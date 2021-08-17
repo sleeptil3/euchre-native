@@ -25,8 +25,9 @@ export default function Card() {
 	}, [currentPlayer])
 
 	return (
-		<div onClick={handleClick} className={`${enableSelection} ${trumpCardPosition} transform transition-transform relative z-20 cursor-pointer w-24 delay-75 duration-500 hover:-translate-y-5`}>
-			<img className={`transition-opacity ${trumpCardOpacity} duration-1000 filter drop-shadow-2xl shadow-2xl`} src={`./cards/${cardCode}.png`} alt={`${upTrump.faceValue} of ${upTrump.suit.name}`} />
-		</div>
+		null
+		// <div onClick={handleClick} className={`${enableSelection} ${trumpCardPosition} transform transition-transform relative z-20 cursor-pointer w-24 delay-75 duration-500 hover:-translate-y-5`}>
+		// 	<img className={`transition-opacity ${trumpCardOpacity} duration-1000 filter drop-shadow-2xl shadow-2xl`} src={`./cards/${cardCode}.png`} alt={`${upTrump.faceValue} of ${upTrump.suit.name}`} />
+		// </div>
 	)
 }

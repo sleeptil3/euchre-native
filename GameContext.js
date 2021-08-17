@@ -23,7 +23,6 @@ export default function GameContext({ children }) {
 	// const decidePace = 100
 
 	// Card State
-	const [pile, setPile] = useState([])
 	const [playerHand, setPlayerHand] = useState([]);
 	const [teammateHand, setTeammateHand] = useState([]);
 	const [opponentHand1, setOpponentHand1] = useState([]);
@@ -49,10 +48,11 @@ export default function GameContext({ children }) {
 	const [teamScore, setTeamScore] = useState(0);
 	const [opponentScore, setOpponentScore] = useState(0);
 	const [matchStage, setMatchStage] = useState("PREGAME"); // NEWGAME, NEWMATCH, DEAL, CALL, PICK, PLAY
-	const [showPrompt, setShowPrompt] = useState(false);
+	const [showPromptModal, setShowPromptModal] = useState(false);
 	const [promptText, setPromptText] = useState({
 		title: "",
-		question: "",
+		subtitle: "",
+		body: "",
 		choices: [],
 	});
 	const [currentPrompt, setCurrentPrompt] = useState(0);
@@ -669,8 +669,8 @@ export default function GameContext({ children }) {
 				setCurrentPrompt,
 				promptText,
 				setPromptText,
-				showPrompt,
-				setShowPrompt,
+				showPromptModal,
+				setShowPromptModal,
 				playerHand,
 				setPlayerHand,
 				teammateHand,
@@ -689,8 +689,6 @@ export default function GameContext({ children }) {
 				setDealer,
 				currentPlayer,
 				setCurrentPlayer,
-				pile,
-				setPile
 			}}
 		>
 			{children}

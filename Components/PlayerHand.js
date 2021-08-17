@@ -14,7 +14,7 @@ export default function PlayerHand() {
 	}, [turnCount])
 
 	return (
-		<Flex direction="row" justify="center" align="flex-end" width="95%" override={{ position: "absolute", bottom: -100 }}>
+		<Flex direction="row" justify="center" align="flex-end" width="95%" override={{ position: "absolute", bottom: -65 }}>
 			{
 				playerHand.map(card => {
 					return <Card card={card} key={uuid()} />

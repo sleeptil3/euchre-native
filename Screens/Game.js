@@ -1,17 +1,16 @@
 import React, { useContext } from "react";
+import { Image, View } from "react-native";
 import { DataContext } from "../GameContext";
-import { Flex } from '../CoreElements/containerStyles'
 import { Subtitle, Body } from '../CoreElements/fontStyles'
-import { colors } from '../CoreElements/theme'
-import GameBoard from "../Components/GameBoard";
-import PlayerHand from "../Components/PlayerHand";
+import { colors, styles } from '../CoreElements/theme'
+import GameLayer from "../Components/GameLayer";
 
 export default function Game() {
 	/////////////////////
 	// CONTEXT IMPORTS //
 	/////////////////////
 
-	const { playerHand, pile } = useContext(DataContext)
+	const { playerHand } = useContext(DataContext)
 
 	////////////
 	// RENDER //
@@ -19,10 +18,10 @@ export default function Game() {
 
 
 	return (
-		<Flex justify="center" align="center" color={"transparent"}>
-			<Subtitle>The Game</Subtitle>
-			<Body>{JSON.stringify(pile)}</Body>
-			<PlayerHand />
-		</Flex>
+		<View style={styles.screen}>
+			<Image style={styles.background} source={require('../assets/bg-table-12p.png')} />
+			<GameLayer />
+		</View>
 	);
 }
+

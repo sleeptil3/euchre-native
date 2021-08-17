@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import React, { useContext } from "react"
 import { DataContext } from "../GameContext"
 import TrumpCard from "./TrumpCard"
 

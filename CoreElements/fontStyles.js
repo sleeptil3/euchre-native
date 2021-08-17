@@ -1,64 +1,67 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { colors } from './theme';
+import * as Font from "expo-font";
+import { useFonts } from 'expo-font';
+
+const customFonts = {
+	"SFPro-Light": require("../assets/fonts/SF-Pro-Text-Light.otf"),
+	"SFPro-Heavy": require("../assets/fonts/SF-Pro-Text-Heavy.otf"),
+	"SFPro-Semibold": require("../assets/fonts/SF-Pro-Text-Semibold.otf"),
+};
 
 export const Heading = ({ children, align, override, color }) => {
-	return (
-		<Text style={[font.heading, { textAlign: align || "left", color: color || font.heading.color }, override]}>{children}</Text>
-	)
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.heading, { textAlign: align || "left", color: color || fontStyles.heading.color }, override]}>{children}</Text>
+	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
 export const Title = ({ children, align, override, color }) => {
-	return (
-		<Text style={[font.title, { textAlign: align || "left", color: color || font.title.color }, override]}>{children}</Text>
-	)
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.title, { textAlign: align || "left", color: color || fontStyles.title.color }, override]}>{children}</Text>
+	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
 export const Subtitle = ({ children, align, override, color }) => {
-	return (
-		<Text style={[font.subtitle, { textAlign: align || "left", color: color || font.subtitle.color }, override]}>{children}</Text>
-	)
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.subtitle, { textAlign: align || "left", color: color || fontStyles.subtitle.color }, override]}>{children}</Text>
+	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
 export const Body = ({ children, align, override, color }) => {
-	return (
-		<Text style={[font.body, { textAlign: align || "left", color: color || font.body.color }, override]}>{children}</Text>
-	)
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.body, { textAlign: align || "left", color: color || fontStyles.body.color }, override]}>{children}</Text>
+	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
-export const font = StyleSheet.create({
-	primary: {
-		fontFamily: "",
-	},
-	bold: {
-		fontWeight: "bold",
-	},
-	light: {
-		fontWeight: "300"
-	},
+export const fontStyles = StyleSheet.create({
 	heading: {
 		color: colors.white,
 		fontSize: 40,
-		fontWeight: "bold",
 		marginBottom: 12
 	},
 	title: {
+		fontFamily: "SFPro-Heavy",
 		color: colors.white,
-		fontSize: 36,
-		fontWeight: "bold",
+		fontSize: 32,
 		marginBottom: 14
 	},
 	subtitle: {
+		fontFamily: "SFPro-Semibold",
 		color: colors.white,
-		fontSize: 30,
-		fontWeight: "normal",
-		marginBottom: 6,
+		fontSize: 24,
+		marginBottom: 2,
 	},
 	body: {
+		fontFamily: "SFPro-Light",
 		color: colors.white,
-		fontSize: 16,
+		fontSize: 18,
 		lineHeight: 24,
-		fontWeight: "300"
+		marginBottom: 10,
 	}
 })
 
