@@ -1,5 +1,3 @@
-
-
 export const colors = {
 	primary: "orange",
 	primaryDark: "darkorange",
@@ -7,5 +5,5 @@ export const colors = {
 	secondaryDark: "#410041",
 	white: "#f8f8ff",
 	black: "#000000",
-	background: "#111",
+	background: "#0A270E",
 }
