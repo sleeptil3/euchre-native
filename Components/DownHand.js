@@ -14,7 +14,7 @@ export default function DownHand({ position, handLength }) {
 		setImage(imageURLS[handLength]);
 	}, [handLength]);
 
-	const scale = 1.3
+	const scale = 1.4
 
 	return (
 		<View style={handStyles[position]} >
@@ -38,21 +38,21 @@ export default function DownHand({ position, handLength }) {
 const handStyles = [
 	null,
 	{
-		position: "absolute",
-		left: -85,
-		top: 200,
+		// position: "absolute",
+		left: -80,
+		// top: 200,
 		transform: [{ rotate: '90deg' }],
 	},
 	{
-		position: "absolute",
-		top: -20,
-		right: 80,
+		// position: "absolute",
+		top: -25,
+		// right: 80,
 		transform: [{ rotate: '180deg' }],
 	},
 	{
-		position: "absolute",
-		right: -85,
-		top: 200,
+		// position: "absolute",
+		right: -38,
+		// top: 200,
 		transform: [{ rotate: '270deg' }],
 	},
 ]

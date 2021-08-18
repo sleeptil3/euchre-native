@@ -3,7 +3,6 @@ import { Flex } from "../CoreElements/containerStyles";
 import { DataContext } from "../GameContext"
 import Card from "./Card"
 import { v4 as uuid } from 'uuid';
-import { View } from "react-native";
 
 export default function PlayerHand() {
 	const { playerHand, yourSeat, currentPlayer, turnCount, matchStage, goAlone } = useContext(DataContext)
@@ -14,7 +13,7 @@ export default function PlayerHand() {
 	}, [turnCount])
 
 	return (
-		<Flex direction="row" justify="center" align="flex-end" width="95%" override={{ position: "absolute", bottom: -65 }}>
+		<Flex direction="row" justify="center" align="flex-end" width="95%" override={{ position: "absolute", bottom: -92 }}>
 			{
 				playerHand.map(card => {
 					return <Card card={card} key={uuid()} />
@@ -23,5 +22,3 @@ export default function PlayerHand() {
 		</Flex>
 	)
 }
-
-	//  for animations (w-24 is nice tight hand, w-0 is stacked, and w-1/2 is laid flat)

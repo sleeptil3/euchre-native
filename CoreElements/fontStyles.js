@@ -1,14 +1,13 @@
-import React from 'react';
-import { Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { colors } from './theme';
-import * as Font from "expo-font";
-import { useFonts } from 'expo-font';
+import React from 'react'
+import { Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { colors } from './theme'
+import { useFonts } from 'expo-font'
 
 const customFonts = {
 	"SFPro-Light": require("../assets/fonts/SF-Pro-Text-Light.otf"),
 	"SFPro-Heavy": require("../assets/fonts/SF-Pro-Text-Heavy.otf"),
-	"SFPro-Semibold": require("../assets/fonts/SF-Pro-Text-Semibold.otf"),
-};
+	"SFPro-Bold": require("../assets/fonts/SF-Pro-Text-Bold.otf"),
+}
 
 export const Heading = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
@@ -38,6 +37,14 @@ export const Body = ({ children, align, override, color }) => {
 	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
+export const DefaultText = ({ children, align, override, color }) => {
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.default, { textAlign: align || "left", color: color || fontStyles.body.color }, override]}>{children}</Text>
+	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+}
+
+
 export const fontStyles = StyleSheet.create({
 	heading: {
 		color: colors.white,
@@ -51,7 +58,7 @@ export const fontStyles = StyleSheet.create({
 		marginBottom: 14
 	},
 	subtitle: {
-		fontFamily: "SFPro-Semibold",
+		fontFamily: "SFPro-Bold",
 		color: colors.white,
 		fontSize: 24,
 		marginBottom: 2,
@@ -62,7 +69,13 @@ export const fontStyles = StyleSheet.create({
 		fontSize: 18,
 		lineHeight: 24,
 		marginBottom: 10,
+	},
+	default: {
+		fontFamily: "SFPro-Light",
+		color: colors.white,
+		fontSize: 18
 	}
+
 })
 
 export const text = StyleSheet.create({

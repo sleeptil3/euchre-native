@@ -5,6 +5,8 @@ import { Flex } from '../CoreElements/containerStyles'
 import { Subtitle, Title, Body } from '../CoreElements/fontStyles'
 import { colors } from '../CoreElements/theme'
 import Icon from '../CoreElements/icons'
+import { v4 as uuid } from 'uuid';
+
 // import { BlurView } from 'expo-blur'
 // import MaskedView from '@react-native-masked-view/masked-view';
 
@@ -17,17 +19,17 @@ export default function PromptModal() {
 			transparent={true}
 			visible={showPromptModal}
 		>
-			<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 224, left: 0, right: 0 }}>
-
+			<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 225, left: 0, right: 0 }}>
 				<View style={styles.modal} tint="dark" intensity={60}>
 					<Flex justify="space-between" align="center">
 						<Title align="center">{promptText.title}</Title>
 						<View>
-							<Subtitle align="center">{promptText.subtitle}</Subtitle>
+							<Subtitle align="center" override={{ fontSize: 22 }}>{promptText.subtitle}</Subtitle>
 							<Body align="center">{promptText.body}</Body>
 						</View>
-						<Flex
+						{promptText.choices.length > 0 && <Flex
 							direction="row"
+							align="center"
 							color="rgba(0,0,0,.75)"
 							override={{
 								borderWidth: 1,
@@ -35,13 +37,14 @@ export default function PromptModal() {
 								borderRadius: 40,
 								paddingHorizontal: 8,
 								paddingVertical: 8,
-								marginVertical: 5
+								marginVertical: 10
 							}}
 						>
-							{promptText.choices.length > 0 && promptText.choices.map(choice => {
-								<Icon choice={choice} />
+							{promptText.choices.map(choice => {
+								return <Icon key={uuid()} choice={choice} />
 							})}
 						</Flex>
+						}
 					</Flex>
 				</View>
 			</View>

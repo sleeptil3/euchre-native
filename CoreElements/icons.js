@@ -3,16 +3,19 @@ import { Pressable, StyleSheet } from 'react-native';
 import { iconSVGs } from './theme';
 import { DataContext } from '../GameContext';
 
-const styles = StyleSheet.create({
-	icon: { marginHorizontal: 12, justifyContent: "center", alignItems: "center" }
-})
-
 export default function Icon({ choice }) {
-	const { type, shortAction, longAction, altText } = choice
 	const { setShowPromptModal } = useContext(DataContext)
 	const [isPressed, setIsPressed] = useState(false)
+	const styles = StyleSheet.create({
+		icon: {
+			marginHorizontal: 12,
+			justifyContent: "center",
+			alignItems: "center"
+		}
+	})
 	let outlineType, filledType
-	switch (type) {
+
+	switch (choice.text) {
 		case "s": {
 			outlineType = iconSVGs.spadeOutlined
 			filledType = iconSVGs.spadeFilled
@@ -35,23 +38,29 @@ export default function Icon({ choice }) {
 		}
 		case "p": {
 			outlineType = iconSVGs.passOutlined
-			filledType = iconSVGs.passOutlined
+			filledType = iconSVGs.passFilled
 			break
 		}
-		default: console.log("no valid icon type given")
+		case "u": {
+			outlineType = iconSVGs.upOutlined
+			filledType = iconSVGs.upFilled
+			break
+		}
+		case "ok": {
+			outlineType = iconSVGs.okOutlined
+			filledType = iconSVGs.okFilled
+			break
+		}
+		default: null
 	}
 
-	const handlePress = (suitCode) => {
-		console.log("short press")
-		console.log(suitCode)
-		// shortAction()
+	const handlePress = (code) => {
+		choice.shortAction(code)
 		setShowPromptModal(false)
 	}
 
-	const handleLongPress = (suitCode) => {
-		console.log("long press")
-		console.log(suitCode)
-		// longAction()
+	const handleLongPress = (code) => {
+		choice.longAction ? choice.longAction(code) : choice.shortAction(code)
 		setShowPromptModal(false)
 	}
 
@@ -60,11 +69,12 @@ export default function Icon({ choice }) {
 			delayLongPress={750}
 			onPressIn={() => setIsPressed(true)}
 			onPressOut={() => setIsPressed(false)}
-			onPress={() => handlePress(type)}
-			onLongPress={() => handleLongPress(type)}
-			style={[styles.icon, { accessibilityLabel: altText }]}
+			onPress={() => handlePress(choice.text)}
+			onLongPress={() => handleLongPress(choice.text)}
+			style={styles.icon}
+			accessibilityLabel={choice.altText}
 		>
-			{isPressed ? filledType : outlineType}
+			{isPressed === true ? filledType : outlineType}
 		</Pressable>
 	)
 }
