@@ -629,7 +629,7 @@ export default function GameContext({ children }) {
 					setPromptText(prompts.ready)
 					setShowPromptModal(true)
 				} else {
-					setPromptText(prompts.goAlone)
+					setPromptText(prompts.readyAlone)
 					setShowPromptModal(true)
 				}
 				break
