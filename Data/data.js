@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid'
 
 export function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -5,6 +6,7 @@ export function sleep(ms) {
 // sleep(1500).then(() => setMatchStage("DEAL"));
 
 export const blankCard = {
+	_id: uuid(),
 	faceValue: "0",
 	suit: {
 		code: "0",
@@ -14,7 +16,7 @@ export const blankCard = {
 			name: "0"
 		}
 	},
-	value: 0
+	value: 0,
 }
 
 export const cardImages = {

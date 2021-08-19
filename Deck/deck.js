@@ -1,3 +1,5 @@
+import { v4 as uuid } from "uuid"
+
 class Suit {
 	constructor(code, name) {
 		this.code = code
@@ -30,6 +32,7 @@ class Card {
 		this.faceValue = faceValue
 		this.value = Card.gameValues[faceValue]
 		this.suit = suits[suitCode]
+		this._id = uuid()
 	}
 }
 

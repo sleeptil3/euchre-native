@@ -4,13 +4,20 @@ import { DataContext } from "../GameContext"
 import { cardImages, blankCard, sleep } from "../Data/data"
 
 export default function Card({ card }) {
-	const { yourSeat, handlePlayerChoice, handleDiscard, matchStage } = useContext(DataContext)
+	const { yourSeat, handlePlayerChoice, handleDiscard, matchStage, debug, log } = useContext(DataContext)
 	const cardCode = card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()
 
 	const handleCardRelease = (stage) => {
-		if (stage === "PLAY") handlePlayerChoice(yourSeat, card)
-		else handleDiscard(yourSeat, card)
+		if (matchStage === "PLAY") {
+			log && console.log("handleCardRelease on stage PLAY")
+			handlePlayerChoice(yourSeat, card)
+		}
+		else {
+			log && console.log(`handleDiscard on stage ${matchStage}`)
+			handleDiscard(yourSeat, card)
+		}
 	}
+
 	const moveAnim = useRef(new Animated.ValueXY()).current;
 	const fadeAnim = useRef(new Animated.Value(1)).current
 	const scaleAnim = useRef(new Animated.Value(1)).current
@@ -31,7 +38,7 @@ export default function Card({ card }) {
 					Animated.spring(moveAnim, { toValue: { x: moveAnim.x, y: -350 }, useNativeDriver: true }).start();
 					Animated.timing(fadeAnim, { toValue: 0, duration: 500, useNativeDriver: true }).start();
 					Animated.timing(scaleAnim, { toValue: .75, duration: 500, useNativeDriver: true }).start();
-					handleCardRelease(matchStage)
+					handleCardRelease()
 				} else {
 					// FAILED THRESHOLD FOR ACTION
 					Animated.spring(moveAnim, { toValue: { x: 0, y: 0 }, useNativeDriver: true }).start();

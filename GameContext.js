@@ -18,12 +18,14 @@ export default function GameContext({ children }) {
 	////////////////
 
 	// Normal Mode Settings
-	const decidePace = 1000
+	// const decidePace = 1000
+	// const log = false
 	const debug = false
 
-	// Debug Mode Settings
+	// Log/Debug Mode Settings
+	const decidePace = 500
+	const log = true
 	// const debug = true
-	// const decidePace = 100
 
 	// Card State
 	const [playerHand, setPlayerHand] = useState([])
@@ -353,7 +355,7 @@ export default function GameContext({ children }) {
 	}
 
 	const handleCallUp = (trump) => {
-		console.log("calllupppp")
+		log && console.log(`${trump.name} called up by ${currentPlayer}`)
 		setTrump(trump)
 		setCallingPlayer(currentPlayer)
 		if (matchStage === "CALL") {
@@ -392,7 +394,7 @@ export default function GameContext({ children }) {
 	}
 
 	const handlePlayerChoice = (player, card) => {
-		// debug && console.log("handlePlayerChoice", player, card)
+		debug && console.log("handlePlayerChoice", player, card)
 		if (!matchSuit) {
 			if (trump.left.code === card.suit.code && card.faceValue === "J")
 				setMatchSuit(trump.code)
@@ -404,7 +406,7 @@ export default function GameContext({ children }) {
 	}
 
 	const handleDiscard = (player, card) => {
-		// debug && console.log("------------------HANDLE DISCARD FUNCTION", player, card)
+		debug && console.log("------------------HANDLE DISCARD FUNCTION", player, card)
 		const hand = getPlayerHand(player, playerHand, nonPlayerHands)
 		switch (player) {
 			case 0: {
@@ -511,7 +513,7 @@ export default function GameContext({ children }) {
 
 	// Game Setup
 	useEffect(() => {
-		// debug && console.log("New Deal: Getting Deck and setting up hands")
+		debug && console.log("New Deal: Getting Deck and setting up hands")
 		getDeck()
 		sleep(250).then(() => setShowStartModal(true))
 	}, [dealer])
@@ -528,8 +530,8 @@ export default function GameContext({ children }) {
 				// FROM: StartModal OR MatchEnd
 				// TO: CALL Stage to start picking Trump
 				debug && console.log("------------------ NEWGAME Stage")
-				// debug && console.log("%cPlayer Hand", "color: green", playerHand)
-				// debug && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
+				debug && console.log("%cPlayer Hand", "color: green", playerHand)
+				debug && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
 				if (upTrump.faceValue === undefined)
 					sleep(500).then(() => setTurnCount(turnCount - 1))
 				else {
@@ -541,9 +543,9 @@ export default function GameContext({ children }) {
 			case "NEWMATCH": {
 				// NOT CURRENTLY USED
 				debug && console.log("------------------ NEWMATCH Stage")
-				// debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
-				// debug && console.log("%cPlayer Hand", "color: green", playerHand)
-				// debug && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
+				debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				debug && console.log("%cPlayer Hand", "color: green", playerHand)
+				debug && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
 				break
 			}
 			case "CALL": {
@@ -653,7 +655,7 @@ export default function GameContext({ children }) {
 			}
 			case "DISCARD": {
 				debug && console.log("------------------ DISCARD Stage")
-				// debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
 				if (yourSeat === dealer) {
 					setPromptText(prompts.discard)
 					setShowPromptModal(true)
@@ -790,6 +792,8 @@ export default function GameContext({ children }) {
 				setDealer,
 				currentPlayer,
 				setCurrentPlayer,
+				log,
+				debug
 			}}
 		>
 			{children}
