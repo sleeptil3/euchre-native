@@ -5,6 +5,7 @@ import PlayerHand from './PlayerHand';
 import DownHands from './DownHands';
 import TrumpStack from './TrumpStack';
 import PromptModal from '../Modals/PromptModal';
+import PromptAction from '../Modals/PromptAction';
 import { styles } from '../CoreElements/theme';
 import { DataContext } from "../GameContext";
 import StartModal from '../Modals/StartModal';
@@ -15,12 +16,13 @@ import PlayField from './PlayField';
 // import GameScore from './GameScore';
 
 export default function GameLayer() {
-	const { matchStage, trump, teamScore, promptText, opponentScore, showPromptModal } = useContext(DataContext)
+	const { matchStage, trump, teamScore, showActionPrompt } = useContext(DataContext)
 
 	return (
 		<SafeAreaView style={styles.screen}>
 			<StartModal />
 			<PromptModal />
+			{showActionPrompt && <PromptAction />}
 			{matchStage !== "PREGAME" &&
 				<Flex fill={2} align="center" justify="center" height="100%" width="100%">
 					<DownHands />

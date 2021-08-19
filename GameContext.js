@@ -9,6 +9,7 @@ import {
 	getPlayerHand,
 	scoreTrick,
 } from "./Data/AI"
+import { minAloneScore, minCallScore, decidePace, debugMode, logMode } from "./Data/data"
 
 export const DataContext = createContext()
 
@@ -16,16 +17,6 @@ export default function GameContext({ children }) {
 	////////////////
 	// GAME STATE //
 	////////////////
-
-	// Normal Mode Settings
-	// const decidePace = 1000
-	// const log = false
-	const debug = false
-
-	// Log/Debug Mode Settings
-	const decidePace = 500
-	const log = true
-	// const debug = true
 
 	// Card State
 	const [playerHand, setPlayerHand] = useState([])
@@ -41,41 +32,41 @@ export default function GameContext({ children }) {
 	const nonPlayerHands = [opponentHand1, teammateHand, opponentHand2]
 
 	// Game State
-	const [uuid, setUuid] = useState(0)
 	const [dealer, setDealer] = useState(0) // 0, 1, 2, 3
 	const [currentPlayer, setCurrentPlayer] = useState(dealer + 1) // 0, 1, 2, 3, 4 (result)
 	const [turnCount, setTurnCount] = useState(-1)
 	const [yourSeat, setYourSeat] = useState(0)
 	const [upTrump, setUpTrump] = useState({})
 
-	// Modal State
+	// Modal/Prompt State
 	const [showPromptModal, setShowPromptModal] = useState(false)
 	const [showStartModal, setShowStartModal] = useState(false)
-
-	// Match State
-	const [trump, setTrump] = useState({}) // {suit, left}
-	const [callingPlayer, setCallingPlayer] = useState(null)
-	const [teamScore, setTeamScore] = useState(0)
-	const [opponentScore, setOpponentScore] = useState(0)
-	const [matchStage, setMatchStage] = useState("PREGAME") // NEWGAME, NEWMATCH, DEAL, CALL, PICK, PLAY
+	const [showActionPrompt, setShowActionPrompt] = useState(false)
+	const [actionText, setActionText] = useState("")
 	const [promptText, setPromptText] = useState({
 		text: "",
 		subtitle: "",
 		body: "",
 		choices: [],
 	})
-	const [currentPrompt, setCurrentPrompt] = useState(0)
+
+	// Match State
+	const [playerChoice, setPlayerChoice] = useState(null)
+	const [trump, setTrump] = useState({}) // {suit, left}
+	const [callingPlayer, setCallingPlayer] = useState(null)
+	const [teamScore, setTeamScore] = useState(0)
+	const [opponentScore, setOpponentScore] = useState(0)
+	const [matchStage, setMatchStage] = useState("PREGAME") // NEWGAME, NEWMATCH, DEAL, CALL, PICK, PLAY
+	const [currentMatchScore, setCurrentTrickScore] = useState({})
+	const [matchSuit, setMatchSuit] = useState(null)
+	const [goAlone, setGoAlone] = useState(null)
 	const [matchTricks, setMatchTricks] = useState({
 		callingTeam: 0,
 		opposingTeam: 0,
 	})
-	const [currentMatchScore, setCurrentTrickScore] = useState({})
-	const [matchSuit, setMatchSuit] = useState(null)
-	const [goAlone, setGoAlone] = useState(null)
 
 	// UI State
 	const [showTrumpCard, setShowTrumpCard] = useState(false)
-	const [trumpCardPosition, setTrumpCardPosition] = useState("translate-y-0 -translate-y-0 translate-x-0 -translate-x-0")
 	const [showTrumpStack, setShowTrumpStack] = useState(false)
 	const suits = {
 		"h": { ...hearts, left: { ...diamonds }, select() { handleCallUp(suits.h) }, },
@@ -231,33 +222,6 @@ export default function GameContext({ children }) {
 				}
 			],
 		},
-		discard: {
-			title: "Discard",
-			subtitle: `${callingPlayer % 2 === 0 ? "Your Team Called Trump" : "The Other Team Called Trump"
-				}`,
-			body: "Tap OK then select a card to discard",
-			choices: [
-				{
-					text: "ok",
-					shortAction: null,
-					longAction: null,
-					altText: "Press okay then discard"
-				}
-			],
-		},
-		yourTurn: {
-			title: "Your Turn",
-			subtitle: "Choose a card",
-			body: `The trick suit is ${matchSuit ? suits[matchSuit].name : ""}`,
-			choices: [
-				{
-					text: "ok",
-					shortAction: null,
-					longAction: null,
-					altText: "Press okay then play a card"
-				}
-			],
-		},
 		othersTurn: {
 			title: "Please Wait",
 			subtitle: `${currentPlayer % 2 === 0
@@ -282,7 +246,7 @@ export default function GameContext({ children }) {
 		trickResultLose: {
 			title: "Trick Results",
 			subtitle: "You Lost",
-			body: "Get them next time!",
+			body: "Get 'em next time!",
 			choices: [
 				{
 					text: "ok",
@@ -305,6 +269,11 @@ export default function GameContext({ children }) {
 				}
 			],
 		},
+	}
+
+	const actionPrompts = {
+		discard: "Choose a Card to Discard",
+		yourTurn: "Choose a Card to Play",
 	}
 
 	///////////////////////
@@ -355,7 +324,7 @@ export default function GameContext({ children }) {
 	}
 
 	const handleCallUp = (trump) => {
-		log && console.log(`${trump.name} called up by ${currentPlayer}`)
+		logMode && console.log(`${trump.name} called up by ${currentPlayer}`)
 		setTrump(trump)
 		setCallingPlayer(currentPlayer)
 		if (matchStage === "CALL") {
@@ -394,7 +363,8 @@ export default function GameContext({ children }) {
 	}
 
 	const handlePlayerChoice = (player, card) => {
-		debug && console.log("handlePlayerChoice", player, card)
+		debugMode && console.log("handlePlayerChoice", player, card)
+		setShowActionPrompt(false)
 		if (!matchSuit) {
 			if (trump.left.code === card.suit.code && card.faceValue === "J")
 				setMatchSuit(trump.code)
@@ -406,7 +376,8 @@ export default function GameContext({ children }) {
 	}
 
 	const handleDiscard = (player, card) => {
-		debug && console.log("------------------HANDLE DISCARD FUNCTION", player, card)
+		debugMode && console.log("------------------HANDLE DISCARD FUNCTION", player, card)
+		setShowActionPrompt(false)
 		const hand = getPlayerHand(player, playerHand, nonPlayerHands)
 		switch (player) {
 			case 0: {
@@ -513,25 +484,34 @@ export default function GameContext({ children }) {
 
 	// Game Setup
 	useEffect(() => {
-		debug && console.log("New Deal: Getting Deck and setting up hands")
+		debugMode && console.log("New Deal: Getting Deck and setting up hands")
 		getDeck()
 		sleep(250).then(() => setShowStartModal(true))
 	}, [dealer])
 
+	// Handle Player Drag Choice
+
+	useEffect(() => {
+		if (playerChoice) {
+			console.log(`Player Chose ${playerChoice} by dragging`)
+			matchStage === "PLAY" ? handlePlayerChoice(yourSeat, playerChoice) : handleDiscard(yourSeat, playerChoice)
+		}
+	}, [playerChoice])
+
 	// Game Logic
 	useEffect(() => {
-		console.log(matchStage, "TurnCount", turnCount, "CurrentPlayer", currentPlayer)
+		logMode && console.log(matchStage, "TurnCount", turnCount, "CurrentPlayer", currentPlayer)
 		switch (matchStage) {
 			case "PREGAME": {
-				debug && console.log("------------------ PREGAME Stage")
+				logMode && console.log("------------------ PREGAME Stage")
 				break
 			}
 			case "NEWGAME": {
 				// FROM: StartModal OR MatchEnd
 				// TO: CALL Stage to start picking Trump
-				debug && console.log("------------------ NEWGAME Stage")
-				debug && console.log("%cPlayer Hand", "color: green", playerHand)
-				debug && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
+				logMode && console.log("------------------ NEWGAME Stage")
+				logMode && console.log("%cPlayer Hand", "color: green", playerHand)
+				logMode && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
 				if (upTrump.faceValue === undefined)
 					sleep(500).then(() => setTurnCount(turnCount - 1))
 				else {
@@ -542,15 +522,15 @@ export default function GameContext({ children }) {
 			}
 			case "NEWMATCH": {
 				// NOT CURRENTLY USED
-				debug && console.log("------------------ NEWMATCH Stage")
-				debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
-				debug && console.log("%cPlayer Hand", "color: green", playerHand)
-				debug && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
+				logMode && console.log("------------------ NEWMATCH Stage")
+				debugMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				debugMode && console.log("%cPlayer Hand", "color: green", playerHand)
+				debugMode && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
 				break
 			}
 			case "CALL": {
-				debug && console.log("------------------ Call Stage")
-				debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				logMode && console.log("------------------ Call Stage")
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
 
 				turnCount === 0 && setCurrentPlayer((dealer + 1) % 4)
 				showTrumpStack === false && sleep(500).then(() => setShowTrumpStack(true))
@@ -587,8 +567,8 @@ export default function GameContext({ children }) {
 				break
 			}
 			case "PICK": {
-				debug && console.log("------------------ Pick Stage")
-				debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				logMode && console.log("------------------ Pick Stage")
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
 				showTrumpCard === true && setShowTrumpCard(false)
 				if (turnCount > 2) {
 					setMatchStage("STUCK")
@@ -618,8 +598,8 @@ export default function GameContext({ children }) {
 				break
 			}
 			case "STUCK": {
-				debug && console.log("------------------ STUCK Stage")
-				debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				logMode && console.log("------------------ STUCK Stage")
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
 				if (dealer === yourSeat) {
 					setPromptText(prompts.trump2Stuck) // STUCK TO DEALER YOU
 					setShowPromptModal(true)
@@ -642,7 +622,8 @@ export default function GameContext({ children }) {
 				break
 			}
 			case "READY": {
-				debug && console.log("------------------ READY Stage")
+				logMode && console.log("------------------ READY Stage")
+				setUpTrump({})
 				setShowTrumpStack(false)
 				if (!goAlone) {
 					setPromptText(prompts.ready)
@@ -654,18 +635,18 @@ export default function GameContext({ children }) {
 				break
 			}
 			case "DISCARD": {
-				debug && console.log("------------------ DISCARD Stage")
-				debug && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				logMode && console.log("------------------ DISCARD Stage")
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, "\nDealer:", upTrump)
 				if (yourSeat === dealer) {
-					setPromptText(prompts.discard)
-					setShowPromptModal(true)
+					setActionText(actionPrompts.discard)
+					setShowActionPrompt(true)
 				}
 				else handleDiscard(dealer, upTrump)
 				break
 			}
 			case "PLAY": {
 				// MATCH PLAY
-				debug && console.log("------------------ Play Stage")
+				logMode && console.log("------------------ Play Stage")
 				if (goAlone !== null && currentPlayer === (goAlone + 2) % 4) {
 					setCurrentPlayer((currentPlayer + 1) % 4)
 					setTurnCount(turnCount + 1)
@@ -673,8 +654,9 @@ export default function GameContext({ children }) {
 				}
 				if (turnCount < 4) {
 					if (currentPlayer === yourSeat) {
-						setPromptText(prompts.yourTurn)
-						setShowPromptModal(true)
+						setShowPromptModal(false)
+						setActionText(actionPrompts.yourTurn)
+						setShowActionPrompt(true)
 					} else {
 						setPromptText(prompts.othersTurn)
 						setShowPromptModal(true)
@@ -714,14 +696,14 @@ export default function GameContext({ children }) {
 			}
 			case "RESULT": {
 				// END OF TRICK OR END OF MATCH
-				debug && console.log("------------------ RESULT Stage")
+				logMode && console.log("------------------ RESULT Stage")
 				if (teamScore >= 10 || opponentScore >= 10) {
 					setMatchStage("GAMEOVER")
 					setTurnCount(100)
 					break
 				}
 				if (matchTricks.opposingTeam + matchTricks.callingTeam === 5) {
-					debug && console.log("------------------ RESULT Stage: 5 tricks done - scorematch")
+					debugMode && console.log("------------------ RESULT Stage: 5 tricks done - scorematch")
 					scoreMatch()
 				} else {
 					setCurrentPlayer(currentMatchScore.winner)
@@ -732,12 +714,12 @@ export default function GameContext({ children }) {
 			}
 			case "GAMEOVER": {
 				// WIN CONDITION MET
-				debug && console.log("------------------ GAMEOVER Stage")
+				logMode && console.log("------------------ GAMEOVER Stage")
 				// Setup a reset for another game
 				break
 			}
 			default:
-				debug && console.log("------------------ Default Stage")
+				logMode && console.log("------------------ Default Stage")
 		}
 	}, [turnCount])
 
@@ -766,8 +748,6 @@ export default function GameContext({ children }) {
 				suits,
 				opponentScore,
 				setOpponentScore,
-				currentPrompt,
-				setCurrentPrompt,
 				promptText,
 				setPromptText,
 				showPromptModal,
@@ -792,8 +772,12 @@ export default function GameContext({ children }) {
 				setDealer,
 				currentPlayer,
 				setCurrentPlayer,
-				log,
-				debug
+				playerChoice,
+				setPlayerChoice,
+				actionText,
+				setActionText,
+				setShowActionPrompt,
+				showActionPrompt
 			}}
 		>
 			{children}

@@ -19,7 +19,7 @@ export default function PlayerHand() {
 			}}>
 			{
 				playerHand.map(card => {
-					return <Card card={card} key={card.faceValue + card.suit.code} />
+					return <Card card={card} scale={1} key={card._id} use={"HAND"} />
 				})
 			}
 		</Flex>

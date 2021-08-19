@@ -54,7 +54,7 @@ export const fontStyles = StyleSheet.create({
 	title: {
 		fontFamily: "SFPro-Heavy",
 		color: colors.white,
-		fontSize: 32,
+		fontSize: 30,
 		marginBottom: 14
 	},
 	subtitle: {

@@ -12,39 +12,45 @@ import Icon from '../CoreElements/icons'
 export default function PromptModal() {
 	const { showPromptModal, promptText } = useContext(DataContext)
 
+	const handleTouchAnywhere = () => {
+		if (promptText.choices.length === 0) setShowPromptModal(false)
+	}
+
 	return (
 		<Modal
 			animationType="slide"
 			transparent={true}
 			visible={showPromptModal}
 		>
-			<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 225, left: 0, right: 0 }}>
-				<View style={styles.modal} tint="dark" intensity={60}>
-					<Flex justify="space-between" align="center">
-						<Title align="center">{promptText.title}</Title>
-						<View>
-							<Subtitle align="center" override={{ fontSize: 22 }}>{promptText.subtitle}</Subtitle>
-							<Body align="center">{promptText.body}</Body>
-						</View>
-						{promptText.choices.length > 0 && <Flex
-							direction="row"
-							align="center"
-							color="rgba(0,0,0,.75)"
-							override={{
-								borderWidth: 1,
-								borderColor: colors.white,
-								borderRadius: 40,
-								paddingHorizontal: 8,
-								paddingVertical: 8,
-								marginVertical: 10
-							}}
-						>
-							{promptText.choices.map(choice => {
-								return <Icon key={choice.text} choice={choice} />
-							})}
+			<View style={{ width: "100%", height: "100%" }}>
+				<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 225, left: 0, right: 0 }}>
+					<View style={styles.modal} tint="dark" intensity={60}>
+						<Flex justify="space-between" align="center">
+							<Title align="center">{promptText.title}</Title>
+							<View>
+								<Subtitle align="center" override={{ fontSize: 22 }}>{promptText.subtitle}</Subtitle>
+								<Body align="center">{promptText.body}</Body>
+							</View>
+							{promptText.choices.length > 0 && <Flex
+								direction="row"
+								align="center"
+								color="rgba(0,0,0,.75)"
+								override={{
+									borderWidth: 1,
+									borderColor: colors.white,
+									borderRadius: 40,
+									paddingHorizontal: 8,
+									paddingVertical: 8,
+									marginVertical: 10
+								}}
+							>
+								{promptText.choices.map(choice => {
+									return <Icon key={choice.text} choice={choice} />
+								})}
+							</Flex>
+							}
 						</Flex>
-						}
-					</Flex>
+					</View>
 				</View>
 			</View>
 		</Modal>
