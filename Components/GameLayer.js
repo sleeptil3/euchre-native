@@ -8,7 +8,7 @@ import PromptModal from '../Modals/PromptModal';
 import { styles } from '../CoreElements/theme';
 import { DataContext } from "../GameContext";
 import StartModal from '../Modals/StartModal';
-// import PlayField from './PlayField';
+import PlayField from './PlayField';
 // import TrumpIndicator from '../Components/TrumpIndicator';
 // import CallingTeamIndicator from './CalllingTeamIndicator';
 // import MatchTricksCount from './MatchTricksCount';
@@ -21,17 +21,17 @@ export default function GameLayer() {
 		<SafeAreaView style={styles.screen}>
 			<StartModal />
 			<PromptModal />
-			{matchStage !== "PREGAME"
-				&& <Flex fill={2} align="center" justify="center" height="100%" width="100%">
+			{matchStage !== "PREGAME" &&
+				<Flex fill={2} align="center" justify="center" height="100%" width="100%">
 					<DownHands />
 					<Flex align="center" justify="center" height="100%" width="100%" override={{ position: "absolute" }}>
 						{(matchStage !== "PLAY" || matchStage !== "RESULT" || matchStage !== "GAMEOVER") ? <TrumpStack /> : null}
-						{/* {matchStage === "PLAY" && <PlayField />} */}
+						{matchStage === "PLAY" && <PlayField />}
 					</Flex>
 				</Flex>
 			}
-			{matchStage !== "PREGAME"
-				&& <Flex fill={1} align="center" height="100%" width="100%">
+			{matchStage !== "PREGAME" &&
+				<Flex fill={1} align="center" height="100%" width="100%">
 					<PlayerHand />
 				</Flex>
 			}
@@ -42,5 +42,3 @@ export default function GameLayer() {
 		</SafeAreaView>
 	)
 }
-
-// className = "relative z-10 h-full w-full text-opacity-80 text-white"

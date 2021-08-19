@@ -5,7 +5,6 @@ import { Flex } from '../CoreElements/containerStyles'
 import { Subtitle, Title, Body } from '../CoreElements/fontStyles'
 import { colors } from '../CoreElements/theme'
 import Icon from '../CoreElements/icons'
-import { v4 as uuid } from 'uuid';
 
 // import { BlurView } from 'expo-blur'
 // import MaskedView from '@react-native-masked-view/masked-view';
@@ -41,7 +40,7 @@ export default function PromptModal() {
 							}}
 						>
 							{promptText.choices.map(choice => {
-								return <Icon key={uuid()} choice={choice} />
+								return <Icon key={choice.text} choice={choice} />
 							})}
 						</Flex>
 						}

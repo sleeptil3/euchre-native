@@ -49,6 +49,7 @@ export const cardImages = {
 	sj: require("../assets/cards/sj.png"),
 	sk: require("../assets/cards/sk.png"),
 	sq: require("../assets/cards/sq.png"),
+	blank: require("../assets/cards/blank.png")
 }
 
 // export const dealerIcon = <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

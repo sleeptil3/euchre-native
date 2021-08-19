@@ -55,12 +55,12 @@ export default function Icon({ choice }) {
 	}
 
 	const handlePress = (code) => {
-		choice.shortAction(code)
+		choice.shortAction ? choice.shortAction(code) : null
 		setShowPromptModal(false)
 	}
 
 	const handleLongPress = (code) => {
-		choice.longAction ? choice.longAction(code) : choice.shortAction(code)
+		choice.longAction ? choice.longAction(code) : choice.shortAction ? choice.shortAction(code) : null
 		setShowPromptModal(false)
 	}
 

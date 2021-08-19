@@ -12,15 +12,13 @@ export default function TrumpCard(props) {
 
 	const handlePress = () => {
 		setShowTrumpCard(false)
-		console.log("short press")
-		// console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
+		// debug && console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
 		// suits[upTrump.suit.code].select()
 	}
 
 	const handleLongPress = () => {
 		setShowTrumpCard(false)
-		console.log("long press")
-		// console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
+		// debug && console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
 		// suits[upTrump.suit.code].select()
 	}
 
