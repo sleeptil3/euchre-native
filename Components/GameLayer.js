@@ -6,17 +6,18 @@ import DownHands from './DownHands';
 import TrumpStack from './TrumpStack';
 import PromptModal from '../Modals/PromptModal';
 import PromptAction from '../Modals/PromptAction';
-import { styles } from '../CoreElements/theme';
+import { styles, iconSVGs } from '../CoreElements/theme';
 import { DataContext } from "../GameContext";
 import StartModal from '../Modals/StartModal';
 import PlayField from './PlayField';
+
 // import TrumpIndicator from '../Components/TrumpIndicator';
 // import CallingTeamIndicator from './CalllingTeamIndicator';
 // import MatchTricksCount from './MatchTricksCount';
 // import GameScore from './GameScore';
 
 export default function GameLayer() {
-	const { matchStage, trump, teamScore, showActionPrompt } = useContext(DataContext)
+	const { matchStage, trump, teamScore, showActionPrompt, yourSeat, dealer } = useContext(DataContext)
 
 	return (
 		<SafeAreaView style={styles.screen}>
@@ -37,6 +38,9 @@ export default function GameLayer() {
 					<PlayerHand />
 				</Flex>
 			}
+			{yourSeat === dealer && (matchStage !== 'PREGAME' && matchStage !== 'RESULT') && <View style={{ position: "absolute", left: 14, bottom: 14 }}>
+				{iconSVGs.dealerIcon}
+			</View>}
 			{/* {trump.code !== undefined && <TrumpIndicator />}
 			{trump.code !== undefined && <CallingTeamIndicator />}
 			{(matchStage === "PLAY" || matchStage === "RESULT") && <MatchTricksCount />}

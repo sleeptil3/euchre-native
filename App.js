@@ -10,7 +10,7 @@ export default function App() {
 		// Eventually will be a react-navigotor between Rules and Game, possibly a game win final screen
 		<GameContext>
 			<Flex color={colors.background}>
-				<StatusBar style="light" hidden={false} />
+				<StatusBar style="light" hidden={true} />
 				<Game />
 			</Flex>
 		</GameContext>

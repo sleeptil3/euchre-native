@@ -8,11 +8,11 @@ export const minCallScore = 500
 
 // Pace Settings
 export const decidePace = 1000
-// export const decidePace = 250
+// export const decidePace = 400
 
 // Log/Debug Mode Settings
 export const logMode = true
-export const debugMode = false
+export const debugMode = true
 
 
 export function sleep(ms) {

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { iconSVGs } from './theme';
 import { DataContext } from '../GameContext';
+import { logMode, debugMode } from '../Data/data';
 
 export default function Icon({ choice }) {
 	const { setShowPromptModal } = useContext(DataContext)
@@ -55,11 +56,13 @@ export default function Icon({ choice }) {
 	}
 
 	const handlePress = (code) => {
+		logMode && console.log("SHORT PRESS")
 		choice.shortAction ? choice.shortAction(code) : null
 		setShowPromptModal(false)
 	}
 
 	const handleLongPress = (code) => {
+		logMode && console.log("LONG PRESS")
 		choice.longAction ? choice.longAction(code) : choice.shortAction ? choice.shortAction(code) : null
 		setShowPromptModal(false)
 	}

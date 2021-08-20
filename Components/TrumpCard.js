@@ -43,7 +43,6 @@ export default function TrumpCard(props) {
 			fadeAnim,
 			{
 				toValue: 0,
-				delay: 250,
 				duration: 750,
 				useNativeDriver: true
 			}

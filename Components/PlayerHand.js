@@ -4,7 +4,7 @@ import { DataContext } from "../GameContext"
 import Card from "./Card"
 
 export default function PlayerHand() {
-	const { playerHand, yourSeat, goAlone } = useContext(DataContext)
+	const { playerHand, yourSeat, goAlone, dealer } = useContext(DataContext)
 
 	return (
 		<Flex

@@ -70,7 +70,7 @@ export default function Card({ card, scale, use, position }) {
 		},
 		field: {
 			transform: transform,
-			borderRadius: 15,
+			borderRadius: 10,
 			width: 194 * scale,
 			height: 268 * scale,
 		}

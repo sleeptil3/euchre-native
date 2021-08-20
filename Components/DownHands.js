@@ -20,5 +20,3 @@ export default function DownHands() {
 		</Flex>
 	)
 }
-
-//  height="60%" width="100%" override={{ position: "absolute", top: 0 }}

@@ -12,10 +12,6 @@ import Icon from '../CoreElements/icons'
 export default function PromptModal() {
 	const { showPromptModal, promptText } = useContext(DataContext)
 
-	const handleTouchAnywhere = () => {
-		if (promptText.choices.length === 0) setShowPromptModal(false)
-	}
-
 	return (
 		<Modal
 			animationType="slide"

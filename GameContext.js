@@ -245,7 +245,7 @@ export default function GameContext({ children }) {
 		},
 		trickResultLose: {
 			title: "Trick Results",
-			subtitle: "You Lost",
+			subtitle: "Your Team Lost",
 			body: "Get 'em next time!",
 			choices: [
 				{
@@ -258,12 +258,12 @@ export default function GameContext({ children }) {
 		},
 		matchResult: {
 			title: "Match Complete",
-			subtitle: `The Game Continues...`,
-			body: "The first team to 10 wins",
+			subtitle: `Scoreboard`,
+			body: "",
 			choices: [
 				{
 					text: "ok",
-					shortAction: () => handleTrickEnd(),
+					shortAction: () => handleMatchEnd(),
 					longAction: null,
 					altText: "Tap to continue"
 				}
@@ -408,9 +408,6 @@ export default function GameContext({ children }) {
 			setMatchStage("READY")
 			setTurnCount(turnCount - 1)
 		}
-		function swap(arr, idx1, idx2) {
-			[arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]]
-		}
 	}
 
 	const handleTrickEnd = () => {
@@ -426,10 +423,13 @@ export default function GameContext({ children }) {
 	}
 
 	const scoreMatch = () => {
+		logMode && console.log('SCORE MATCH START')
 		let tempTeamScore = teamScore
 		let tempOpposingScore = opponentScore
 		if (matchTricks.callingTeam > matchTricks.opposingTeam) {
 			// Calling Team won the match
+			logMode && console.log('CALLING TEAM WON', matchTricks.callingTeam, matchTricks.opposingTeam)
+
 			if (matchTricks.callingTeam >= 3) {
 				if (matchTricks.callingTeam === 5) {
 					const scoreCalc = goAlone !== null ? 4 : 2
@@ -442,25 +442,36 @@ export default function GameContext({ children }) {
 					}
 				} else {
 					if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
-						tempTeamScore++
+						tempTeamScore += 1
 						setTeamScore(tempTeamScore)
 					} else {
-						tempOpposingScore++
+						tempOpposingScore += 1
 						setOpponentScore(tempOpposingScore)
 					}
 				}
 			}
 		} else {
 			// Calling Team was Euchred
-			if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat))
-				setOpponentScore(opponentScore + 2)
-			else setTeamScore(teamScore + 2)
+			logMode && console.log('CALLING TEAM WAS EUCHRED', matchTricks.callingTeam, matchTricks.opposingTeam)
+
+			if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
+				tempOpposingScore += 2
+				setOpponentScore(tempOpposingScore)
+			}
+			else {
+				tempTeamScore += 2
+				setTeamScore(tempTeamScore)
+			}
 		}
+
 		if (tempTeamScore >= 10 || tempOpposingScore >= 10) {
+			logMode && console.log('GAME OVER', matchTricks.callingTeam, matchTricks.opposingTeam)
 			setMatchStage("GAMEOVER")
 			setTurnCount(100)
 		} else {
+			prompts.matchResult.body = `Your Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 			setPromptText(prompts.matchResult)
+			setShowPromptModal(true)
 		}
 	}
 
@@ -474,8 +485,10 @@ export default function GameContext({ children }) {
 			opposingTeam: 0,
 		})
 		setCallingPlayer(null)
-		setMatchStage("CALL")
-		setTurnCount(0)
+		sleep(250).then(() => {
+			setMatchStage("CALL")
+			setTurnCount(0)
+		})
 	}
 
 	////////////////
@@ -485,8 +498,8 @@ export default function GameContext({ children }) {
 	// Game Setup
 	useEffect(() => {
 		debugMode && console.log("New Deal: Getting Deck and setting up hands")
+		matchStage === "PREGAME" && sleep(250).then(() => setShowStartModal(true))
 		getDeck()
-		sleep(250).then(() => setShowStartModal(true))
 	}, [dealer])
 
 	// Handle Player Drag Choice
@@ -510,8 +523,8 @@ export default function GameContext({ children }) {
 				// FROM: StartModal OR MatchEnd
 				// TO: CALL Stage to start picking Trump
 				logMode && console.log("------------------ NEWGAME Stage")
-				logMode && console.log("%cPlayer Hand", "color: green", playerHand)
-				logMode && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
+				debugMode && console.log("%cPlayer Hand", "color: green", playerHand)
+				debugMode && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
 				if (upTrump.faceValue === undefined)
 					sleep(500).then(() => setTurnCount(turnCount - 1))
 				else {
@@ -530,11 +543,10 @@ export default function GameContext({ children }) {
 			}
 			case "CALL": {
 				logMode && console.log("------------------ Call Stage")
-				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
-
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump.name)
 				turnCount === 0 && setCurrentPlayer((dealer + 1) % 4)
-				showTrumpStack === false && sleep(500).then(() => setShowTrumpStack(true))
-				showTrumpCard === false && sleep(1250).then(() => setShowTrumpCard(true))
+				showTrumpStack === false && sleep(100).then(() => setShowTrumpStack(true))
+				showTrumpCard === false && sleep(500).then(() => setShowTrumpCard(true))
 				if (turnCount >= 0) {
 					if (turnCount > 3) {
 						setMatchStage("PICK")
@@ -545,9 +557,9 @@ export default function GameContext({ children }) {
 							setPromptText(prompts.trump1Turn) // OPTION TO CALL IT UP
 							setShowPromptModal(true)
 						} else {
-							setPromptText(prompts.trump1Round) // AWAITING TURN TO CALL IT UP
-							setShowPromptModal(true)
-							sleep(decidePace).then(() =>
+							sleep(decidePace).then(() => {
+								setPromptText(prompts.trump1Round) // AWAITING TURN TO CALL IT UP
+								setShowPromptModal(true)
 								decideTrump(
 									currentPlayer,
 									nonPlayerHands[currentPlayer - 1],
@@ -556,9 +568,10 @@ export default function GameContext({ children }) {
 									suits,
 									dealer,
 									pass,
-									setGoAlone
+									setGoAlone,
+									matchSuit
 								)
-							)
+							})
 						}
 					}
 				} else {
@@ -568,7 +581,7 @@ export default function GameContext({ children }) {
 			}
 			case "PICK": {
 				logMode && console.log("------------------ Pick Stage")
-				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump.name)
 				showTrumpCard === true && setShowTrumpCard(false)
 				if (turnCount > 2) {
 					setMatchStage("STUCK")
@@ -576,10 +589,10 @@ export default function GameContext({ children }) {
 					setTurnCount(-1)
 				} else {
 					if (currentPlayer === yourSeat) {
-						setPromptText(prompts.trump2Turn) // AWAITING TURN TO DECLARE IT
+						setPromptText(prompts.trump2Turn)
 						setShowPromptModal(true)
 					} else {
-						setPromptText(prompts.trump2Round) // OPTION TO DECLARE IT
+						setPromptText(prompts.trump2Round)
 						setShowPromptModal(true)
 						sleep(decidePace).then(() =>
 							decideTrump(
@@ -590,7 +603,8 @@ export default function GameContext({ children }) {
 								suits,
 								dealer,
 								pass,
-								setGoAlone
+								setGoAlone,
+								matchSuit
 							)
 						)
 					}
@@ -599,7 +613,7 @@ export default function GameContext({ children }) {
 			}
 			case "STUCK": {
 				logMode && console.log("------------------ STUCK Stage")
-				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump)
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump.name)
 				if (dealer === yourSeat) {
 					setPromptText(prompts.trump2Stuck) // STUCK TO DEALER YOU
 					setShowPromptModal(true)
@@ -615,7 +629,8 @@ export default function GameContext({ children }) {
 							suits,
 							dealer,
 							pass,
-							setGoAlone
+							setGoAlone,
+							matchSuit
 						)
 					)
 				}
@@ -625,21 +640,25 @@ export default function GameContext({ children }) {
 				logMode && console.log("------------------ READY Stage")
 				setUpTrump({})
 				setShowTrumpStack(false)
-				if (!goAlone) {
+				if (goAlone === null) {
 					setPromptText(prompts.ready)
 					setShowPromptModal(true)
 				} else {
-					setPromptText(prompts.goAlone)
+					setPromptText(prompts.readyAlone)
 					setShowPromptModal(true)
 				}
 				break
 			}
 			case "DISCARD": {
+				setShowPromptModal(false)
 				logMode && console.log("------------------ DISCARD Stage")
-				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, "\nDealer:", upTrump)
+				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, "\nDealer:", upTrump.name)
 				if (yourSeat === dealer) {
-					setActionText(actionPrompts.discard)
-					setShowActionPrompt(true)
+					sleep(250).then(() => {
+						setShowPromptModal(false)
+						setActionText(actionPrompts.discard)
+						setShowActionPrompt(true)
+					})
 				}
 				else handleDiscard(dealer, upTrump)
 				break
@@ -654,24 +673,28 @@ export default function GameContext({ children }) {
 				}
 				if (turnCount < 4) {
 					if (currentPlayer === yourSeat) {
-						setShowPromptModal(false)
-						setActionText(actionPrompts.yourTurn)
-						setShowActionPrompt(true)
+						sleep(250).then(() => {
+							setShowPromptModal(false)
+							setActionText(actionPrompts.yourTurn)
+							setShowActionPrompt(true)
+						})
 					} else {
 						setPromptText(prompts.othersTurn)
 						setShowPromptModal(true)
-						decideAIplay(
-							currentPlayer,
-							trump,
-							matchSuit,
-							playerHand,
-							nonPlayerHands,
-							handlePlayerChoice,
-							playedCards
+						sleep(decidePace).then(() =>
+							decideAIplay(
+								currentPlayer,
+								trump,
+								matchSuit,
+								playerHand,
+								nonPlayerHands,
+								handlePlayerChoice,
+								playedCards
+							)
 						)
 					}
 				} else {
-					const trickScoreData = scoreTrick(playedCards, trump)
+					const trickScoreData = scoreTrick(playedCards, trump, matchSuit)
 					setCurrentTrickScore(trickScoreData)
 					if (trickScoreData.winner === callingPlayer || findIsTeammate(trickScoreData.winner, callingPlayer)) {
 						setMatchTricks({
@@ -686,9 +709,11 @@ export default function GameContext({ children }) {
 					}
 					if (trickScoreData.winner === yourSeat || findIsTeammate(trickScoreData.winner, yourSeat)) {
 						setPromptText(prompts.trickResultWin)
+						prompts.trickResultWin.subtitle = `${trickScoreData.winner === yourSeat ? 'You Won' : 'Your Teammate Won'}`
 						setShowPromptModal(true)
 					} else {
 						setPromptText(prompts.trickResultLose)
+						prompts.trickResultLose.body = `Player ${trickScoreData.winner} won the trick`
 						setShowPromptModal(true)
 					}
 				}
@@ -703,7 +728,7 @@ export default function GameContext({ children }) {
 					break
 				}
 				if (matchTricks.opposingTeam + matchTricks.callingTeam === 5) {
-					debugMode && console.log("------------------ RESULT Stage: 5 tricks done - scorematch")
+					logMode && console.log("------------------ RESULT Stage: 5 tricks done - scorematch")
 					scoreMatch()
 				} else {
 					setCurrentPlayer(currentMatchScore.winner)
