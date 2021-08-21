@@ -1,34 +1,55 @@
 import React, { useState, useEffect, useContext } from "react";
 import { DataContext } from "../GameContext";
 import { iconSVGs } from '../CoreElements/theme';
-import { View, Image } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
+import { cardImages } from "../Data/data";
 
 export default function DownHand({ position, handLength }) {
 	const [image, setImage] = useState(0);
-	const { currentPlayer, turnCount, matchStage, goAlone, dealer } = useContext(DataContext)
+	const { currentPlayer, turnCount, matchStage, matchTricks, goAlone, dealer } = useContext(DataContext)
 
-	const imageURLS = [require("../assets/cards/down0.png"), require("../assets/cards/down1.png"), require("../assets/cards/down2.png"), require("../assets/cards/down3.png"), require("../assets/cards/down4.png"), require("../assets/cards/down5.png")]
+	const imageURLS = [cardImages.down0, cardImages.down1, cardImages.down2, cardImages.down3, cardImages.down4, cardImages.down5]
 
 	const handStyles = [
 		null,
 		{
-			left: -80,
-			transform: [{ rotate: '90deg' }],
+			left: 50,
+			height: 200,
+			bottom: 40,
+			transform: [{ rotate: '90deg' }, { translateY: "200%" }],
 			opacity: goAlone !== null && ((goAlone + 2) % 4) === position ? 0 : 1
 		},
 		{
-			top: -25,
-			transform: [{ rotate: '180deg' }],
+			top: 50,
+			transform: [{ rotate: '180deg' }, { translateY: "200%" }],
 			opacity: goAlone !== null && ((goAlone + 2) % 4) === position ? 0 : 1
 		},
 		{
-			right: -38,
-			transform: [{ rotate: '270deg' }],
+			height: 220,
+			left: -50,
+			bottom: 40,
+			transform: [{ rotate: '-90deg' }, { translateY: "200%" }],
 			opacity: goAlone !== null && ((goAlone + 2) % 4) === position ? 0 : 1
 		},
 	]
 
-	const scale = 1.4
+	const styles = StyleSheet.create({
+		icon: {
+			position: "absolute",
+			alignItems: "center",
+			left: position === 3 ? -44 : null,
+			right: position === 1 ? -40 : position === 2 ? -56 : null,
+			top: position === 2 ? 22 : -16,
+			opacity: .6
+		},
+		arrow: {
+			top: -2,
+		},
+		deck: {
+			transform: position === 1 ? [{ rotate: '-90deg' }] : position === 2 ? [{ rotate: '180deg' }] : [{ rotate: '90deg' }]
+		}
+	})
+
 
 	useEffect(() => {
 		setImage(imageURLS[handLength]);
@@ -36,10 +57,16 @@ export default function DownHand({ position, handLength }) {
 
 	return (
 		<View style={handStyles[position]}>
-			<Image source={image} style={{ height: 83 / scale, width: 303 / scale }} />
-			{position === dealer && (matchStage !== 'PREGAME' && matchStage !== 'RESULT') && <View style={{ position: "absolute", right: position === 3 ? -56 : null, left: position === 3 ? null : -56, bottom: 32 }}>
-				{iconSVGs.dealerIcon}
-			</View>}
+			<Image source={image} />
+			{(position === dealer && matchTricks.callingTeam + matchTricks.opposingTeam !== 5) && <View style={styles.icon}>
+				<View style={styles.deck}>
+					{iconSVGs.dealerIcon}
+				</View>
+				<View style={styles.arrow}>
+					{iconSVGs.downArrow}
+				</View>
+			</View>
+			}
 		</View>
 	)
 }

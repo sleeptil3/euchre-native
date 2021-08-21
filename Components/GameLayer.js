@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Flex } from '../CoreElements/containerStyles';
 import PlayerHand from './PlayerHand';
 import DownHands from './DownHands';
@@ -10,20 +10,37 @@ import { styles, iconSVGs } from '../CoreElements/theme';
 import { DataContext } from "../GameContext";
 import StartModal from '../Modals/StartModal';
 import PlayField from './PlayField';
-
-// import TrumpIndicator from '../Components/TrumpIndicator';
+import GameOverModal from '../Modals/GameOverModal';
+import TrumpIndicator from '../Components/TrumpIndicator';
+import MatchTricksCount from './MatchTricksCount';
 // import CallingTeamIndicator from './CalllingTeamIndicator';
-// import MatchTricksCount from './MatchTricksCount';
 // import GameScore from './GameScore';
 
 export default function GameLayer() {
-	const { matchStage, trump, teamScore, showActionPrompt, yourSeat, dealer } = useContext(DataContext)
+	const { trump, matchStage, teamScore, matchTricks, showActionPrompt, yourSeat, dealer } = useContext(DataContext)
+
+	const localStyles = StyleSheet.create({
+		hud: {
+			position: "absolute",
+			width: "100%",
+			top: 80,
+			flexDirection: "row",
+			justifyContent: "space-between",
+			paddingHorizontal: 26,
+			opacity: (matchStage === "PLAY" || matchStage === "RESULT") && matchTricks.callingTeam + matchTricks.opposingTeam !== 5 ? 1 : 0
+		}
+	})
 
 	return (
 		<SafeAreaView style={styles.screen}>
 			<StartModal />
+			<GameOverModal />
 			<PromptModal />
 			{showActionPrompt && <PromptAction />}
+			<View style={localStyles.hud}>
+				<MatchTricksCount />
+				<TrumpIndicator />
+			</View>
 			{matchStage !== "PREGAME" &&
 				<Flex fill={2} align="center" justify="center" height="100%" width="100%">
 					<DownHands />
@@ -41,9 +58,7 @@ export default function GameLayer() {
 			{yourSeat === dealer && (matchStage !== 'PREGAME' && matchStage !== 'RESULT') && <View style={{ position: "absolute", left: 14, bottom: 14 }}>
 				{iconSVGs.dealerIcon}
 			</View>}
-			{/* {trump.code !== undefined && <TrumpIndicator />}
-			{trump.code !== undefined && <CallingTeamIndicator />}
-			{(matchStage === "PLAY" || matchStage === "RESULT") && <MatchTricksCount />}
+			{/* {trump.code !== undefined && <CallingTeamIndicator />}
 			{(matchStage === "PLAY" || matchStage === "RESULT" || teamScore > 0 || opponentScore > 0) && <GameScore />} */}
 		</SafeAreaView>
 	)

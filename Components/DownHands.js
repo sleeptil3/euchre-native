@@ -10,7 +10,7 @@ export default function DownHands() {
 
 	return (
 		<Flex fill={2} height="100%" width="100%" >
-			<Flex direction="row" justify="space-between" align="center" height="100%" width="100%" override={{ position: "absolute", top: 0, left: 0 }}>
+			<Flex direction="row" justify="space-between" align="center" height="100%" width="100%" override={{ position: "absolute" }}>
 				<DownHand position={1} handLength={opponentHand1.length} />
 				<DownHand position={3} handLength={opponentHand2.length} />
 			</Flex>

@@ -9,7 +9,7 @@ import {
 	getPlayerHand,
 	scoreTrick,
 } from "./Data/AI"
-import { minAloneScore, minCallScore, decidePace, debugMode, logMode } from "./Data/data"
+import { decidePace, debugMode, logMode } from "./Data/data"
 
 export const DataContext = createContext()
 
@@ -42,6 +42,7 @@ export default function GameContext({ children }) {
 	const [showPromptModal, setShowPromptModal] = useState(false)
 	const [showStartModal, setShowStartModal] = useState(false)
 	const [showActionPrompt, setShowActionPrompt] = useState(false)
+	const [showGameOverModal, setShowGameOverModal] = useState(false)
 	const [actionText, setActionText] = useState("")
 	const [promptText, setPromptText] = useState({
 		text: "",
@@ -436,31 +437,38 @@ export default function GameContext({ children }) {
 					if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 						tempTeamScore += scoreCalc
 						setTeamScore(tempTeamScore)
+						if (goAlone !== null) prompts.matchResult.body = `Your team took all five tricks while going alone (4pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						else prompts.matchResult.body = `Your team took all five tricks (2pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 					} else {
 						tempOpposingScore += scoreCalc
 						setOpponentScore(tempOpposingScore)
+						if (goAlone !== null) prompts.matchResult.body = `The other team took all five tricks while going alone (4pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						else prompts.matchResult.body = `The other team took all five tricks (2pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 					}
 				} else {
 					if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 						tempTeamScore += 1
 						setTeamScore(tempTeamScore)
+						prompts.matchResult.body = `Your team took ${matchTricks.callingTeam} tricks (1pt)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 					} else {
 						tempOpposingScore += 1
 						setOpponentScore(tempOpposingScore)
+						prompts.matchResult.body = `The other team took ${matchTricks.callingTeam} tricks (1pt)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 					}
 				}
 			}
 		} else {
 			// Calling Team was Euchred
 			logMode && console.log('CALLING TEAM WAS EUCHRED', matchTricks.callingTeam, matchTricks.opposingTeam)
-
 			if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 				tempOpposingScore += 2
 				setOpponentScore(tempOpposingScore)
+				prompts.matchResult.body = `You got Euchred\n2pts awarded to the other team\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 			}
 			else {
 				tempTeamScore += 2
 				setTeamScore(tempTeamScore)
+				prompts.matchResult.body = `You Euchred the other team\n2pts awarded to your team\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 			}
 		}
 
@@ -469,7 +477,6 @@ export default function GameContext({ children }) {
 			setMatchStage("GAMEOVER")
 			setTurnCount(100)
 		} else {
-			prompts.matchResult.body = `Your Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
 			setPromptText(prompts.matchResult)
 			setShowPromptModal(true)
 		}
@@ -491,11 +498,59 @@ export default function GameContext({ children }) {
 		})
 	}
 
+	const resetGame = () => {
+		// Card State
+		setPlayerHand([])
+		setTeammateHand([])
+		setOpponentHand1([])
+		setOpponentHand2([])
+		setPlayedCards({
+			0: blankCard,
+			1: blankCard,
+			2: blankCard,
+			3: blankCard,
+		})
+
+		// Game State
+		setYourSeat(0)
+		setUpTrump({})
+
+		// Modal/Prompt State
+		setActionText("")
+		setPromptText({
+			text: "",
+			subtitle: "",
+			body: "",
+			choices: [],
+		})
+
+		// Match State
+		setPlayerChoice(null)
+		setTrump({})
+		setCallingPlayer(null)
+		setTeamScore(0)
+		setOpponentScore(0)
+		setCurrentTrickScore({})
+		setMatchSuit(null)
+		setGoAlone(null)
+		setMatchTricks({
+			callingTeam: 0,
+			opposingTeam: 0,
+		})
+		// UI State
+		setShowTrumpCard(false)
+		setShowTrumpStack(false)
+		setMatchStage("PREGAME") // NEWGAME, NEWMATCH, DEAL, CALL, PICK, PLAY
+		setShowGameOverModal(false)
+		setDealer(dealer + 1) // 0, 1, 2, 3
+		setCurrentPlayer(dealer + 1) // 0, 1, 2, 3, 4 (result)
+	}
+
 	////////////////
 	// useEffects //
 	////////////////
 
-	// Game Setup
+	// Game/NewDeal Setup
 	useEffect(() => {
 		debugMode && console.log("New Deal: Getting Deck and setting up hands")
 		matchStage === "PREGAME" && sleep(250).then(() => setShowStartModal(true))
@@ -503,7 +558,6 @@ export default function GameContext({ children }) {
 	}, [dealer])
 
 	// Handle Player Drag Choice
-
 	useEffect(() => {
 		if (playerChoice) {
 			console.log(`Player Chose ${playerChoice} by dragging`)
@@ -740,11 +794,11 @@ export default function GameContext({ children }) {
 			case "GAMEOVER": {
 				// WIN CONDITION MET
 				logMode && console.log("------------------ GAMEOVER Stage")
-				// Setup a reset for another game
+				setShowGameOverModal(true)
 				break
 			}
 			default:
-				logMode && console.log("------------------ Default Stage")
+				logMode && console.log("------------------ Unknown Stage")
 		}
 	}, [turnCount])
 
@@ -754,55 +808,36 @@ export default function GameContext({ children }) {
 		<DataContext.Provider
 			value={{
 				goAlone,
-				showTrumpStack,
-				setShowTrumpStack,
+				showTrumpStack, setShowTrumpStack,
 				matchTricks,
-				playedCards,
-				setPlayedCards,
+				playedCards, setPlayedCards,
 				handlePlayerChoice,
 				handleDiscard,
-				showTrumpCard,
-				setShowTrumpCard,
+				showTrumpCard, setShowTrumpCard,
 				pass,
 				yourSeat,
-				turnCount,
-				setTurnCount,
-				callingPlayer,
-				setCallingPlayer,
+				turnCount, setTurnCount,
+				callingPlayer, setCallingPlayer,
 				upTrump,
 				suits,
-				opponentScore,
-				setOpponentScore,
-				promptText,
-				setPromptText,
-				showPromptModal,
-				setShowPromptModal,
-				showStartModal,
-				setShowStartModal,
-				playerHand,
-				setPlayerHand,
-				teammateHand,
-				setTeammateHand,
-				opponentHand1,
-				setOpponentHand1,
-				opponentHand2,
-				setOpponentHand2,
-				trump,
-				setTrump,
-				teamScore,
-				setTeamScore,
-				matchStage,
-				setMatchStage,
-				dealer,
-				setDealer,
-				currentPlayer,
-				setCurrentPlayer,
-				playerChoice,
-				setPlayerChoice,
-				actionText,
-				setActionText,
-				setShowActionPrompt,
-				showActionPrompt
+				opponentScore, setOpponentScore,
+				promptText, setPromptText,
+				showPromptModal, setShowPromptModal,
+				showStartModal, setShowStartModal,
+				playerHand, setPlayerHand,
+				teammateHand, setTeammateHand,
+				opponentHand1, setOpponentHand1,
+				opponentHand2, setOpponentHand2,
+				trump, setTrump,
+				teamScore, setTeamScore,
+				matchStage, setMatchStage,
+				dealer, setDealer,
+				currentPlayer, setCurrentPlayer,
+				playerChoice, setPlayerChoice,
+				actionText, setActionText,
+				showActionPrompt, setShowActionPrompt,
+				showGameOverModal, setShowGameOverModal,
+				resetGame
 			}}
 		>
 			{children}

@@ -1,14 +1,51 @@
-import { useContext } from "react"
+import React, { useContext } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Body, DefaultText, Subtitle } from '../CoreElements/fontStyles'
 import { DataContext } from "../GameContext"
+import { colors } from '../CoreElements/theme'
 
 export default function MatchTricksCount() {
-	const { matchTricks, callingPlayer, yourSeat, matchStage } = useContext(DataContext)
-	if (matchStage !== "PLAY") return null
-	else return (
-		<div className="absolute bottom-32 left-80 transform translate-x-7  flex flex-col justify-center items-center py-2 px-2 text-white opacity-60 rounded-lg">
-			<h1 className="text-md text-center font-normal">Match Tricks</h1>
-			<h2 className="text-sm text font-light">Your Team: <span className="font-normal">{callingPlayer === yourSeat || (callingPlayer + 2) % 4 === yourSeat ? matchTricks.callingTeam : matchTricks.opposingTeam}</span></h2>
-			<h2 className="text-sm text font-light">Opposing Team: <span className="font-normal">{callingPlayer === yourSeat || (callingPlayer + 2) % 4 === yourSeat ? matchTricks.opposingTeam : matchTricks.callingTeam}</span></h2>
-		</div>
+	const { matchTricks, callingPlayer } = useContext(DataContext)
+	return (
+		<View style={styles.container}>
+			<DefaultText align="center" override={{ fontSize: 15, marginBottom: 2 }}>Tricks</DefaultText>
+			<View style={styles.row}>
+				<View style={styles.flex}>
+					<DefaultText align="center" override={{ fontSize: 12 }}>You</DefaultText>
+					<DefaultText align="center" override={{ fontSize: 12 }}>{callingPlayer % 2 === 0 ? matchTricks.callingTeam : matchTricks.opposingTeam}</DefaultText>
+				</View>
+				<View style={styles.flex}>
+					<DefaultText align="center" override={{ fontSize: 12 }}>Them</DefaultText>
+					<DefaultText align="center" override={{ fontSize: 12 }}>{callingPlayer % 2 === 0 ? matchTricks.opposingTeam : matchTricks.callingTeam}</DefaultText>
+				</View>
+
+			</View>
+		</View>
 	)
 }
+
+
+const styles = StyleSheet.create({
+	container: {
+		alignItems: "center",
+		justifyContent: "center",
+		opacity: .8,
+		borderWidth: 1,
+		borderColor: colors.white,
+		borderRadius: 10,
+		paddingVertical: 6,
+		paddingTop: 2,
+		height: 64,
+		flex: 0
+	},
+	flex: {
+		justifyContent: "center",
+		alignItems: "center",
+		paddingHorizontal: 4
+	},
+	row: {
+		flexDirection: "row",
+		alignItems: "center"
+
+	}
+})

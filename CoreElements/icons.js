@@ -76,6 +76,7 @@ export default function Icon({ choice }) {
 			onLongPress={() => handleLongPress(choice.text)}
 			style={styles.icon}
 			accessibilityLabel={choice.altText}
+			hitSlop={10}
 		>
 			{isPressed === true ? filledType : outlineType}
 		</Pressable>

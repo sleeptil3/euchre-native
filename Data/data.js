@@ -1,18 +1,17 @@
 import { v4 as uuid } from 'uuid'
 
 // Scoring Modes
-// const minAloneScore = 100
-// const minCallScore = 70
-export const minAloneScore = 500
-export const minCallScore = 500
+export const minAloneScore = 100
+export const minCallScore = 70
+// export const minAloneScore = 500
+// export const minCallScore = 500
 
 // Pace Settings
-export const decidePace = 1000
-// export const decidePace = 400
+export const decidePace = 1250
 
 // Log/Debug Mode Settings
-export const logMode = true
-export const debugMode = true
+export const logMode = false
+export const debugMode = false
 
 
 export function sleep(ms) {
@@ -44,15 +43,15 @@ export const cardImages = {
 	d9: require("../assets/cards/d9.png"),
 	d10: require("../assets/cards/d10.png"),
 	da: require("../assets/cards/da.png"),
-	deck: require("../assets/cards/deck.png"),
+	deck: require("../assets/cards/downHands/deck.png"),
 	dj: require("../assets/cards/dj.png"),
 	dk: require("../assets/cards/dk.png"),
-	down0: require("../assets/cards/down0.png"),
-	down1: require("../assets/cards/down1.png"),
-	down2: require("../assets/cards/down2.png"),
-	down3: require("../assets/cards/down3.png"),
-	down4: require("../assets/cards/down4.png"),
-	down5: require("../assets/cards/down5.png"),
+	down0: require("../assets/cards/downHands/down0.png"),
+	down1: require("../assets/cards/downHands/down1.png"),
+	down2: require("../assets/cards/downHands/down2.png"),
+	down3: require("../assets/cards/downHands/down3.png"),
+	down4: require("../assets/cards/downHands/down4.png"),
+	down5: require("../assets/cards/downHands/down5.png"),
 	dq: require("../assets/cards/dq.png"),
 	h9: require("../assets/cards/h9.png"),
 	h10: require("../assets/cards/h10.png"),

@@ -20,7 +20,7 @@ export default function PromptModal() {
 		>
 			<View style={{ width: "100%", height: "100%" }}>
 				<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 225, left: 0, right: 0 }}>
-					<View style={styles.modal} tint="dark" intensity={60}>
+					<View style={styles.modal}>
 						<Flex justify="space-between" align="center">
 							<Title align="center">{promptText.title}</Title>
 							<View>

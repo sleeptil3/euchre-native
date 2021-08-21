@@ -1,21 +1,21 @@
 {
 	"expo": {
-		"name": "euchre-native",
-		"slug": "euchre-native",
-		"version": "1.0.0",
+		"name": "Euchre",
+		"slug": "euchre",
+		"version": "0.9.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
+			"backgroundColor": "#111"
 		},
 		"updates": {
 			"fallbackToCacheTimeout": 0
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": false
 		},
 		"android": {
 			"adaptiveIcon": {
