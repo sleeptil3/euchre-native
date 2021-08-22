@@ -15,13 +15,9 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": false
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#FFFFFF"
-			}
+			"supportsTablet": false,
+			"bundleIdentifier": "com.sleeptil3software.euchre",
+			"buildNumber": "0.9.0"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
