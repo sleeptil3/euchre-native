@@ -19,6 +19,9 @@
 			"bundleIdentifier": "com.sleeptil3software.euchre",
 			"buildNumber": "0.9.0"
 		},
+		"android": {
+			"package": "com.sleeptil3software.euchre"
+		},
 		"web": {
 			"favicon": "./assets/favicon.png"
 		}
