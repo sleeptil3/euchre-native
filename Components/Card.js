@@ -2,10 +2,9 @@ import React, { useState, useContext, useEffect, useRef } from "react"
 import { Animated, PanResponder, StyleSheet } from "react-native";
 import { DataContext } from "../GameContext"
 import { cardImages, blankCard, sleep } from "../Data/data"
-import { logMode, debugMode, decidePace } from "../Data/data";
 
 export default function Card({ card, scale, use, position }) {
-	const { setPlayerChoice, upTrump } = useContext(DataContext)
+	const { setPlayerChoice, upTrump, deckTheme } = useContext(DataContext)
 	const [isTrump, setIsTrump] = useState(false)
 	const cardCode = card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()
 
@@ -98,7 +97,7 @@ export default function Card({ card, scale, use, position }) {
 
 	return (
 		<Animated.Image
-			source={cardImages[cardCode]}
+			source={cardImages[deckTheme][cardCode]}
 			style={selectedStyle}
 			{...dragResponder.panHandlers}
 		/>

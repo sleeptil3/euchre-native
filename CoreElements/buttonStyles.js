@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Button } from 'react-native';
+import { Pressable, Button, Text, Linking } from 'react-native';
 import { Subtitle } from './fontStyles';
 import { colors } from './theme';
 
@@ -77,3 +77,7 @@ export const ButtonSetValue = ({ overwrite = false, size, text, setState, state,
 		)
 	}
 }
+
+export const ButtonURLLink = ({ url, children }) => {
+	return <Text style={{ textDecorationLine: "underline" }} onPress={() => Linking.openURL(url)}>{children}</Text>;
+};

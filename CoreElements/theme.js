@@ -25,9 +25,31 @@ export const styles = StyleSheet.create({
 	screen: {
 		width: "100%",
 		height: "100%",
-		alignItems: "center"
+		alignItems: "center",
+	},
+	settingsScreen: {
+		width: "100%",
+		height: "100%",
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	settings: {
+		width: "90%",
+		height: "80%",
+		alignItems: "center",
+		justifyContent: "center",
 	}
 })
+
+export const themeSamples = {
+	Default: require("../assets/decks/Default/icons/example.png"),
+	QueenG: require("../assets/decks/QueenG/icons/example.png"),
+}
+
+export const themeHands = {
+	Default: require("../assets/decks/Default/icons/hand.png"),
+	QueenG: require("../assets/decks/QueenG/icons/hand.png"),
+}
 
 export const iconSVGs = {
 	spadeOutlined: <Svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">

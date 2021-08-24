@@ -13,6 +13,8 @@ import PlayField from './PlayField';
 import GameOverModal from '../Modals/GameOverModal';
 import TrumpIndicator from '../Components/TrumpIndicator';
 import MatchTricksCount from './MatchTricksCount';
+import SettingsModal from '../Modals/SettingsModal';
+import RulesModal from '../Modals/RulesModal';
 // import CallingTeamIndicator from './CalllingTeamIndicator';
 // import GameScore from './GameScore';
 
@@ -34,6 +36,8 @@ export default function GameLayer() {
 	return (
 		<SafeAreaView style={styles.screen}>
 			<StartModal />
+			<SettingsModal />
+			<RulesModal />
 			<GameOverModal />
 			<PromptModal />
 			{showActionPrompt && <PromptAction />}

@@ -6,9 +6,9 @@ import { cardImages } from "../Data/data";
 
 export default function DownHand({ position, handLength }) {
 	const [image, setImage] = useState(0);
-	const { currentPlayer, turnCount, matchStage, matchTricks, goAlone, dealer } = useContext(DataContext)
+	const { deckTheme, matchTricks, goAlone, dealer } = useContext(DataContext)
 
-	const imageURLS = [cardImages.down0, cardImages.down1, cardImages.down2, cardImages.down3, cardImages.down4, cardImages.down5]
+	const imageURLS = [cardImages[deckTheme].down0, cardImages[deckTheme].down1, cardImages[deckTheme].down2, cardImages[deckTheme].down3, cardImages[deckTheme].down4, cardImages[deckTheme].down5]
 
 	const handStyles = [
 		null,

@@ -5,22 +5,9 @@ import { DataContext } from "../GameContext"
 import { cardImages, sleep } from "../Data/data"
 
 export default function TrumpCard(props) {
-	const { showTrumpCard, setShowTrumpCard, suits, matchStage, yourSeat, upTrump, currentPlayer } = useContext(DataContext)
+	const { deckTheme, showTrumpCard, setShowTrumpCard, suits, matchStage, yourSeat, upTrump, currentPlayer } = useContext(DataContext)
 	const [cardCode, setCardCode] = useState("")
-	const [enableSelection, setEnableSelection] = useState(false)
 	const [scaleValue, setScaleValue] = useState(.6)
-
-	const handlePress = () => {
-		setShowTrumpCard(false)
-		debugMode && console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
-		// suits[upTrump.suit.code].select()
-	}
-
-	const handleLongPress = () => {
-		setShowTrumpCard(false)
-		debugMode && console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
-		// suits[upTrump.suit.code].select()
-	}
 
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -57,35 +44,37 @@ export default function TrumpCard(props) {
 		setCardCode("" + upTrump.suit.code + upTrump.faceValue.toLowerCase())
 	}, [upTrump])
 
-	useEffect(() => {
-		if (matchStage === "CALL") {
-			currentPlayer === yourSeat ? setEnableSelection(true) : setEnableSelection(false)
-		} else {
-			setEnableSelection(false)
-		}
-	}, [currentPlayer])
-
 	return (
-		<Pressable
-			onPress={handlePress}
-			onLongPress={handleLongPress}
-			onPressIn={() => setScaleValue(.7)}
-			onPressOut={() => setScaleValue(.6)}
-		>
-			<Animated.Image
-				source={cardImages[cardCode]}
-				style={
-					{
-						transform: [{ scale: scaleValue }],
-						opacity: fadeAnim
-					}
+		<Animated.Image
+			source={cardImages[deckTheme][cardCode]}
+			style={
+				{
+					transform: [{ scale: scaleValue }],
+					opacity: fadeAnim
 				}
-			/>
-		</Pressable>
+			}
+		/>
 	)
 }
 
 
-		// <div onClick={handleClick} className={`${enableSelection} ${trumpCardPosition} transform transition-transform relative z-20 cursor-pointer w-24 delay-75 duration-500 hover:-translate-y-5`}>
-		// 	<img className={`transition-opacity ${trumpCardOpacity} duration-1000 filter drop-shadow-2xl shadow-2xl`} src={`./cards/${cardCode}.png`} alt={`${upTrump.faceValue} of ${upTrump.suit.name}`} />
-		// </div>
+// Older code for clicking upTrump card
+
+// const handlePress = () => {
+// 	setShowTrumpCard(false)
+// 	debugMode && console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
+// 	// suits[upTrump.suit.code].select()
+// }
+
+// const handleLongPress = () => {
+// 	setShowTrumpCard(false)
+// 	debugMode && console.log(`You ordered up ${upTrump.faceValue} of ${upTrump.suit.name} as trump`)
+// 	// suits[upTrump.suit.code].select()
+// }
+
+// const [enableSelection, setEnableSelection] = useState(false)
+// <Pressable
+// 	onPress = { handlePress }
+// 	onLongPress = { handleLongPress }
+// 	onPressIn = {() => setScaleValue(.7)}
+// 	onPressOut = {() => setScaleValue(.6)}>

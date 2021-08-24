@@ -18,6 +18,9 @@ export default function GameContext({ children }) {
 	// GAME STATE //
 	////////////////
 
+	// Theme State
+	const [deckTheme, setDeckTheme] = useState("Default")
+
 	// Card State
 	const [playerHand, setPlayerHand] = useState([])
 	const [teammateHand, setTeammateHand] = useState([])
@@ -41,6 +44,8 @@ export default function GameContext({ children }) {
 	// Modal/Prompt State
 	const [showPromptModal, setShowPromptModal] = useState(false)
 	const [showStartModal, setShowStartModal] = useState(false)
+	const [showRulesModal, setShowRulesModal] = useState(false)
+	const [showSettingsModal, setShowSettingsModal] = useState(false)
 	const [showActionPrompt, setShowActionPrompt] = useState(false)
 	const [showGameOverModal, setShowGameOverModal] = useState(false)
 	const [actionText, setActionText] = useState("")
@@ -807,23 +812,20 @@ export default function GameContext({ children }) {
 	return (
 		<DataContext.Provider
 			value={{
-				goAlone,
+				deckTheme, setDeckTheme,
+				showPromptModal, setShowPromptModal,
+				showRulesModal, setShowRulesModal,
+				showSettingsModal, setShowSettingsModal,
+				showStartModal, setShowStartModal,
+				showGameOverModal, setShowGameOverModal,
+				showActionPrompt, setShowActionPrompt,
 				showTrumpStack, setShowTrumpStack,
-				matchTricks,
 				playedCards, setPlayedCards,
-				handlePlayerChoice,
-				handleDiscard,
 				showTrumpCard, setShowTrumpCard,
-				pass,
-				yourSeat,
 				turnCount, setTurnCount,
 				callingPlayer, setCallingPlayer,
-				upTrump,
-				suits,
 				opponentScore, setOpponentScore,
 				promptText, setPromptText,
-				showPromptModal, setShowPromptModal,
-				showStartModal, setShowStartModal,
 				playerHand, setPlayerHand,
 				teammateHand, setTeammateHand,
 				opponentHand1, setOpponentHand1,
@@ -835,8 +837,14 @@ export default function GameContext({ children }) {
 				currentPlayer, setCurrentPlayer,
 				playerChoice, setPlayerChoice,
 				actionText, setActionText,
-				showActionPrompt, setShowActionPrompt,
-				showGameOverModal, setShowGameOverModal,
+				goAlone,
+				matchTricks,
+				handlePlayerChoice,
+				handleDiscard,
+				pass,
+				yourSeat,
+				upTrump,
+				suits,
 				resetGame
 			}}
 		>

@@ -7,12 +7,21 @@ const customFonts = {
 	"SFPro-Light": require("../assets/fonts/SF-Pro-Text-Light.otf"),
 	"SFPro-Heavy": require("../assets/fonts/SF-Pro-Text-Heavy.otf"),
 	"SFPro-Bold": require("../assets/fonts/SF-Pro-Text-Bold.otf"),
+	"SF-Pro-Display-ThinItalic": require("../assets/fonts/SF-Pro-Display-ThinItalic.otf"),
+	"SFPro-Display-Bold": require("../assets/fonts/SF-Pro-Display-Bold.otf"),
 }
 
 export const Heading = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.heading, { textAlign: align || "left", color: color || fontStyles.heading.color }, override]}>{children}</Text>
+	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+}
+
+export const Italic = ({ children, align, override, color }) => {
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.italic, { textAlign: align || "left", color: color || fontStyles.heading.color }, override]}>{children}</Text>
 	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
@@ -37,6 +46,13 @@ export const Body = ({ children, align, override, color }) => {
 	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
+export const List = ({ children, align, override, color }) => {
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.list, { textAlign: align || "left", color: color || fontStyles.body.color }, override]}>• {children}</Text>
+	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+}
+
 export const DefaultText = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
@@ -47,9 +63,14 @@ export const DefaultText = ({ children, align, override, color }) => {
 
 export const fontStyles = StyleSheet.create({
 	heading: {
+		fontFamily: "SFPro-Display-Bold",
 		color: colors.white,
-		fontSize: 40,
-		marginBottom: 12
+		fontSize: 48,
+	},
+	italic: {
+		fontFamily: "SF-Pro-Display-ThinItalic",
+		color: colors.white,
+		fontSize: 18,
 	},
 	title: {
 		fontFamily: "SFPro-Heavy",
@@ -66,9 +87,15 @@ export const fontStyles = StyleSheet.create({
 	body: {
 		fontFamily: "SFPro-Light",
 		color: colors.white,
-		fontSize: 18,
+		fontSize: 16,
 		lineHeight: 24,
-		marginBottom: 10,
+		marginBottom: 20,
+	},
+	list: {
+		fontFamily: "SFPro-Light",
+		color: colors.white,
+		fontSize: 16,
+		lineHeight: 24,
 	},
 	default: {
 		fontFamily: "SFPro-Light",
