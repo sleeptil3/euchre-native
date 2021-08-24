@@ -27,7 +27,7 @@ export default function PromptAction() {
 	}, [])
 
 	return (
-		<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 225, left: 0, right: 0 }}>
+		<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 245, left: 0, right: 0 }}>
 			<Animated.View style={[styles.action, { opacity: blinkAnim }]}>
 				<Flex justify="center" align="center">
 					<Subtitle align="center" override={{ fontSize: 20 }}>{actionText}</Subtitle>
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
 		borderRadius: 32,
 		borderWidth: 2,
 		borderColor: "rgba(255,255,255,.5)",
-		backgroundColor: "rgba(0,0,0,.5)"
+		backgroundColor: "rgba(0,0,0,.75)"
 	},
 })

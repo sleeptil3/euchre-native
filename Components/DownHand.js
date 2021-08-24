@@ -5,10 +5,17 @@ import { View, Image, StyleSheet } from "react-native";
 import { cardImages } from "../Data/data";
 
 export default function DownHand({ position, handLength }) {
+	const { matchTricks, goAlone, dealer, appPreferences } = useContext(DataContext)
 	const [image, setImage] = useState(0);
-	const { deckTheme, matchTricks, goAlone, dealer } = useContext(DataContext)
+	const [imageURLS, setImageURLS] = useState([cardImages[appPreferences.deckTheme].down0, cardImages[appPreferences.deckTheme].down1, cardImages[appPreferences.deckTheme].down2, cardImages[appPreferences.deckTheme].down3, cardImages[appPreferences.deckTheme].down4, cardImages[appPreferences.deckTheme].down5])
 
-	const imageURLS = [cardImages[deckTheme].down0, cardImages[deckTheme].down1, cardImages[deckTheme].down2, cardImages[deckTheme].down3, cardImages[deckTheme].down4, cardImages[deckTheme].down5]
+	useEffect(() => {
+		setImageURLS([cardImages[appPreferences.deckTheme].down0, cardImages[appPreferences.deckTheme].down1, cardImages[appPreferences.deckTheme].down2, cardImages[appPreferences.deckTheme].down3, cardImages[appPreferences.deckTheme].down4, cardImages[appPreferences.deckTheme].down5])
+	}, [appPreferences.deckTheme])
+
+	useEffect(() => {
+		setImage(imageURLS[handLength])
+	}, [imageURLS])
 
 	const handStyles = [
 		null,

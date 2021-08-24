@@ -25,11 +25,7 @@ export default function RulesModal() {
 				<View style={styles.settings}>
 					<ScrollView style={localStyles.modal}>
 						<View style={{ margin: 20 }}>
-							<View style={{ marginVertical: 10, alignItems: "center" }} >
-								<Svg width="69" height="69" viewBox="0 0 69 69" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<Path d="M34.5 69C53.3735 69 69 53.3397 69 34.5C69 15.6265 53.3397 0 34.4662 0C15.6265 0 0 15.6265 0 34.5C0 53.3397 15.6603 69 34.5 69ZM34.5 63.25C18.5353 63.25 5.78382 50.4647 5.78382 34.5C5.78382 18.5353 18.5015 5.75 34.4662 5.75C50.4309 5.75 63.2162 18.5353 63.25 34.5C63.2838 50.4647 50.4647 63.25 34.5 63.25ZM34.1956 22.4588C36.6647 22.4588 38.5926 20.4971 38.5926 18.0279C38.5926 15.5588 36.6647 13.5971 34.1956 13.5971C31.7603 13.5971 29.7985 15.5588 29.7985 18.0279C29.7985 20.4971 31.7603 22.4588 34.1956 22.4588ZM28.5809 53.1029H42.3471C43.7338 53.1029 44.8162 52.0882 44.8162 50.7015C44.8162 49.3824 43.7338 48.3338 42.3471 48.3338H38.1529V31.1176C38.1529 29.2912 37.2397 28.0735 35.5147 28.0735H29.1559C27.7691 28.0735 26.6868 29.1221 26.6868 30.4412C26.6868 31.8279 27.7691 32.8426 29.1559 32.8426H32.775V48.3338H28.5809C27.1941 48.3338 26.1118 49.3824 26.1118 50.7015C26.1118 52.0882 27.1941 53.1029 28.5809 53.1029Z" fill={colors.white} />
-								</Svg>
-							</View>
+							<View style={{ marginVertical: 10, alignItems: "center" }}>{iconSVGs.info}</View>
 							<View style={{ marginBottom: 20 }} >
 								<Heading align="center">How to Play</Heading>
 								<Italic override={{ marginBottom: 20 }} align="center">(from <ButtonURLLink url="https://bicyclecards.com/how-to-play/euchre/">bicyclecards.com</ButtonURLLink>)</Italic>
@@ -105,6 +101,6 @@ const localStyles = StyleSheet.create({
 		borderRadius: 32,
 		borderWidth: 2,
 		borderColor: "rgba(255,255,255,.5)",
-		backgroundColor: "rgba(0,0,0,.5)",
+		backgroundColor: "rgba(0,0,0,.7)",
 	},
 })

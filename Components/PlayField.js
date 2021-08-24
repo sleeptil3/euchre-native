@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import { DataContext } from "../GameContext"
 import { blankCard } from "../Data/data"
 import Card from "./Card"
-import { Flex } from "../CoreElements/containerStyles"
 import { StyleSheet, View } from "react-native"
 
 export default function PlayField() {

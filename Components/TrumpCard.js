@@ -5,7 +5,7 @@ import { DataContext } from "../GameContext"
 import { cardImages, sleep } from "../Data/data"
 
 export default function TrumpCard(props) {
-	const { deckTheme, showTrumpCard, setShowTrumpCard, suits, matchStage, yourSeat, upTrump, currentPlayer } = useContext(DataContext)
+	const { appPreferences, showTrumpCard, upTrump } = useContext(DataContext)
 	const [cardCode, setCardCode] = useState("")
 	const [scaleValue, setScaleValue] = useState(.6)
 
@@ -46,7 +46,7 @@ export default function TrumpCard(props) {
 
 	return (
 		<Animated.Image
-			source={cardImages[deckTheme][cardCode]}
+			source={cardImages[appPreferences.deckTheme][cardCode]}
 			style={
 				{
 					transform: [{ scale: scaleValue }],

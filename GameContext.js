@@ -17,7 +17,6 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	////////////////
 	// GAME STATE //
 	////////////////
-	console.log("App Preferences: ", appPreferences)
 
 	// Card State
 	const [playerHand, setPlayerHand] = useState([])
@@ -33,6 +32,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	const nonPlayerHands = [opponentHand1, teammateHand, opponentHand2]
 
 	// Game State
+	const [gameplayCount, setGameplayCount] = useState(0)
 	const [dealer, setDealer] = useState(0) // 0, 1, 2, 3
 	const [currentPlayer, setCurrentPlayer] = useState(dealer + 1) // 0, 1, 2, 3, 4 (result)
 	const [turnCount, setTurnCount] = useState(-1)
@@ -40,12 +40,13 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	const [upTrump, setUpTrump] = useState({})
 
 	// Modal/Prompt State
-	const [showPromptModal, setShowPromptModal] = useState(false)
 	const [showStartModal, setShowStartModal] = useState(false)
 	const [showRulesModal, setShowRulesModal] = useState(false)
 	const [showSettingsModal, setShowSettingsModal] = useState(false)
-	const [showActionPrompt, setShowActionPrompt] = useState(false)
 	const [showGameOverModal, setShowGameOverModal] = useState(false)
+	const [showHelpModal, setShowHelpModal] = useState(false)
+	const [showPromptModal, setShowPromptModal] = useState(false)
+	const [showActionPrompt, setShowActionPrompt] = useState(false)
 	const [actionText, setActionText] = useState("")
 	const [promptText, setPromptText] = useState({
 		text: "",
@@ -60,7 +61,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	const [callingPlayer, setCallingPlayer] = useState(null)
 	const [teamScore, setTeamScore] = useState(0)
 	const [opponentScore, setOpponentScore] = useState(0)
-	const [matchStage, setMatchStage] = useState("PREGAME") // NEWGAME, NEWMATCH, DEAL, CALL, PICK, PLAY
+	const [matchStage, setMatchStage] = useState("PREGAME") // PREGAME, NEWGAME, NEWMATCH, DEAL, PICK, CALL, READY, PLAY, RESULT, GAMEOVER
 	const [currentMatchScore, setCurrentTrickScore] = useState({})
 	const [matchSuit, setMatchSuit] = useState(null)
 	const [goAlone, setGoAlone] = useState(null)
@@ -515,6 +516,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		})
 
 		// Game State
+		setGameplayCount(gameplayCount + 1)
 		setYourSeat(0)
 		setUpTrump({})
 
@@ -543,10 +545,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		// UI State
 		setShowTrumpCard(false)
 		setShowTrumpStack(false)
-		setMatchStage("PREGAME") // NEWGAME, NEWMATCH, DEAL, CALL, PICK, PLAY
+		setMatchStage("PREGAME")
 		setShowGameOverModal(false)
-		setDealer(dealer + 1) // 0, 1, 2, 3
-		setCurrentPlayer(dealer + 1) // 0, 1, 2, 3, 4 (result)
+		setDealer(dealer + 1)
+		setCurrentPlayer(dealer + 1)
 	}
 
 	////////////////
@@ -730,8 +732,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				}
 				if (turnCount < 4) {
 					if (currentPlayer === yourSeat) {
-						sleep(250).then(() => {
-							setShowPromptModal(false)
+						setShowPromptModal(false)
+						sleep(500).then(() => {
 							setActionText(actionPrompts.yourTurn)
 							setShowActionPrompt(true)
 						})
@@ -805,16 +807,16 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		}
 	}, [turnCount])
 
-
-
 	return (
 		<DataContext.Provider
 			value={{
 				appPreferences, setAppPreferences,
+				gameplayCount, setGameplayCount,
 				showPromptModal, setShowPromptModal,
 				showRulesModal, setShowRulesModal,
 				showSettingsModal, setShowSettingsModal,
 				showStartModal, setShowStartModal,
+				showHelpModal, setShowHelpModal,
 				showGameOverModal, setShowGameOverModal,
 				showActionPrompt, setShowActionPrompt,
 				showTrumpStack, setShowTrumpStack,
@@ -850,4 +852,3 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		</DataContext.Provider>
 	)
 }
-

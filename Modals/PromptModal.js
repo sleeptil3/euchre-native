@@ -5,18 +5,21 @@ import { Flex } from '../CoreElements/containerStyles'
 import { Subtitle, Title, Body } from '../CoreElements/fontStyles'
 import { colors } from '../CoreElements/theme'
 import Icon from '../CoreElements/icons'
+import ControlPanel from '../Components/ControlPanel'
+import { blankCard, sleep } from '../Data/data'
 
 // import { BlurView } from 'expo-blur'
 // import MaskedView from '@react-native-masked-view/masked-view';
 
 export default function PromptModal() {
-	const { showPromptModal, promptText } = useContext(DataContext)
+	const { showPromptModal, promptText, currentPlayer, yourSeat, playedCards, matchStage } = useContext(DataContext)
 
 	return (
 		<Modal
 			animationType="slide"
 			transparent={true}
 			visible={showPromptModal}
+			presentationStyle={"overFullScreen"}
 		>
 			<View style={{ width: "100%", height: "100%" }}>
 				<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 225, left: 0, right: 0 }}>
@@ -37,7 +40,7 @@ export default function PromptModal() {
 									borderRadius: 40,
 									paddingHorizontal: 8,
 									paddingVertical: 8,
-									marginVertical: 10
+									marginBottom: 10
 								}}
 							>
 								{promptText.choices.map(choice => {
@@ -45,6 +48,7 @@ export default function PromptModal() {
 								})}
 							</Flex>
 							}
+							{(currentPlayer === yourSeat || matchStage === "READY" || !Object.values(playedCards).includes(blankCard)) && <ControlPanel />}
 						</Flex>
 					</View>
 				</View>
@@ -60,6 +64,6 @@ const styles = StyleSheet.create({
 		borderRadius: 32,
 		borderWidth: 2,
 		borderColor: "rgba(255,255,255,.5)",
-		backgroundColor: "rgba(0,0,0,.5)"
+		backgroundColor: "rgba(0,0,0,.75)"
 	},
 })

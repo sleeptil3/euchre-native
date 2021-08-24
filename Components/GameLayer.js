@@ -15,8 +15,8 @@ import TrumpIndicator from '../Components/TrumpIndicator';
 import MatchTricksCount from './MatchTricksCount';
 import SettingsModal from '../Modals/SettingsModal';
 import RulesModal from '../Modals/RulesModal';
-// import CallingTeamIndicator from './CalllingTeamIndicator';
-// import GameScore from './GameScore';
+import HelpModal from '../Modals/HelpModal';
+
 
 export default function GameLayer() {
 	const { trump, matchStage, teamScore, matchTricks, showActionPrompt, yourSeat, dealer } = useContext(DataContext)
@@ -35,10 +35,11 @@ export default function GameLayer() {
 
 	return (
 		<SafeAreaView style={styles.screen}>
+			<GameOverModal />
 			<StartModal />
 			<SettingsModal />
 			<RulesModal />
-			<GameOverModal />
+			<HelpModal />
 			<PromptModal />
 			{showActionPrompt && <PromptAction />}
 			<View style={localStyles.hud}>
@@ -48,7 +49,7 @@ export default function GameLayer() {
 			{matchStage !== "PREGAME" &&
 				<Flex fill={2} align="center" justify="center" height="100%" width="100%">
 					<DownHands />
-					<Flex align="center" justify="center" height="100%" width="100%" override={{ position: "absolute" }}>
+					<Flex align="center" justify="center" height="100%" width="100%" override={{ position: "absolute", bottom: 20 }}>
 						{(matchStage !== "PLAY" || matchStage !== "RESULT" || matchStage !== "GAMEOVER") ? <TrumpStack /> : null}
 						{matchStage === "PLAY" && <PlayField />}
 					</Flex>

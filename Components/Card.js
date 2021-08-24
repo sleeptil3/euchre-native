@@ -4,9 +4,14 @@ import { DataContext } from "../GameContext"
 import { cardImages, blankCard, sleep } from "../Data/data"
 
 export default function Card({ card, scale, use, position }) {
-	const { setPlayerChoice, upTrump, deckTheme } = useContext(DataContext)
+	const { setPlayerChoice, upTrump, appPreferences } = useContext(DataContext)
 	const [isTrump, setIsTrump] = useState(false)
 	const cardCode = card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()
+	const [imageURL, setImageURL] = useState(cardImages[appPreferences.deckTheme][cardCode])
+
+	useEffect(() => {
+		setImageURL(cardImages[appPreferences.deckTheme][cardCode])
+	}, [appPreferences.deckTheme, cardCode])
 
 	const moveAnim = useRef(new Animated.ValueXY()).current;
 	const fadeAnim = useRef(new Animated.Value(1)).current
@@ -97,7 +102,7 @@ export default function Card({ card, scale, use, position }) {
 
 	return (
 		<Animated.Image
-			source={cardImages[deckTheme][cardCode]}
+			source={imageURL}
 			style={selectedStyle}
 			{...dragResponder.panHandlers}
 		/>

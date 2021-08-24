@@ -78,6 +78,6 @@ export const ButtonSetValue = ({ overwrite = false, size, text, setState, state,
 	}
 }
 
-export const ButtonURLLink = ({ url, children }) => {
-	return <Text style={{ textDecorationLine: "underline" }} onPress={() => Linking.openURL(url)}>{children}</Text>;
+export const ButtonURLLink = ({ url, children, override, align }) => {
+	return <Text style={[{ textDecorationLine: "underline", textAlign: align || "left" }, override]} onPress={() => Linking.openURL(url)}>{children}</Text>;
 };

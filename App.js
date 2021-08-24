@@ -11,7 +11,7 @@ export default function App() {
 
 	const getStoredPreferences = async () => {
 		try {
-			const jsonValue = await AsyncStorage.getItem('preferences')
+			const jsonValue = await AsyncStorage.getItem('@preferences')
 			return jsonValue != null ? JSON.parse(jsonValue) : null;
 		} catch (e) {
 			console.error("getStoredPreferences error: ", e)
@@ -21,7 +21,7 @@ export default function App() {
 	const storePreferences = async (preferenceObject) => {
 		try {
 			const jsonValue = JSON.stringify(preferenceObject)
-			await AsyncStorage.setItem('settings', jsonValue)
+			await AsyncStorage.setItem('@preferences', jsonValue)
 		} catch (e) {
 			console.error("storePreferences error: ", e)
 		}
@@ -35,9 +35,9 @@ export default function App() {
 				deckTheme: "Default",
 				sounds: false
 			}
-			storePreferences(newPreferencesObj)
 			setAppPreferences(newPreferencesObj)
-		} else setAppPreferences(storedPrefences)
+			storePreferences(newPreferencesObj)
+		} else setAppPreferences(storedPreferences)
 	}
 
 	useEffect(() => {
