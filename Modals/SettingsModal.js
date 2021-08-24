@@ -1,14 +1,13 @@
 import React, { useContext } from 'react'
-import { View, Modal, StyleSheet, Pressable, Image, ScrollView } from 'react-native'
+import { View, Modal, StyleSheet, Pressable, ScrollView } from 'react-native'
 import { DataContext } from '../GameContext'
-import { Flex } from '../CoreElements/containerStyles'
-import { Subtitle, Italic, Body, DefaultText, Heading, Title } from '../CoreElements/fontStyles'
+import { Italic, DefaultText, Heading, Title } from '../CoreElements/fontStyles'
 import { colors, iconSVGs, styles } from '../CoreElements/theme'
 import Svg, { Path } from 'react-native-svg'
-import DeckTheme from '../Components/DeckTheme'
+import DeckThemeChoice from '../Components/DeckThemeChoice'
 
 export default function SettingsModal() {
-	const { setShowStartModal, setShowSettingsModal, showSettingsModal, setDeckTheme, deckTheme } = useContext(DataContext)
+	const { setShowStartModal, setShowSettingsModal, showSettingsModal } = useContext(DataContext)
 
 	const handleClose = () => {
 		setShowStartModal(true)
@@ -38,8 +37,8 @@ export default function SettingsModal() {
 							</View>
 							<View style={{ justifyContent: "center", alignItems: "center", marginVertical: 20 }}>
 								<Title override={{ fontSize: 24 }}>Deck Theme</Title>
-								<DeckTheme deck="Default" />
-								<DeckTheme deck="QueenG" />
+								<DeckThemeChoice deck="Default" />
+								<DeckThemeChoice deck="QueenG" />
 							</View>
 							<Pressable
 								accessibilityLabel={"Press to begin the game"}

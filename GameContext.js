@@ -13,13 +13,11 @@ import { decidePace, debugMode, logMode } from "./Data/data"
 
 export const DataContext = createContext()
 
-export default function GameContext({ children }) {
+export default function GameContext({ appPreferences, setAppPreferences, children }) {
 	////////////////
 	// GAME STATE //
 	////////////////
-
-	// Theme State
-	const [deckTheme, setDeckTheme] = useState("Default")
+	console.log("App Preferences: ", appPreferences)
 
 	// Card State
 	const [playerHand, setPlayerHand] = useState([])
@@ -812,7 +810,7 @@ export default function GameContext({ children }) {
 	return (
 		<DataContext.Provider
 			value={{
-				deckTheme, setDeckTheme,
+				appPreferences, setAppPreferences,
 				showPromptModal, setShowPromptModal,
 				showRulesModal, setShowRulesModal,
 				showSettingsModal, setShowSettingsModal,
