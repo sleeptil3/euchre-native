@@ -1,6 +1,6 @@
 {
 	"expo": {
-		"name": "Euchre",
+		"name": "Euchre Night",
 		"slug": "euchre",
 		"version": "0.9.0",
 		"orientation": "portrait",
@@ -8,16 +8,16 @@
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",
-			"backgroundColor": "#111"
+			"backgroundColor": "#000000"
 		},
 		"updates": {
 			"fallbackToCacheTimeout": 0
 		},
-		"assetBundlePatterns": ["**/*"],
+		"assetBundlePatterns": ["assets/**"],
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "com.sleeptil3software.euchre",
-			"buildNumber": "0.9.0"
+			"buildNumber": "0.9.1"
 		},
 		"android": {
 			"package": "com.sleeptil3software.euchre"

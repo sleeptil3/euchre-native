@@ -71,8 +71,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	})
 
 	// UI State
-	const [showTrumpCard, setShowTrumpCard] = useState(false)
 	const [showTrumpStack, setShowTrumpStack] = useState(false)
+	const [showDeal, setShowDeal] = useState(false)
 	const suits = {
 		"h": { ...hearts, left: { ...diamonds }, select() { handleCallUp(suits.h) }, },
 		"d": { ...diamonds, left: { ...hearts }, select() { handleCallUp(suits.d) }, },
@@ -195,11 +195,11 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			choices: [],
 		},
 		ready: {
-			title: `${trump.name} is Trump`,
+			title: "Match Ready",
 			subtitle: `${callingPlayer % 2 === 0
-				? `Your team called it`
-				: `The other team called it`}`,
-			body: "Good luck",
+				? `Your team called ${trump.name}`
+				: `The other team called ${trump.name}`}`,
+			body: "Play will start to the left of the dealer.",
 			choices: [
 				{
 					text: "ok",
@@ -294,16 +294,22 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		setOpponentHand1([...newDeck.deck.slice(10, 15)])
 		setOpponentHand2([...newDeck.deck.slice(15, 20)])
 		setUpTrump(newDeck.deck[20])
-		if (matchStage !== "PREGAME") {
-			setMatchStage("CALL")
-			setCurrentPlayer((dealer + 1) % 4)
-			setTurnCount(0)
-		} else setTurnCount(-1)
+		sleep(1000).then(() => {
+			if (matchStage !== "PREGAME") {
+				setCurrentPlayer((dealer + 1) % 4)
+				setTurnCount(-25)
+			} else {
+				setTurnCount(-1)
+			}
+
+		})
 	}
 
 	const pass = () => {
-		setCurrentPlayer((currentPlayer + 1) % 4)
-		setTurnCount(turnCount + 1)
+		sleep(decidePace).then(() => {
+			setCurrentPlayer((currentPlayer + 1) % 4)
+			setTurnCount(turnCount + 1)
+		})
 	}
 
 	const handleGoAlone = (trumpSuitCode) => {
@@ -333,9 +339,6 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		setTrump(trump)
 		setCallingPlayer(currentPlayer)
 		if (matchStage === "CALL") {
-			// handle the Trump Card Position/Opacity effects
-			setShowTrumpCard(false)
-
 			// add the card to the dealer's hand
 			sleep(decidePace).then(() => {
 				switch (dealer) {
@@ -361,9 +364,11 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				setTurnCount(-10)
 			})
 		} else if (matchStage === "PICK" || matchStage === "STUCK") {
-			setMatchStage("READY")
-			setCurrentPlayer((dealer + 1) % 4)
-			setTurnCount(-10)
+			sleep(decidePace).then(() => {
+				setMatchStage("READY")
+				setCurrentPlayer((dealer + 1) % 4)
+				setTurnCount(-10)
+			})
 		}
 	}
 
@@ -383,6 +388,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	const handleDiscard = (player, card) => {
 		debugMode && console.log("------------------HANDLE DISCARD FUNCTION", player, card)
 		setShowActionPrompt(false)
+		showDeal === true && setShowTrumpStack(false)
 		const hand = getPlayerHand(player, playerHand, nonPlayerHands)
 		switch (player) {
 			case 0: {
@@ -497,8 +503,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		})
 		setCallingPlayer(null)
 		sleep(250).then(() => {
-			setMatchStage("CALL")
-			setTurnCount(0)
+			setMatchStage("DEAL")
+			setTurnCount(-25)
 		})
 	}
 
@@ -543,7 +549,6 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			opposingTeam: 0,
 		})
 		// UI State
-		setShowTrumpCard(false)
 		setShowTrumpStack(false)
 		setMatchStage("PREGAME")
 		setShowGameOverModal(false)
@@ -565,7 +570,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	// Handle Player Drag Choice
 	useEffect(() => {
 		if (playerChoice) {
-			console.log(`Player Chose ${playerChoice} by dragging`)
+			debugMode && console.log(`Player Chose ${playerChoice} by dragging`)
 			matchStage === "PLAY" ? handlePlayerChoice(yourSeat, playerChoice) : handleDiscard(yourSeat, playerChoice)
 		}
 	}, [playerChoice])
@@ -587,8 +592,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				if (upTrump.faceValue === undefined)
 					sleep(500).then(() => setTurnCount(turnCount - 1))
 				else {
-					setMatchStage("CALL")
-					setTurnCount(0)
+					setMatchStage("DEAL")
+					setTurnCount(-25)
 				}
 				break
 			}
@@ -600,12 +605,21 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				debugMode && console.log("%cNon-Player Hands", "color: green", nonPlayerHands)
 				break
 			}
+			case "DEAL": {
+				logMode && console.log("------------------ DEAL Stage")
+				turnCount === 0 && setCurrentPlayer((dealer + 1) % 4)
+				setShowDeal(true)
+				showTrumpStack === false && sleep(4000).then(() => setShowTrumpStack(true))
+				sleep(4500).then(() => {
+					setMatchStage("CALL")
+					setTurnCount(0)
+				})
+				break
+			}
 			case "CALL": {
 				logMode && console.log("------------------ Call Stage")
 				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump.name)
 				turnCount === 0 && setCurrentPlayer((dealer + 1) % 4)
-				showTrumpStack === false && sleep(100).then(() => setShowTrumpStack(true))
-				showTrumpCard === false && sleep(500).then(() => setShowTrumpCard(true))
 				if (turnCount >= 0) {
 					if (turnCount > 3) {
 						setMatchStage("PICK")
@@ -614,7 +628,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 					} else {
 						if (currentPlayer === yourSeat) {
 							setPromptText(prompts.trump1Turn) // OPTION TO CALL IT UP
-							setShowPromptModal(true)
+							sleep(decidePace).then(() => setShowPromptModal(true))
 						} else {
 							sleep(decidePace).then(() => {
 								setPromptText(prompts.trump1Round) // AWAITING TURN TO CALL IT UP
@@ -627,8 +641,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 									suits,
 									dealer,
 									pass,
-									setGoAlone,
-									matchSuit
+									setGoAlone
 								)
 							})
 						}
@@ -641,7 +654,6 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			case "PICK": {
 				logMode && console.log("------------------ Pick Stage")
 				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, upTrump.name)
-				showTrumpCard === true && setShowTrumpCard(false)
 				if (turnCount > 2) {
 					setMatchStage("STUCK")
 					setCurrentPlayer(dealer)
@@ -662,8 +674,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 								suits,
 								dealer,
 								pass,
-								setGoAlone,
-								matchSuit
+								setGoAlone
 							)
 						)
 					}
@@ -688,8 +699,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 							suits,
 							dealer,
 							pass,
-							setGoAlone,
-							matchSuit
+							setGoAlone
 						)
 					)
 				}
@@ -713,11 +723,9 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				logMode && console.log("------------------ DISCARD Stage")
 				logMode && console.log(`Current Player: ${currentPlayer} \nturnCount: ${turnCount} \nDealer: ${dealer}`, "\nDealer:", upTrump.name)
 				if (yourSeat === dealer) {
-					sleep(250).then(() => {
-						setShowPromptModal(false)
-						setActionText(actionPrompts.discard)
-						setShowActionPrompt(true)
-					})
+					setShowPromptModal(false)
+					setActionText(actionPrompts.discard)
+					setShowActionPrompt(true)
 				}
 				else handleDiscard(dealer, upTrump)
 				break
@@ -732,8 +740,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				}
 				if (turnCount < 4) {
 					if (currentPlayer === yourSeat) {
-						setShowPromptModal(false)
-						sleep(500).then(() => {
+						sleep(decidePace).then(() => {
+							setShowPromptModal(false)
 							setActionText(actionPrompts.yourTurn)
 							setShowActionPrompt(true)
 						})
@@ -788,6 +796,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				}
 				if (matchTricks.opposingTeam + matchTricks.callingTeam === 5) {
 					logMode && console.log("------------------ RESULT Stage: 5 tricks done - scorematch")
+					setShowDeal(false)
 					scoreMatch()
 				} else {
 					setCurrentPlayer(currentMatchScore.winner)
@@ -820,8 +829,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				showGameOverModal, setShowGameOverModal,
 				showActionPrompt, setShowActionPrompt,
 				showTrumpStack, setShowTrumpStack,
+				showDeal, setShowDeal,
 				playedCards, setPlayedCards,
-				showTrumpCard, setShowTrumpCard,
 				turnCount, setTurnCount,
 				callingPlayer, setCallingPlayer,
 				opponentScore, setOpponentScore,

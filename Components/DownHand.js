@@ -1,42 +1,101 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { DataContext } from "../GameContext";
 import { iconSVGs } from '../CoreElements/theme';
-import { View, Image, StyleSheet } from "react-native";
-import { cardImages } from "../Data/data";
+import { View, Animated, StyleSheet } from "react-native";
+import { cardImages, sleep } from "../Data/data";
 
 export default function DownHand({ position, handLength }) {
 	const { matchTricks, goAlone, dealer, appPreferences } = useContext(DataContext)
-	const [image, setImage] = useState(0);
-	const [imageURLS, setImageURLS] = useState([cardImages[appPreferences.deckTheme].down0, cardImages[appPreferences.deckTheme].down1, cardImages[appPreferences.deckTheme].down2, cardImages[appPreferences.deckTheme].down3, cardImages[appPreferences.deckTheme].down4, cardImages[appPreferences.deckTheme].down5])
+	const anim1 = useRef(new Animated.Value(100)).current
+	const anim2 = useRef(new Animated.Value(100)).current
+	const anim3 = useRef(new Animated.Value(100)).current
+	const anim4 = useRef(new Animated.Value(100)).current
+	const anim5 = useRef(new Animated.Value(100)).current
 
-	useEffect(() => {
-		setImageURLS([cardImages[appPreferences.deckTheme].down0, cardImages[appPreferences.deckTheme].down1, cardImages[appPreferences.deckTheme].down2, cardImages[appPreferences.deckTheme].down3, cardImages[appPreferences.deckTheme].down4, cardImages[appPreferences.deckTheme].down5])
-	}, [appPreferences.deckTheme])
+	const move1 = () => {
+		Animated.timing(
+			anim1,
+			{
+				toValue: 0,
+				duration: 250,
+				useNativeDriver: true
+			}
+		).start()
+	};
+	const move2 = () => {
+		Animated.timing(
+			anim2,
+			{
+				delay: 100,
+				toValue: 0,
+				duration: 250,
+				useNativeDriver: true
+			}
+		).start()
+	};
 
-	useEffect(() => {
-		setImage(imageURLS[handLength])
-	}, [imageURLS])
+	const move3 = () => {
+		Animated.timing(
+			anim3,
+			{
+				delay: 200,
+				toValue: 0,
+				duration: 250,
+				useNativeDriver: true
+			}
+		).start()
+	};
+
+	const move4 = () => {
+		Animated.timing(
+			anim4,
+			{
+				delay: 300,
+				toValue: 0,
+				duration: 250,
+				useNativeDriver: true
+			}
+		).start()
+	};
+
+	const move5 = () => {
+		Animated.timing(
+			anim5,
+			{
+				delay: 400,
+				toValue: 10,
+				duration: 250,
+				useNativeDriver: true
+			}
+		).start()
+	};
+
 
 	const handStyles = [
 		null,
 		{
+			left: 40,
+			height: 0,
+			width: 0,
+			bottom: 110,
+			transform: [{ rotate: '90deg' }],
+			opacity: goAlone !== null && ((goAlone + 2) % 4) === 1 ? 0 : 1
+		},
+		{
+			top: 30,
 			left: 50,
-			height: 200,
-			bottom: 40,
-			transform: [{ rotate: '90deg' }, { translateY: "200%" }],
-			opacity: goAlone !== null && ((goAlone + 2) % 4) === position ? 0 : 1
+			width: 0,
+			height: 0,
+			transform: [{ rotate: '180deg' }],
+			opacity: goAlone !== null && ((goAlone + 2) % 4) === 2 ? 0 : 1
 		},
 		{
-			top: 50,
-			transform: [{ rotate: '180deg' }, { translateY: "200%" }],
-			opacity: goAlone !== null && ((goAlone + 2) % 4) === position ? 0 : 1
-		},
-		{
-			height: 220,
-			left: -50,
-			bottom: 40,
-			transform: [{ rotate: '-90deg' }, { translateY: "200%" }],
-			opacity: goAlone !== null && ((goAlone + 2) % 4) === position ? 0 : 1
+			right: 40,
+			bottom: 42,
+			width: 0,
+			height: 0,
+			transform: [{ rotate: '-90deg' }],
+			opacity: goAlone !== null && ((goAlone + 2) % 4) === 3 ? 0 : 1
 		},
 	]
 
@@ -44,9 +103,9 @@ export default function DownHand({ position, handLength }) {
 		icon: {
 			position: "absolute",
 			alignItems: "center",
-			left: position === 3 ? -44 : null,
-			right: position === 1 ? -40 : position === 2 ? -56 : null,
-			top: position === 2 ? 22 : -16,
+			top: position === 2 ? 12 : -22,
+			left: position === 1 ? 150 : position === 2 ? 160 : null,
+			right: position === 3 ? 77 : null,
 			opacity: .6
 		},
 		arrow: {
@@ -57,14 +116,87 @@ export default function DownHand({ position, handLength }) {
 		}
 	})
 
-
 	useEffect(() => {
-		setImage(imageURLS[handLength]);
-	}, [handLength]);
+		move1()
+		move2()
+		move3()
+		move4()
+		move5()
+	}, [])
 
 	return (
-		<View style={handStyles[position]}>
-			<Image source={image} />
+		<View style={[handStyles[position], { flexDirection: "row", justifyContent: "center" }]}>
+			<Animated.Image
+				style={
+					[
+						{
+							marginRight: -100,
+							opacity: handLength === 0 ? 0 : 1
+						},
+						{
+							transform: [{ rotate: '-15deg' }, { translateY: anim1 }]
+						}
+					]
+				}
+				source={cardImages[appPreferences.deckTheme].down1}
+			/>
+			<Animated.Image
+				style={
+					[
+						{
+							marginRight: -100,
+							opacity: handLength < 2 ? 0 : 1
+						},
+						{
+							transform: [{ rotate: '-5deg' }, { translateY: anim2 }]
+						}
+					]
+				}
+				source={cardImages[appPreferences.deckTheme].down1}
+			/>
+			<Animated.Image
+				style={
+					[
+						{
+							marginRight: -100,
+							opacity: handLength < 3 ? 0 : 1
+						},
+						{
+							transform: [{ rotate: '-0deg' }, { translateY: anim3 }]
+						}
+					]
+				}
+				source={cardImages[appPreferences.deckTheme].down1}
+			/>
+			<Animated.Image
+				style={
+					[
+						{
+							marginRight: -100,
+							opacity: handLength < 4 ? 0 : 1
+						},
+						{
+							transform: [{ rotate: '5deg' }, { translateY: anim4 }]
+						}
+					]
+				}
+				source={cardImages[appPreferences.deckTheme].down1}
+			/>
+			<Animated.Image
+				style={
+					[
+						{
+							marginRight: -100,
+							opacity: handLength < 5 ? 0 : 1
+						},
+						{
+							transform: [{ rotate: '15deg' }, { translateY: anim5 }]
+						}
+					]
+				}
+				source={cardImages[appPreferences.deckTheme].down1}
+			/>
+
 			{(position === dealer && matchTricks.callingTeam + matchTricks.opposingTeam !== 5) && <View style={styles.icon}>
 				<View style={styles.deck}>
 					{iconSVGs.dealerIcon}

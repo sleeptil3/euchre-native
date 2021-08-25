@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Image, Pressable, StyleSheet, View } from 'react-native'
-import { Body, DefaultText, Subtitle } from '../CoreElements/fontStyles'
+import { Body, Subtitle } from '../CoreElements/fontStyles'
 import { DataContext } from "../GameContext"
 import { iconSVGs, colors, themeSamples } from '../CoreElements/theme'
-import Svg, { Path } from 'react-native-svg'
+import { ButtonURLLink } from '../CoreElements/buttonStyles'
 
 export default function DeckThemeChoice({ deck }) {
 	const { appPreferences, setAppPreferences } = useContext(DataContext)
@@ -12,7 +12,6 @@ export default function DeckThemeChoice({ deck }) {
 	const handleThemeChange = () => {
 		setAppPreferences({ ...appPreferences, deckTheme: deck })
 	}
-
 	useEffect(() => {
 		if (appPreferences.deckTheme === deck) setChosen(true)
 		else setChosen(false)
@@ -39,6 +38,10 @@ export default function DeckThemeChoice({ deck }) {
 				<View style={{ position: "absolute", top: 10, left: 10 }}>
 					{appPreferences.deckTheme === deck ? iconSVGs.toggleOn : iconSVGs.toggleOff}
 				</View>
+				{deck === "QueenG" && <View>
+					<Body override={{ fontSize: 13, lineHeight: 18 }}>QueenG was created by Maayan Segal at 16 years old as the first ever, multi-ethnic deck of cards where men and women are equal. In this deck, the Jack, Queen, and King are represented as Prince/Princess, Duke/Duchess, and Monarch, respectively.</Body>
+					<Body override={{ fontSize: 13, lineHeight: 18 }}>This is a beautiful set of cards and I highly recommend you pick up a set. You can learn more about Maayan and pick up a QueenG card deck of your own on her <ButtonURLLink url={"https://www.indiegogo.com/projects/queeng-playing-cards-2nd-edition#/"}>Indiegogo</ButtonURLLink> page.</Body>
+				</View>}
 			</View>
 		</Pressable>
 	)

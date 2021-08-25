@@ -41,16 +41,3 @@ const localStyles = StyleSheet.create({
 		opacity: .67
 	}
 })
-
-// style = {({ pressed }) => {
-// 	return (
-// 		{
-// 			accessibilityLabel: altText,
-// 			backgroundColor: pressed ? pressColor : color,
-// 			paddingVertical: 10,
-// 			paddingHorizontal: 20,
-// 			borderRadius: 30,
-// 			margin: 10
-// 		}
-// 	)
-// }}

@@ -92,8 +92,8 @@ export const scoreTrick = (playedCards, trump, matchSuit) => {
 }
 
 
-export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dealer, pass, setGoAlone, matchSuit) => {
-	debugMode && console.log("------------------ DECIDE TRUMP FUNCTION: Player: ", currentPlayer)
+export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dealer, pass, setGoAlone) => {
+	debugMode && console.log("------------------ DECIDE TRUMP FUNCTION: Player: ", currentPlayer, matchStage)
 	const suitMap = groupBySuit(hand)
 	switch (matchStage) {
 		case "CALL": {

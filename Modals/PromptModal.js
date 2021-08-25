@@ -25,10 +25,10 @@ export default function PromptModal() {
 				<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", marginHorizontal: 24, bottom: 225, left: 0, right: 0 }}>
 					<View style={styles.modal}>
 						<Flex justify="space-between" align="center">
-							<Title align="center">{promptText.title}</Title>
+							<Title align="center" override={{ marginTop: 5 }}>{promptText.title}</Title>
 							<View>
-								<Subtitle align="center" override={{ fontSize: 22 }}>{promptText.subtitle}</Subtitle>
-								<Body align="center">{promptText.body}</Body>
+								<Subtitle align="center" override={{ fontSize: 20 }}>{promptText.subtitle}</Subtitle>
+								<Body align="center" override={{ fontSize: 15, marginBottom: 10 }}>{promptText.body}</Body>
 							</View>
 							{promptText.choices.length > 0 && <Flex
 								direction="row"
@@ -38,9 +38,9 @@ export default function PromptModal() {
 									borderWidth: 1,
 									borderColor: colors.white,
 									borderRadius: 40,
-									paddingHorizontal: 8,
-									paddingVertical: 8,
-									marginBottom: 10
+									paddingHorizontal: 2,
+									paddingVertical: 4,
+									marginBottom: 5
 								}}
 							>
 								{promptText.choices.map(choice => {

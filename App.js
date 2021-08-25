@@ -30,10 +30,10 @@ export default function App() {
 	const handlePreferenceLoad = async () => {
 		const storedPreferences = await getStoredPreferences()
 		if (!storedPreferences) {
-			console.log("no stored prefs")
 			const newPreferencesObj = {
 				deckTheme: "Default",
-				sounds: false
+				sounds: false,
+				tableTheme: "table-great-room"
 			}
 			setAppPreferences(newPreferencesObj)
 			storePreferences(newPreferencesObj)
@@ -45,7 +45,6 @@ export default function App() {
 	}, [])
 
 	useEffect(() => {
-		console.log("app preferences changed - saving now")
 		if (appPreferences !== {}) {
 			storePreferences(appPreferences)
 		}

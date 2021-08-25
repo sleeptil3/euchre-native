@@ -9,6 +9,14 @@ const customFonts = {
 	"SFPro-Bold": require("../assets/fonts/SF-Pro-Text-Bold.otf"),
 	"SF-Pro-Display-ThinItalic": require("../assets/fonts/SF-Pro-Display-ThinItalic.otf"),
 	"SFPro-Display-Bold": require("../assets/fonts/SF-Pro-Display-Bold.otf"),
+	"JuliusSansOne": require("../assets/fonts/JuliusSansOne-Regular.ttf"),
+}
+
+export const MainTitle = ({ children, align, override, color }) => {
+	const [fontLoaded] = useFonts(customFonts)
+
+	if (fontLoaded) return <Text style={[fontStyles.mainTitle, { textAlign: align || "center", color: color || fontStyles.mainTitle.color }, override]}>{children}</Text>
+	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
 }
 
 export const Heading = ({ children, align, override, color }) => {
@@ -62,6 +70,11 @@ export const DefaultText = ({ children, align, override, color }) => {
 
 
 export const fontStyles = StyleSheet.create({
+	mainTitle: {
+		fontFamily: "JuliusSansOne",
+		color: colors.white,
+		fontSize: 38,
+	},
 	heading: {
 		fontFamily: "SFPro-Display-Bold",
 		color: colors.white,
@@ -75,7 +88,7 @@ export const fontStyles = StyleSheet.create({
 	title: {
 		fontFamily: "SFPro-Heavy",
 		color: colors.white,
-		fontSize: 30,
+		fontSize: 28,
 		marginBottom: 14
 	},
 	subtitle: {

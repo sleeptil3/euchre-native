@@ -2,11 +2,12 @@ import React, { useContext } from 'react'
 import { View, Modal, StyleSheet, Pressable, ScrollView } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Italic, DefaultText, Heading, Title } from '../CoreElements/fontStyles'
-import { colors, iconSVGs, styles } from '../CoreElements/theme'
+import { colors, iconSVGs, styles, themeTable } from '../CoreElements/theme'
 import DeckThemeChoice from '../Components/DeckThemeChoice'
+import TableThemeChoice from '../Components/TableThemeChoice'
 
 export default function SettingsModal() {
-	const { showActionPrompt, setShowActionPrompt, matchStage, setShowStartModal, setShowSettingsModal, showSettingsModal, setShowPromptModal } = useContext(DataContext)
+	const { matchStage, setShowStartModal, setShowSettingsModal, showSettingsModal, setShowPromptModal } = useContext(DataContext)
 
 	const handleClose = () => {
 		if (matchStage === "PREGAME") setShowStartModal(true)
@@ -22,7 +23,8 @@ export default function SettingsModal() {
 		>
 			<View style={styles.settingsScreen}>
 				<View style={styles.settings}>
-					<ScrollView style={localStyles.modal}>
+					<Pressable onPress={handleClose} style={{ position: "absolute", right: 20, top: -50, opacity: .67 }}>{iconSVGs.close}</Pressable>
+					<ScrollView scrollIndicatorInsets={{ right: 4 }} indicatorStyle="white" style={localStyles.modal}>
 						<View style={{ margin: 20 }}>
 							<View style={{ marginVertical: 10, alignItems: "center" }}>{iconSVGs.settingsLarge}</View>
 							<View style={{ marginBottom: 20 }} >
@@ -34,8 +36,14 @@ export default function SettingsModal() {
 								<DeckThemeChoice deck="Default" />
 								<DeckThemeChoice deck="QueenG" />
 							</View>
+							<View style={{ justifyContent: "center", alignItems: "center", marginVertical: 20 }}>
+								<Title override={{ fontSize: 24 }}>Table Theme</Title>
+								{Object.keys(themeTable).map(theme => {
+									return <TableThemeChoice key={theme} id={theme} title={themeTable[theme].title} />
+								})}
+							</View>
 							<Pressable
-								accessibilityLabel={"Press to begin the game"}
+								accessibilityLabel={"Close settings"}
 								onPress={handleClose}
 							>
 								<View
@@ -43,7 +51,7 @@ export default function SettingsModal() {
 										justifyContent: "space-around",
 										alignItems: "center",
 										flexDirection: "row",
-										backgroundColor: "rgba(0, 0, 0, .75)",
+										backgroundColor: colors.red,
 										borderWidth: 1,
 										borderColor: colors.white,
 										borderRadius: 40,

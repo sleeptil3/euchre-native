@@ -1,16 +1,16 @@
 import { v4 as uuid } from 'uuid'
 
 // Scoring Modes
-export const minAloneScore = 100
-export const minCallScore = 70
-// export const minAloneScore = 500
-// export const minCallScore = 500
+// export const minAloneScore = 100
+// export const minCallScore = 70
+export const minAloneScore = 500
+export const minCallScore = 500
 
 // Pace Settings
-export const decidePace = 1250
+export const decidePace = 250
 
 // Log/Debug Mode Settings
-export const logMode = false
+export const logMode = true
 export const debugMode = false
 
 

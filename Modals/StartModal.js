@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { View, Modal, StyleSheet, Pressable, Image } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Flex } from '../CoreElements/containerStyles'
-import { Italic, Body, DefaultText, Heading } from '../CoreElements/fontStyles'
+import { Italic, Body, DefaultText, Heading, MainTitle } from '../CoreElements/fontStyles'
 import { colors, iconSVGs, themeHands } from '../CoreElements/theme'
 import ShareButton from '../Components/ShareButton'
 import * as StoreReview from 'expo-store-review';
@@ -49,14 +49,14 @@ export default function StartModal() {
 				shadowOffset: { width: 4, height: 4 }
 			}}>
 				<View style={styles.modal}>
-					<Heading align="center">Euchre</Heading>
+					<MainTitle>Euchre Nights</MainTitle>
 					<Italic align="center">Created by Shawn Clary</Italic>
 					<View style={{ marginVertical: 10 }}>
 						<Image source={appPreferences.deckTheme ? themeHands[appPreferences.deckTheme] : themeHands.Default} />
 					</View>
 					<Body align="center" override={{ marginBottom: 10 }}>Choose an option:</Body>
 					<Pressable
-						accessibilityLabel={"Press to begin the game"}
+						accessibilityLabel={"Begin a new game"}
 						onPress={handlePlay}
 					>
 						<View
@@ -73,12 +73,12 @@ export default function StartModal() {
 								marginVertical: 0,
 							}}
 						>
-							<DefaultText align="center" override={{ fontSize: 24 }}>New Game</DefaultText>
+							<DefaultText align="center" override={{ fontSize: 24, fontFamily: "SFPro-Bold" }}>New Game</DefaultText>
 						</View>
 					</Pressable>
 					<View style={{ width: "85%", alignItems: "center", justifyContent: "center" }}>
 						<Pressable
-							accessibilityLabel={"View rules"}
+							accessibilityLabel={"View the rules"}
 							onPress={handleRules}
 						>
 							<View
@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
 	modal: {
 		width: "90%",
 		paddingVertical: 22,
+		paddingTop: 32,
 		borderRadius: 32,
 		borderWidth: 2,
 		borderColor: "rgba(255,255,255,.5)",
