@@ -1,18 +1,22 @@
 import React, { useState, useContext, useEffect, useRef } from "react"
 import { Animated, PanResponder, StyleSheet } from "react-native";
 import { DataContext } from "../GameContext"
-import { cardImages, blankCard, sleep } from "../Data/data"
+import { cardImages, blankCard, sleep, sounds } from "../Data/data"
+import { Audio } from "expo-av";
 
 export default function Card({ card, scale, use, position, order }) {
-	const { setPlayerChoice, upTrump, appPreferences, matchStage } = useContext(DataContext)
+	const { setPlayerChoice, upTrump, appPreferences, matchStage, enableSound } = useContext(DataContext)
 	const [isTrump, setIsTrump] = useState(false)
 	const cardCode = card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()
 	const [imageURL, setImageURL] = useState(cardImages[appPreferences.deckTheme][card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()])
 
-	useEffect(() => {
-		setImageURL(cardImages[appPreferences.deckTheme][cardCode])
-	}, [appPreferences.deckTheme, cardCode])
-
+	async function playCardSound() {
+		const { sound } = await Audio.Sound.createAsync(
+			sounds.play,
+			{ isMuted: !enableSound, volume: .2 }
+		)
+		await sound.playAsync()
+	}
 
 	const moveAnim = useRef(new Animated.ValueXY()).current
 	const fadeAnim = useRef(new Animated.Value(1)).current
@@ -32,7 +36,7 @@ export default function Card({ card, scale, use, position, order }) {
 			onPanResponderRelease: () => {
 				if (moveAnim.y._value < -150.0) {
 					// PASSED THRESHOLD FOR ACTION
-					playSound()
+					playCardSound()
 					if (!isTrump) {
 						Animated.spring(moveAnim, { toValue: { x: moveAnim.x, y: -350 }, useNativeDriver: true }).start();
 						Animated.timing(fadeAnim, { toValue: 0, duration: 500, useNativeDriver: true }).start();
@@ -117,6 +121,10 @@ export default function Card({ card, scale, use, position, order }) {
 	useEffect(() => {
 		moveUp()
 	}, [])
+
+	useEffect(() => {
+		setImageURL(cardImages[appPreferences.deckTheme][cardCode])
+	}, [appPreferences.deckTheme, cardCode])
 
 	return (
 		<Animated.View style={{ transform: [{ translateY: matchStage === "DEAL" ? dealAnim : 0 }] }}>

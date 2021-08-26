@@ -30,14 +30,12 @@ export default function TableThemeChoice({ id, title }) {
 			width: 250
 		},
 	})
-
 	return (
 		<Pressable onPress={appPreferences.tableTheme !== id ? handleThemeChange : null}>
 			<View style={[styles.container, { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20 }]}>
 				{appPreferences.tableTheme === id ? iconSVGs.toggleOn : iconSVGs.toggleOff}
 				<Subtitle align="left" override={{ fontSize: 18, top: 1, paddingLeft: 18 }}>{title}</Subtitle>
 			</View>
-			{/* <Image source={image} /> */}
 		</Pressable>
 	)
 }

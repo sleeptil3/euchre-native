@@ -31,14 +31,31 @@ export default function HelpModal() {
 							</View>
 							<View style={{ marginVertical: 30, alignItems: "center" }}>
 								<Title override={{ fontSize: 24 }}>Interface Icons</Title>
-								<View style={{ marginVertical: 10, alignItems: "center" }}>
+								<View style={{ marginTop: 10, alignItems: "center" }}>
+									<Title override={{ fontSize: 18 }}>Play Choices</Title>
+									<View style={{ flexDirection: "row", alignItems: "flex-end", justifyContent: "center", marginTop: 5 }}>
+										<View style={{ alignItems: "center", justifyContent: "center", paddingHorizontal: 10 }}>
+											{iconSVGs.upOutlined}
+											<Body>Order Up</Body>
+										</View>
+										<View style={{ alignItems: "center", justifyContent: "center", paddingHorizontal: 10 }}>
+											{iconSVGs.passOutlined}
+											<Body>Pass</Body>
+										</View>
+										<View style={{ alignItems: "center", justifyContent: "center", paddingHorizontal: 10 }}>
+											{iconSVGs.okOutlined}
+											<Body>Continue</Body>
+										</View>
+									</View>
+								</View>
+								<View style={{ marginTop: 10, alignItems: "center" }}>
 									<Title override={{ fontSize: 18 }}>Match Tricks</Title>
 									<View style={{ alignItems: "center", marginBottom: 10 }}>
 										<MatchTricksCount />
 									</View>
 									<Body>Shows how many tricks each team has won so far in the current match</Body>
 								</View>
-								<View style={{ marginVertical: 10, alignItems: "center" }}>
+								<View style={{ marginTop: 10, alignItems: "center" }}>
 									<Title override={{ fontSize: 18 }}>Trump Indicator</Title>
 									<View style={{ alignItems: "center", marginVertical: 10 }}>
 										<TrumpIndicator />

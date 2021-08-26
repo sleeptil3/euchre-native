@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { View, Modal, StyleSheet } from 'react-native'
+import { View, Modal, StyleSheet, ActivityIndicator } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Flex } from '../CoreElements/containerStyles'
 import { Subtitle, Title, Body } from '../CoreElements/fontStyles'
@@ -48,6 +48,7 @@ export default function PromptModal() {
 								})}
 							</Flex>
 							}
+							{(currentPlayer !== yourSeat && Object.values(playedCards).includes(blankCard) && matchStage !== "RESULT" && matchStage !== "GAMEOVER" && matchStage !== "READY") && <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />}
 							{(currentPlayer === yourSeat || matchStage === "READY" || !Object.values(playedCards).includes(blankCard)) && <ControlPanel />}
 						</Flex>
 					</View>

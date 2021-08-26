@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState, useRef } from "react"
 import { Animated, View, Image } from "react-native"
 import { DataContext } from "../GameContext"
-import { cardImages, sleep } from "../Data/data"
+import { cardImages, sleep, sounds } from "../Data/data"
 import FlipCard from 'react-native-flip-card'
 import { Audio } from 'expo-av';
 
@@ -10,24 +10,23 @@ export default function TrumpCard() {
 	const { appPreferences, upTrump, matchStage, showTrumpStack } = useContext(DataContext)
 	const [cardCode, setCardCode] = useState("")
 	const [flipState, setFlipState] = useState(false)
-	const [sound, setSound] = React.useState();
 
-	async function playSound() {
+	async function playFlip() {
+		_onPlaybackStatusUpdate = playbackStatus => {
+			if (playbackStatus.isPlaying) {
+				sleep(250).then(() => setFlipState(!flipState))
+			}
+		}
 		const { sound } = await Audio.Sound.createAsync(
-			require("../assets/sounds/flipSound.wav")
-		);
-		setSound(sound);
-		await sound.playAsync();
+			sounds.flip,
+			{ isMuted: !appPreferences.sounds }
+		)
+		sound.setVolumeAsync(.2)
+		sound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate)
+		await sound.playAsync()
 	}
 
-	useEffect(() => {
-		return sound
-			? () => {
-				sound.unloadAsync();
-			}
-			: undefined;
-	}, [sound]);
-
+	// Animation Effects
 	const fadeAnim = useRef(new Animated.Value(1)).current
 
 	const fadeOut = () => {
@@ -43,14 +42,10 @@ export default function TrumpCard() {
 
 
 	useEffect(() => {
-		showTrumpStack && flipState === false && matchStage === "CALL" && sleep(1250).then(() => {
-			playSound()
-			sleep(400).then(() => setFlipState(true))
+		showTrumpStack && flipState === false && matchStage === "CALL" && sleep(500).then(() => {
+			playFlip()
 		})
-		matchStage === "PICK" && flipState === true && sleep(50).then(() => {
-			playSound()
-			sleep(400).then(() => setFlipState(false))
-		})
+		matchStage === "PICK" && flipState === true && playFlip()
 		matchStage === "DISCARD" && fadeOut()
 	}, [matchStage])
 
@@ -60,12 +55,11 @@ export default function TrumpCard() {
 
 	return (
 		<Animated.View style={{ position: "absolute", opacity: fadeAnim }}>
-
 			<FlipCard
 				flip={flipState}
 				flipHorizontal={true}
 				flipVertical={false}
-				friction={15}
+				friction={100}
 			>
 				<View>
 					<Image

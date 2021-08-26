@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext } from "react"
+import { Audio } from "expo-av"
 import { hearts, diamonds, spades, clubs, Deck } from './Deck/deck'
-import { sleep, blankCard } from "./Data/data"
+import { sleep, blankCard, sounds } from "./Data/data"
 import {
 	decideTrump,
 	decideAIplay,
@@ -70,7 +71,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		opposingTeam: 0,
 	})
 
-	// UI State
+	// UI/AV State
+	const [enableSound, setEnableSound] = useState(true)
 	const [showTrumpStack, setShowTrumpStack] = useState(false)
 	const [showDeal, setShowDeal] = useState(false)
 	const suits = {
@@ -78,6 +80,14 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		"d": { ...diamonds, left: { ...hearts }, select() { handleCallUp(suits.d) }, },
 		"s": { ...spades, left: { ...clubs }, select() { handleCallUp(suits.s) }, },
 		"c": { ...clubs, left: { ...spades }, select() { handleCallUp(suits.c) }, },
+	}
+	async function playAIsound() {
+		const { sound } = await Audio.Sound.createAsync(
+			sounds.play,
+			{ isMuted: !enableSound }
+		)
+		sound.setVolumeAsync(.2)
+		await sound.playAsync()
 	}
 
 	////////////////
@@ -306,10 +316,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	}
 
 	const pass = () => {
-		sleep(decidePace).then(() => {
-			setCurrentPlayer((currentPlayer + 1) % 4)
-			setTurnCount(turnCount + 1)
-		})
+		setCurrentPlayer((currentPlayer + 1) % 4)
+		setTurnCount(turnCount + 1)
 	}
 
 	const handleGoAlone = (trumpSuitCode) => {
@@ -575,6 +583,11 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		}
 	}, [playerChoice])
 
+	// Handle Sound Preference Change
+	useEffect(() => {
+		setEnableSound(appPreferences.sounds)
+	}, [appPreferences.sounds])
+
 	// Game Logic
 	useEffect(() => {
 		logMode && console.log(matchStage, "TurnCount", turnCount, "CurrentPlayer", currentPlayer)
@@ -748,7 +761,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 					} else {
 						setPromptText(prompts.othersTurn)
 						setShowPromptModal(true)
-						sleep(decidePace).then(() =>
+						sleep(decidePace).then(() => {
+							playAIsound()
 							decideAIplay(
 								currentPlayer,
 								trump,
@@ -758,7 +772,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 								handlePlayerChoice,
 								playedCards
 							)
-						)
+						})
 					}
 				} else {
 					const trickScoreData = scoreTrick(playedCards, trump, matchSuit)
@@ -820,6 +834,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		<DataContext.Provider
 			value={{
 				appPreferences, setAppPreferences,
+				enableSound, setEnableSound,
 				gameplayCount, setGameplayCount,
 				showPromptModal, setShowPromptModal,
 				showRulesModal, setShowRulesModal,

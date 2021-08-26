@@ -1,11 +1,12 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useRef, useEffect, useContext } from "react";
+import { Audio } from "expo-av";
 import { DataContext } from "../GameContext";
 import { iconSVGs } from '../CoreElements/theme';
 import { View, Animated, StyleSheet } from "react-native";
-import { cardImages, sleep } from "../Data/data";
+import { cardImages, sleep, sounds } from "../Data/data";
 
 export default function DownHand({ position, handLength }) {
-	const { matchTricks, goAlone, dealer, appPreferences } = useContext(DataContext)
+	const { matchTricks, goAlone, dealer, enableSound, appPreferences } = useContext(DataContext)
 	const anim1 = useRef(new Animated.Value(100)).current
 	const anim2 = useRef(new Animated.Value(100)).current
 	const anim3 = useRef(new Animated.Value(100)).current
@@ -70,7 +71,6 @@ export default function DownHand({ position, handLength }) {
 		).start()
 	};
 
-
 	const handStyles = [
 		null,
 		{
@@ -116,7 +116,16 @@ export default function DownHand({ position, handLength }) {
 		}
 	})
 
+	async function playDeal() {
+		const { sound } = await Audio.Sound.createAsync(
+			sounds.deal,
+			{ isMuted: !enableSound, volume: .5 }
+		)
+		await sound.playAsync()
+	}
+
 	useEffect(() => {
+		playDeal()
 		move1()
 		move2()
 		move3()
