@@ -30,14 +30,22 @@ export default function App() {
 	const handlePreferenceLoad = async () => {
 		const storedPreferences = await getStoredPreferences()
 		if (!storedPreferences) {
-			console.log("no stored prefs")
 			const newPreferencesObj = {
 				deckTheme: "Default",
-				sounds: false
+				sounds: true,
+				tableTheme: "table-green"
 			}
 			setAppPreferences(newPreferencesObj)
 			storePreferences(newPreferencesObj)
-		} else setAppPreferences(storedPreferences)
+		} else {
+			if (storedPreferences.deckTheme === undefined || storedPreferences.sounds === undefined || storedPreferences.tableTheme === undefined) {
+				if (storedPreferences.deckTheme === undefined) storedPreferences.deckTheme = "Default"
+				if (storedPreferences.sounds === undefined) storedPreferences.sounds = true
+				if (storedPreferences.tableTheme === undefined) storedPreferences.tableTheme = "table-green"
+				storePreferences(storedPreferences)
+			}
+			setAppPreferences(storedPreferences)
+		}
 	}
 
 	useEffect(() => {
@@ -45,13 +53,13 @@ export default function App() {
 	}, [])
 
 	useEffect(() => {
-		console.log("app preferences changed - saving now")
 		if (appPreferences !== {}) {
 			storePreferences(appPreferences)
 		}
 	}, [appPreferences])
 
 	if (appPreferences === {}) return null
+
 	else return (
 		<GameContext appPreferences={appPreferences} setAppPreferences={setAppPreferences}>
 			<Flex color={colors.background}>

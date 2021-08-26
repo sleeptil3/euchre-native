@@ -92,8 +92,8 @@ export const scoreTrick = (playedCards, trump, matchSuit) => {
 }
 
 
-export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dealer, pass, setGoAlone, matchSuit) => {
-	debugMode && console.log("------------------ DECIDE TRUMP FUNCTION: Player: ", currentPlayer)
+export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dealer, pass, setGoAlone) => {
+	debugMode && console.log("------------------ DECIDE TRUMP FUNCTION: Player: ", currentPlayer, matchStage)
 	const suitMap = groupBySuit(hand)
 	switch (matchStage) {
 		case "CALL": {
@@ -102,7 +102,7 @@ export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dea
 			debugMode && console.log("Hand Score: ", result)
 			if (result >= minAloneScore) setGoAlone(currentPlayer)
 			if (result > minCallScore) suits[upTrump.suit.code].select()
-			else pass()
+			else sleep(decidePace).then(() => pass())
 			break
 		}
 		// PICK OR STUCK
@@ -126,7 +126,7 @@ export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dea
 			if (matchStage === "PICK") {
 				if (highestScore >= minAloneScore) setGoAlone(currentPlayer)
 				if (highestScore > minCallScore) suits[highSuitCode].select()
-				else pass()
+				else sleep(decidePace).then(() => pass())
 			} else {
 				if (highestScore >= minAloneScore) setGoAlone(currentPlayer)
 				suits[highSuitCode].select()

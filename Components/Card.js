@@ -1,21 +1,27 @@
 import React, { useState, useContext, useEffect, useRef } from "react"
 import { Animated, PanResponder, StyleSheet } from "react-native";
 import { DataContext } from "../GameContext"
-import { cardImages, blankCard, sleep } from "../Data/data"
+import { cardImages, blankCard, sleep, sounds } from "../Data/data"
+import { Audio } from "expo-av";
 
-export default function Card({ card, scale, use, position }) {
-	const { setPlayerChoice, upTrump, appPreferences } = useContext(DataContext)
+export default function Card({ card, scale, use, position, order }) {
+	const { setPlayerChoice, upTrump, appPreferences, matchStage, enableSound } = useContext(DataContext)
 	const [isTrump, setIsTrump] = useState(false)
 	const cardCode = card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()
-	const [imageURL, setImageURL] = useState(cardImages[appPreferences.deckTheme][cardCode])
+	const [imageURL, setImageURL] = useState(cardImages[appPreferences.deckTheme][card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()])
 
-	useEffect(() => {
-		setImageURL(cardImages[appPreferences.deckTheme][cardCode])
-	}, [appPreferences.deckTheme, cardCode])
+	async function playCardSound() {
+		const { sound } = await Audio.Sound.createAsync(
+			sounds.play,
+			{ isMuted: !enableSound, volume: .2 }
+		)
+		await sound.playAsync()
+	}
 
-	const moveAnim = useRef(new Animated.ValueXY()).current;
+	const moveAnim = useRef(new Animated.ValueXY()).current
 	const fadeAnim = useRef(new Animated.Value(1)).current
 	const scaleAnim = useRef(new Animated.Value(1)).current
+	const dealAnim = useRef(new Animated.Value(250)).current
 
 	const dragResponder = useRef(
 		PanResponder.create({
@@ -30,6 +36,7 @@ export default function Card({ card, scale, use, position }) {
 			onPanResponderRelease: () => {
 				if (moveAnim.y._value < -150.0) {
 					// PASSED THRESHOLD FOR ACTION
+					playCardSound()
 					if (!isTrump) {
 						Animated.spring(moveAnim, { toValue: { x: moveAnim.x, y: -350 }, useNativeDriver: true }).start();
 						Animated.timing(fadeAnim, { toValue: 0, duration: 500, useNativeDriver: true }).start();
@@ -44,11 +51,24 @@ export default function Card({ card, scale, use, position }) {
 		})
 	).current;
 
+	const moveUp = () => {
+		Animated.timing(
+			dealAnim,
+			{
+				toValue: 0,
+				delay: (1 + order) * 100,
+				duration: 250,
+				useNativeDriver: true
+			}
+		).start();
+	};
+
+
 	let transform
 
 	switch (position) {
 		case 0: {
-			transform = [{ rotate: "-3deg" },]
+			transform = [{ rotate: "-2deg" }, { translateX: -206 }, { translateY: -40 }]
 			break
 		}
 		case 1: {
@@ -56,7 +76,7 @@ export default function Card({ card, scale, use, position }) {
 			break
 		}
 		case 2: {
-			transform = [{ rotate: "3deg" }, { translateY: -100 }]
+			transform = [{ rotate: "4deg" }, { translateY: -100 }]
 			break
 		}
 		case 3: {
@@ -68,13 +88,11 @@ export default function Card({ card, scale, use, position }) {
 
 	const styles = StyleSheet.create({
 		hand: {
-			borderRadius: 20,
 			marginLeft: -81,
-			marginRight: -81
+			marginRight: -81,
 		},
 		field: {
 			transform: transform,
-			borderRadius: 10,
 			width: 194 * scale,
 			height: 268 * scale,
 		}
@@ -92,7 +110,7 @@ export default function Card({ card, scale, use, position }) {
 
 	const selectedStyle = use === "HAND" ? [styles.hand, animStyles.hand] : [styles.field, animStyles.field]
 	if (position === 0) {
-		selectedStyle.push({ position: "absolute", bottom: 50 })
+		selectedStyle.push({ position: "absolute" })
 	}
 
 	useEffect(() => {
@@ -100,11 +118,21 @@ export default function Card({ card, scale, use, position }) {
 		else setIsTrump(false)
 	}, [upTrump])
 
+	useEffect(() => {
+		moveUp()
+	}, [])
+
+	useEffect(() => {
+		setImageURL(cardImages[appPreferences.deckTheme][cardCode])
+	}, [appPreferences.deckTheme, cardCode])
+
 	return (
-		<Animated.Image
-			source={imageURL}
-			style={selectedStyle}
-			{...dragResponder.panHandlers}
-		/>
+		<Animated.View style={{ transform: [{ translateY: matchStage === "DEAL" ? dealAnim : 0 }] }}>
+			<Animated.Image
+				source={imageURL}
+				style={selectedStyle}
+				{...dragResponder.panHandlers}
+			/>
+		</Animated.View>
 	)
 }

@@ -1,10 +1,8 @@
 import React, { useContext } from 'react'
-import { View, Modal, StyleSheet, Pressable, Image, ScrollView } from 'react-native'
+import { View, Modal, StyleSheet, Pressable, ScrollView } from 'react-native'
 import { DataContext } from '../GameContext'
-import { Flex } from '../CoreElements/containerStyles'
 import { Title, List, Italic, Body, DefaultText, Heading } from '../CoreElements/fontStyles'
 import { colors, iconSVGs, styles } from '../CoreElements/theme'
-import Svg, { Path } from 'react-native-svg'
 import { ButtonURLLink } from '../CoreElements/buttonStyles'
 
 export default function RulesModal() {
@@ -23,7 +21,8 @@ export default function RulesModal() {
 		>
 			<View style={styles.settingsScreen}>
 				<View style={styles.settings}>
-					<ScrollView style={localStyles.modal}>
+					<Pressable onPress={handleClose} style={{ position: "absolute", right: 20, top: -50, opacity: .67 }}>{iconSVGs.close}</Pressable>
+					<ScrollView scrollIndicatorInsets={{ right: 4 }} indicatorStyle="white" style={localStyles.modal}>
 						<View style={{ margin: 20 }}>
 							<View style={{ marginVertical: 10, alignItems: "center" }}>{iconSVGs.info}</View>
 							<View style={{ marginBottom: 20 }} >
@@ -67,7 +66,7 @@ export default function RulesModal() {
 								<Body>If you are the Calling Team, but are unable to win at least 3 tricks, you have been "Euchred" and 2 points are awarded to the opposing team.</Body>
 							</View>
 							<Pressable
-								accessibilityLabel={"Press to begin the game"}
+								accessibilityLabel={"Close the rules window"}
 								onPress={handleClose}
 							>
 								<View
@@ -75,7 +74,7 @@ export default function RulesModal() {
 										justifyContent: "space-around",
 										alignItems: "center",
 										flexDirection: "row",
-										backgroundColor: "rgba(0, 0, 0, .75)",
+										backgroundColor: colors.red,
 										borderWidth: 1,
 										borderColor: colors.white,
 										borderRadius: 40,

@@ -7,7 +7,7 @@ export const minCallScore = 70
 // export const minCallScore = 500
 
 // Pace Settings
-export const decidePace = 1250
+export const decidePace = 1000
 
 // Log/Debug Mode Settings
 export const logMode = false
@@ -101,6 +101,45 @@ export const cardImages = {
 		down3: require("../assets/decks/QueenG/downHands/down3.png"),
 		down4: require("../assets/decks/QueenG/downHands/down4.png"),
 		down5: require("../assets/decks/QueenG/downHands/down5.png"),
-
+	},
+	Year2099: {
+		c9: require("../assets/decks/Year2099/c9.png"),
+		c10: require("../assets/decks/Year2099/c10.png"),
+		ca: require("../assets/decks/Year2099/ca.png"),
+		cj: require("../assets/decks/Year2099/cj.png"),
+		ck: require("../assets/decks/Year2099/ck.png"),
+		cq: require("../assets/decks/Year2099/cq.png"),
+		d9: require("../assets/decks/Year2099/d9.png"),
+		d10: require("../assets/decks/Year2099/d10.png"),
+		da: require("../assets/decks/Year2099/da.png"),
+		dj: require("../assets/decks/Year2099/dj.png"),
+		dk: require("../assets/decks/Year2099/dk.png"),
+		dq: require("../assets/decks/Year2099/dq.png"),
+		h9: require("../assets/decks/Year2099/h9.png"),
+		h10: require("../assets/decks/Year2099/h10.png"),
+		ha: require("../assets/decks/Year2099/ha.png"),
+		hj: require("../assets/decks/Year2099/hj.png"),
+		hk: require("../assets/decks/Year2099/hk.png"),
+		hq: require("../assets/decks/Year2099/hq.png"),
+		s9: require("../assets/decks/Year2099/s9.png"),
+		s10: require("../assets/decks/Year2099/s10.png"),
+		sa: require("../assets/decks/Year2099/sa.png"),
+		sj: require("../assets/decks/Year2099/sj.png"),
+		sk: require("../assets/decks/Year2099/sk.png"),
+		sq: require("../assets/decks/Year2099/sq.png"),
+		blank: require("../assets/decks/Year2099/blank.png"),
+		deck: require("../assets/decks/Year2099/downHands/deck.png"),
+		down0: require("../assets/decks/Year2099/downHands/down0.png"),
+		down1: require("../assets/decks/Year2099/downHands/down1.png"),
+		down2: require("../assets/decks/Year2099/downHands/down2.png"),
+		down3: require("../assets/decks/Year2099/downHands/down3.png"),
+		down4: require("../assets/decks/Year2099/downHands/down4.png"),
+		down5: require("../assets/decks/Year2099/downHands/down5.png"),
 	}
+}
+
+export const sounds = {
+	deal: require("../assets/sounds/deal.mp3"),
+	play: require("../assets/sounds/play.mp3"),
+	flip: require("../assets/sounds/flip.mp3"),
 }

@@ -1,25 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Image, View } from "react-native";
-import { DataContext } from "../GameContext";
-import { Subtitle, Body } from '../CoreElements/fontStyles'
-import { colors, styles } from '../CoreElements/theme'
+import { styles, themeTable } from '../CoreElements/theme'
 import GameLayer from "../Components/GameLayer";
+import { DataContext } from "../GameContext";
 
 export default function Game() {
-	/////////////////////
-	// CONTEXT IMPORTS //
-	/////////////////////
+	const { appPreferences } = useContext(DataContext)
+	const [tableImage, setTableImage] = useState(themeTable["table-great-room"].image)
 
-	const { playerHand } = useContext(DataContext)
-
-	////////////
-	// RENDER //
-	////////////
-
+	useEffect(() => {
+		appPreferences.tableTheme && setTableImage(themeTable[appPreferences.tableTheme].image)
+	}, [appPreferences.tableTheme])
 
 	return (
 		<View style={styles.screen}>
-			<Image style={styles.background} source={require('../assets/bg-table-12p.png')} />
+			<Image style={styles.background} source={tableImage} />
 			<GameLayer />
 		</View>
 	);

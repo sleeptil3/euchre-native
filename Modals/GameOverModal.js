@@ -57,10 +57,10 @@ export default function GameOverModal() {
 					>
 						<Pressable
 							hitSlop={40}
-							accessibilityLabel={"Press to begin the game again"}
+							accessibilityLabel={"Go back to the start screen"}
 							onPress={resetGame}
 						>
-							<DefaultText align="center">End Game</DefaultText>
+							<DefaultText align="center">Close</DefaultText>
 						</Pressable>
 					</View>
 					<ShareButton styles={{

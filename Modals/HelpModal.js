@@ -1,11 +1,8 @@
 import React, { useContext } from 'react'
-import { View, Modal, StyleSheet, Pressable, Image, ScrollView } from 'react-native'
+import { View, Modal, StyleSheet, Pressable, ScrollView } from 'react-native'
 import { DataContext } from '../GameContext'
-import { Flex } from '../CoreElements/containerStyles'
-import { Title, List, Italic, Body, DefaultText, Heading } from '../CoreElements/fontStyles'
+import { Title, Body, DefaultText, Heading } from '../CoreElements/fontStyles'
 import { colors, iconSVGs, styles } from '../CoreElements/theme'
-import Svg, { Path } from 'react-native-svg'
-import { ButtonURLLink } from '../CoreElements/buttonStyles'
 import MatchTricksCount from '../Components/MatchTricksCount'
 import TrumpIndicator from '../Components/TrumpIndicator'
 
@@ -25,24 +22,40 @@ export default function HelpModal() {
 		>
 			<View style={styles.settingsScreen}>
 				<View style={styles.settings}>
-					<ScrollView style={localStyles.modal}>
+					<Pressable onPress={handleClose} style={{ position: "absolute", right: 20, top: -50, opacity: .67 }}>{iconSVGs.close}</Pressable>
+					<ScrollView scrollIndicatorInsets={{ right: 4 }} indicatorStyle="white" style={localStyles.modal}>
 						<View style={{ margin: 20 }}>
 							<View style={{ marginVertical: 10, alignItems: "center" }}>{iconSVGs.helpLarge}</View>
 							<View style={{ marginBottom: 0 }} >
 								<Heading align="center">Help</Heading>
 							</View>
-							{/* <View style={{ marginHorizontal: 10, borderWidth: 1, borderRadius: 10, borderColor: colors.white, padding: 12, paddingBottom: 0 }}>
-							</View> */}
 							<View style={{ marginVertical: 30, alignItems: "center" }}>
 								<Title override={{ fontSize: 24 }}>Interface Icons</Title>
-								<View style={{ marginVertical: 10, alignItems: "center" }}>
+								<View style={{ marginTop: 10, alignItems: "center" }}>
+									<Title override={{ fontSize: 18 }}>Play Choices</Title>
+									<View style={{ flexDirection: "row", alignItems: "flex-end", justifyContent: "center", marginTop: 5 }}>
+										<View style={{ alignItems: "center", justifyContent: "center", paddingHorizontal: 10 }}>
+											{iconSVGs.upOutlined}
+											<Body>Order Up</Body>
+										</View>
+										<View style={{ alignItems: "center", justifyContent: "center", paddingHorizontal: 10 }}>
+											{iconSVGs.passOutlined}
+											<Body>Pass</Body>
+										</View>
+										<View style={{ alignItems: "center", justifyContent: "center", paddingHorizontal: 10 }}>
+											{iconSVGs.okOutlined}
+											<Body>Continue</Body>
+										</View>
+									</View>
+								</View>
+								<View style={{ marginTop: 10, alignItems: "center" }}>
 									<Title override={{ fontSize: 18 }}>Match Tricks</Title>
 									<View style={{ alignItems: "center", marginBottom: 10 }}>
 										<MatchTricksCount />
 									</View>
 									<Body>Shows how many tricks each team has won so far in the current match</Body>
 								</View>
-								<View style={{ marginVertical: 10, alignItems: "center" }}>
+								<View style={{ marginTop: 10, alignItems: "center" }}>
 									<Title override={{ fontSize: 18 }}>Trump Indicator</Title>
 									<View style={{ alignItems: "center", marginVertical: 10 }}>
 										<TrumpIndicator />
@@ -85,6 +98,6 @@ const localStyles = StyleSheet.create({
 		borderRadius: 32,
 		borderWidth: 2,
 		borderColor: "rgba(255,255,255,.5)",
-		backgroundColor: "rgba(0,0,0,.9)",
+		backgroundColor: "rgba(0,0,0,.75)",
 	},
 })
