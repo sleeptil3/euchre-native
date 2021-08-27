@@ -12,13 +12,13 @@ export default function MatchTricksCount() {
 		<View style={styles.container}>
 			<View style={[styles.panel, { top: null, right: -27, transform: [{ rotate: "90deg" }] }]}>
 				<View style={[styles.panelItem, { backgroundColor: "transparent" }]}>
-					<Subtitle align="center" override={{ fontSize: 8, marginBottom: 0 }}>Match</Subtitle>
+					<Subtitle align="center" override={{ fontSize: 8, marginBottom: 0 }}>Game</Subtitle>
 				</View>
 				<View style={[styles.panelItem, { marginLeft: 0, backgroundColor: "transparent" }]}>
-					<Subtitle align="center" override={{ fontSize: 8, marginBottom: 0, marginLeft: 3 }}>Game</Subtitle>
+					<Subtitle align="center" override={{ fontSize: 8, marginBottom: 0, marginLeft: 3 }}>Match</Subtitle>
 				</View>
 			</View>
-			<View style={[styles.row, { marginTop: 0, marginRight: 8 }]}>
+			<View style={[styles.row, { marginTop: 0, marginRight: 8, left: 2 }]}>
 				<View style={[styles.score, { borderRightWidth: .5, borderBottomWidth: .5 }]}>
 					<DefaultText align="center" override={{ fontSize: 16 }}>{teamScore}</DefaultText>
 				</View>
@@ -26,7 +26,7 @@ export default function MatchTricksCount() {
 					<DefaultText align="center" override={{ fontSize: 16 }}>{opponentScore}</DefaultText>
 				</View>
 			</View>
-			<View style={[styles.row, { marginBottom: 0, marginRight: 8 }]}>
+			<View style={[styles.row, { marginBottom: 0, marginRight: 8, left: 2 }]}>
 				<View style={[styles.score, { borderRightWidth: .5, borderTopWidth: .5 }]}>
 					<DefaultText align="center" override={{ fontSize: 16 }}>{callingPlayer % 2 === 0 ? matchTricks.callingTeam : matchTricks.opposingTeam}</DefaultText>
 				</View>
@@ -34,7 +34,7 @@ export default function MatchTricksCount() {
 					<DefaultText align="center" override={{ fontSize: 16 }}>{callingPlayer % 2 === 0 ? matchTricks.opposingTeam : matchTricks.callingTeam}</DefaultText>
 				</View>
 			</View>
-			<View style={[styles.panel, { right: 11 }]}>
+			<View style={[styles.panel, { right: 8.5 }]}>
 				<View style={[styles.panelItem, { borderWidth: .5, borderBottomWidth: 0 }]}>
 					<Title align="center" override={{ fontSize: 9, padding: 2, marginBottom: 0 }}>You</Title>
 				</View>
