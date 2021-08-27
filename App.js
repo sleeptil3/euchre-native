@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useWindowDimensions, View } from 'react-native';
 import GameContext from './GameContext';
 import { StatusBar } from 'expo-status-bar';
 import Game from './Screens/Game'
-import { Flex } from './CoreElements/containerStyles';
-import { colors } from './CoreElements/theme';
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { colors } from './CoreElements/theme';
 
 export default function App() {
 	const [appPreferences, setAppPreferences] = useState({})
+	const { height, width } = useWindowDimensions()
 
 	const getStoredPreferences = async () => {
 		try {
@@ -62,10 +63,10 @@ export default function App() {
 
 	else return (
 		<GameContext appPreferences={appPreferences} setAppPreferences={setAppPreferences}>
-			<Flex color={colors.background}>
+			<View style={{ position: "absolute", width: width, height: height, alignItems: "center", justifyContent: "center", backgroundColor: "#000" }}>
 				<StatusBar style="light" hidden={true} />
 				<Game />
-			</Flex>
+			</View>
 		</GameContext>
 	);
 }

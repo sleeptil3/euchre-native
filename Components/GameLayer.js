@@ -25,11 +25,15 @@ export default function GameLayer() {
 		hud: {
 			position: "absolute",
 			width: "100%",
-			top: 80,
+			top: 28,
 			flexDirection: "row",
 			justifyContent: "space-between",
-			paddingHorizontal: 26,
-			opacity: (matchStage === "PLAY" || matchStage === "RESULT") && matchTricks.callingTeam + matchTricks.opposingTeam !== 5 ? 1 : 0
+			paddingHorizontal: 10,
+			opacity: (matchStage === "PLAY" || matchStage === "RESULT") ? 1 : 0
+		},
+		field: {
+			height: "50%",
+			width: "100%"
 		}
 	})
 
@@ -38,7 +42,7 @@ export default function GameLayer() {
 	}, [matchStage])
 
 	return (
-		<SafeAreaView style={styles.screen}>
+		<View style={styles.screen}>
 			<GameOverModal />
 			<StartModal />
 			<SettingsModal />
@@ -46,25 +50,25 @@ export default function GameLayer() {
 			<HelpModal />
 			<PromptModal />
 			{showActionPrompt && <PromptAction />}
-			<View style={localStyles.hud}>
-				<MatchTricksCount />
-				<TrumpIndicator />
-			</View>
 			{matchStage !== "PREGAME" &&
-				<Flex fill={2} align="center" justify="center" height="100%" width="100%">
+				<SafeAreaView style={localStyles.field}>
 					{showDeal && <DownHands />}
 					<Flex align="center" justify="center" height="100%" width="100%" override={{ position: "absolute", bottom: 20 }}>
 						{(matchStage !== "PLAY" || matchStage !== "RESULT" || matchStage !== "GAMEOVER") ? <TrumpStack /> : null}
 						{matchStage === "PLAY" && <PlayField />}
 					</Flex>
-				</Flex>
+				</SafeAreaView>
 			}
 			<Flex fill={1} align="center" height="100%" width="100%">
 				{showPlayerHand && <PlayerHand />}
 			</Flex>
-			{yourSeat === dealer && (matchStage !== 'PREGAME' && matchStage !== 'RESULT') && <View style={{ position: "absolute", left: 14, bottom: 14 }}>
-				{iconSVGs.dealerIcon}
+			{yourSeat === dealer && (matchStage !== 'PREGAME' && matchStage !== 'RESULT') && <View style={{ position: "absolute", justifyContent: "flex-end", bottom: 0 }}>
+				{iconSVGs.dealerIndicatorLarge}
 			</View>}
-		</SafeAreaView>
+			<View style={localStyles.hud}>
+				<TrumpIndicator />
+				<MatchTricksCount />
+			</View>
+		</View>
 	)
 }

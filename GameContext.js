@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from "react"
+import * as Device from 'expo-device'
 import { Audio } from "expo-av"
 import { hearts, diamonds, spades, clubs, Deck } from './Deck/deck'
 import { sleep, blankCard, sounds } from "./Data/data"
@@ -73,6 +74,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 
 	// UI/AV State
 	const [enableSound, setEnableSound] = useState(true)
+	const [hasNotch, setHasNotch] = useState()
 	const [showTrumpStack, setShowTrumpStack] = useState(false)
 	const [showDeal, setShowDeal] = useState(false)
 	const suits = {
@@ -564,9 +566,22 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		setCurrentPlayer(dealer + 1)
 	}
 
+	const checkForNotch = () => {
+		const thisDevice = Device.modelName
+		const notchedPhones = ["iPhone XR", "iPhone X", "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", "iPhone 12 mini", "iPhone 11 Pro", "iPhone 11 Pro Max", "iPhone 11"]
+		return notchedPhones.includes(thisDevice)
+	}
+
 	////////////////
 	// useEffects //
 	////////////////
+
+	// Check for notch
+	useEffect(() => {
+		const notchCheck = checkForNotch()
+		console.log(notchCheck)
+		setHasNotch(notchCheck)
+	}, [])
 
 	// Game/NewDeal Setup
 	useEffect(() => {
@@ -866,6 +881,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				handlePlayerChoice,
 				handleDiscard,
 				pass,
+				hasNotch,
 				yourSeat,
 				upTrump,
 				suits,

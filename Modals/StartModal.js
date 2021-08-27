@@ -6,6 +6,7 @@ import { Italic, Body, DefaultText, Heading, MainTitle } from '../CoreElements/f
 import { colors, iconSVGs, themeHands } from '../CoreElements/theme'
 import ShareButton from '../Components/ShareButton'
 import * as StoreReview from 'expo-store-review';
+import { sleep } from '../Data/data'
 
 export default function StartModal() {
 	const { gameplayCount, appPreferences, setShowRulesModal, setShowSettingsModal, showStartModal, setShowStartModal, setCurrentPlayer, setMatchStage, setTurnCount, dealer, turnCount } = useContext(DataContext)

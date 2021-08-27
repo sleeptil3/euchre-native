@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
 	field: {
 		position: "absolute",
 		top: 90,
-		height: "60%",
-		width: "90%",
+		height: "100%",
+		width: "100%",
 		flexDirection: "row",
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
 	}
 })
