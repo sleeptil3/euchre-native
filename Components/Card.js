@@ -68,7 +68,7 @@ export default function Card({ card, scale, use, position, order }) {
 
 	switch (position) {
 		case 0: {
-			transform = [{ rotate: "-2deg" }, { translateX: -206 }, { translateY: -40 }]
+			transform = [{ rotate: "-2deg" }, { translateX: -206 }, { translateY: -80 }]
 			break
 		}
 		case 1: {
@@ -76,7 +76,7 @@ export default function Card({ card, scale, use, position, order }) {
 			break
 		}
 		case 2: {
-			transform = [{ rotate: "4deg" }, { translateY: -100 }]
+			transform = [{ rotate: "4deg" }, { translateY: -80 }]
 			break
 		}
 		case 3: {

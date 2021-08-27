@@ -26,7 +26,7 @@ export default function PromptAction() {
 	}, [])
 
 	return (
-		<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", bottom: 245, left: 0, right: 0 }}>
+		<View style={{ justifyContent: "center", alignItems: "center", position: "absolute", bottom: 195, left: 0, right: 0 }}>
 			<View style={{
 				borderRadius: 32,
 				borderWidth: 2,

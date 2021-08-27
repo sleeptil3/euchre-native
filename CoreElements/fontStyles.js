@@ -16,56 +16,56 @@ export const MainTitle = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.mainTitle, { textAlign: align || "center", color: color || fontStyles.mainTitle.color }, override]}>{children}</Text>
-	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 export const Heading = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.heading, { textAlign: align || "left", color: color || fontStyles.heading.color }, override]}>{children}</Text>
-	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 export const Italic = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.italic, { textAlign: align || "left", color: color || fontStyles.heading.color }, override]}>{children}</Text>
-	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 export const Title = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.title, { textAlign: align || "left", color: color || fontStyles.title.color }, override]}>{children}</Text>
-	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 export const Subtitle = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.subtitle, { textAlign: align || "left", color: color || fontStyles.subtitle.color }, override]}>{children}</Text>
-	return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 export const Body = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.body, { textAlign: align || "left", color: color || fontStyles.body.color }, override]}>{children}</Text>
-	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	else return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 export const List = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.list, { textAlign: align || "left", color: color || fontStyles.body.color }, override]}>• {children}</Text>
-	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	else return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 export const DefaultText = ({ children, align, override, color }) => {
 	const [fontLoaded] = useFonts(customFonts)
 
 	if (fontLoaded) return <Text style={[fontStyles.default, { textAlign: align || "left", color: color || fontStyles.body.color }, override]}>{children}</Text>
-	else return <ActivityIndicator style={{ margin: 20, marginTop: 30 }} animating={true} color={colors.white} size="small" />
+	else return <Text style={{ opacity: 0 }}>{children}</Text>
 }
 
 

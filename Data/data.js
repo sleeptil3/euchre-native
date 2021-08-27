@@ -61,12 +61,7 @@ export const cardImages = {
 		sq: require("../assets/decks/Default/sq.png"),
 		blank: require("../assets/decks/Default/blank.png"),
 		deck: require("../assets/decks/Default/downHands/deck.png"),
-		down0: require("../assets/decks/Default/downHands/down0.png"),
 		down1: require("../assets/decks/Default/downHands/down1.png"),
-		down2: require("../assets/decks/Default/downHands/down2.png"),
-		down3: require("../assets/decks/Default/downHands/down3.png"),
-		down4: require("../assets/decks/Default/downHands/down4.png"),
-		down5: require("../assets/decks/Default/downHands/down5.png"),
 	},
 	QueenG: {
 		c9: require("../assets/decks/QueenG/c9.png"),
@@ -95,12 +90,7 @@ export const cardImages = {
 		sq: require("../assets/decks/QueenG/sq.png"),
 		blank: require("../assets/decks/QueenG/blank.png"),
 		deck: require("../assets/decks/QueenG/downHands/deck.png"),
-		down0: require("../assets/decks/QueenG/downHands/down0.png"),
 		down1: require("../assets/decks/QueenG/downHands/down1.png"),
-		down2: require("../assets/decks/QueenG/downHands/down2.png"),
-		down3: require("../assets/decks/QueenG/downHands/down3.png"),
-		down4: require("../assets/decks/QueenG/downHands/down4.png"),
-		down5: require("../assets/decks/QueenG/downHands/down5.png"),
 	},
 	Year2099: {
 		c9: require("../assets/decks/Year2099/c9.png"),
@@ -129,12 +119,7 @@ export const cardImages = {
 		sq: require("../assets/decks/Year2099/sq.png"),
 		blank: require("../assets/decks/Year2099/blank.png"),
 		deck: require("../assets/decks/Year2099/downHands/deck.png"),
-		down0: require("../assets/decks/Year2099/downHands/down0.png"),
 		down1: require("../assets/decks/Year2099/downHands/down1.png"),
-		down2: require("../assets/decks/Year2099/downHands/down2.png"),
-		down3: require("../assets/decks/Year2099/downHands/down3.png"),
-		down4: require("../assets/decks/Year2099/downHands/down4.png"),
-		down5: require("../assets/decks/Year2099/downHands/down5.png"),
 	}
 }
 

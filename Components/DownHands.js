@@ -3,6 +3,7 @@ import { DataContext } from "../GameContext"
 import DownHand from "./DownHand"
 import { Flex } from "../CoreElements/containerStyles";
 import { sleep } from "../Data/data";
+import { StyleSheet, View } from "react-native";
 
 export default function DownHands() {
 	const { teammateHand, opponentHand1, opponentHand2, matchStage, promptText } = useContext(DataContext)
@@ -23,15 +24,36 @@ export default function DownHands() {
 		}
 	}, [])
 
+	const localStyles = StyleSheet.create({
+		downHands: {
+			height: "100%",
+			width: "100%",
+		},
+		horizontal: {
+			width: "100%",
+			position: "absolute",
+			bottom: 0
+		},
+		vertical: {
+			width: "100%",
+			height: "100%",
+			position: "absolute",
+			top: 0,
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "flex-start",
+		}
+	})
+
 	return (
-		<Flex fill={2} height="100%" width="100%" >
-			<Flex direction="row" justify="space-between" align="center" height="100%" width="100%" override={{ position: "absolute" }}>
+		<View style={localStyles.downHands}>
+			<View style={localStyles.horizontal}>
 				{show1 && <DownHand position={1} handLength={opponentHand1.length} />}
 				{show3 && <DownHand position={3} handLength={opponentHand2.length} />}
-			</Flex>
-			<Flex direction="row" justify="center" align="flex-start" height="100%" width="100%" override={{ position: "absolute", top: 0 }}>
+			</View>
+			<View style={localStyles.vertical}>
 				{show2 && <DownHand position={2} handLength={teammateHand.length} />}
-			</Flex>
-		</Flex>
+			</View>
+		</View>
 	)
 }

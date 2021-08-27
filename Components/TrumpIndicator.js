@@ -19,22 +19,24 @@ export default function TrumpIndicator() {
 			paddingVertical: 6,
 			paddingHorizontal: 6,
 			paddingTop: 2,
-			height: 64
+			height: 64,
+			left: 12,
+			backgroundColor: colors.black
 		},
-		caller: {
+		indicator: {
 			position: "absolute",
-			backgroundColor: callingPlayer % 2 === 0 ? colors.green : colors.yellow,
-			height: 14,
-			top: -15,
-			borderTopLeftRadius: 5,
-			borderTopRightRadius: 5
+			top: callingPlayer === 2 ? -19 : null,
+			bottom: callingPlayer === 0 ? -19 : null,
+			left: callingPlayer === 1 ? -19 : null,
+			right: callingPlayer === 3 ? -19 : null,
+			transform: [{ rotate: callingPlayer === 1 ? "-90deg" : callingPlayer === 3 ? "90deg" : callingPlayer === 0 ? "180deg" : 0 }]
 		}
 	})
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.caller}>
-				<DefaultText override={{ color: colors.black, fontSize: 12, paddingHorizontal: 4 }}>{callingPlayer % 2 === 0 ? "You" : "Them"}</DefaultText>
+			<View style={styles.indicator}>
+				{iconSVGs.indicator}
 			</View>
 			<DefaultText align="center" override={{ fontSize: 15, marginBottom: 2 }}>Trump</DefaultText>
 			{
