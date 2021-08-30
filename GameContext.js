@@ -579,7 +579,6 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	// Check for notch
 	useEffect(() => {
 		const notchCheck = checkForNotch()
-		console.log(notchCheck)
 		setHasNotch(notchCheck)
 	}, [])
 
