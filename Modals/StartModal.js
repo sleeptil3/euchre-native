@@ -50,7 +50,7 @@ export default function StartModal() {
 				shadowOffset: { width: 4, height: 4 }
 			}}>
 				<View style={styles.modal}>
-					<MainTitle>Euchre Nights</MainTitle>
+					<MainTitle>Euchre Night</MainTitle>
 					<Italic align="center">Created by Shawn Clary</Italic>
 					<View style={{ marginVertical: 10 }}>
 						<Image source={appPreferences.deckTheme ? themeHands[appPreferences.deckTheme] : themeHands.Default} />

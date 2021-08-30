@@ -47,6 +47,7 @@ export class Deck {
 			}
 		}
 	}
+
 	// Randomize array in-place using Durstenfeld shuffle algorithm
 	// Resourced from StackOverflow user 'ashleedawg'
 	shuffleDeck = () => {

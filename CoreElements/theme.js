@@ -43,13 +43,11 @@ export const styles = StyleSheet.create({
 
 export const themeSamples = {
 	Default: require("../assets/decks/Default/icons/example.png"),
-	QueenG: require("../assets/decks/QueenG/icons/example.png"),
 	Year2099: require("../assets/decks/Year2099/icons/example.png"),
 }
 
 export const themeHands = {
 	Default: require("../assets/decks/Default/icons/hand.png"),
-	QueenG: require("../assets/decks/QueenG/icons/hand.png"),
 	Year2099: require("../assets/decks/Year2099/icons/hand.png"),
 }
 

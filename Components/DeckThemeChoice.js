@@ -38,10 +38,6 @@ export default function DeckThemeChoice({ deck }) {
 				<View style={{ position: "absolute", top: 10, left: 10 }}>
 					{appPreferences.deckTheme === deck ? iconSVGs.toggleOn : iconSVGs.toggleOff}
 				</View>
-				{deck === "QueenG" && <View>
-					<Body override={{ fontSize: 13, lineHeight: 18 }}>QueenG was created by Maayan Segal at 16 years old as the first ever, multi-ethnic deck of cards where men and women are equal. In this deck, the Jack, Queen, and King are represented as Prince/Princess, Duke/Duchess, and Monarch, respectively.</Body>
-					<Body override={{ fontSize: 13, lineHeight: 18 }}>This is a beautiful set of cards and I highly recommend you pick up a set. You can learn more about Maayan and pick up a QueenG card deck of your own on her <ButtonURLLink url={"https://www.indiegogo.com/projects/queeng-playing-cards-2nd-edition#/"}>Indiegogo</ButtonURLLink> page.</Body>
-				</View>}
 			</View>
 		</Pressable>
 	)

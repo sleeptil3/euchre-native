@@ -39,7 +39,6 @@ export default function SettingsModal() {
 							<View style={{ justifyContent: "center", alignItems: "center", marginVertical: 20 }}>
 								<Title override={{ fontSize: 24 }}>Deck Theme</Title>
 								<DeckThemeChoice deck="Default" />
-								<DeckThemeChoice deck="QueenG" />
 								<DeckThemeChoice deck="Year2099" />
 							</View>
 							<View style={{ justifyContent: "center", alignItems: "center", marginVertical: 20 }}>
