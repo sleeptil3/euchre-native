@@ -12,7 +12,7 @@ export default function TrumpIndicator() {
 		container: {
 			alignItems: "center",
 			justifyContent: "center",
-			opacity: .6,
+			opacity: trump.code === undefined ? 0 : .6,
 			borderWidth: 1,
 			borderColor: colors.white,
 			borderRadius: 10,

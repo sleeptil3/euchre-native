@@ -22,7 +22,7 @@ export default function PromptModal() {
 					<View style={styles.modal}>
 						<Flex justify="space-between" align="center">
 							<Title align="center" override={{ marginTop: 0 }}>{promptText.title}</Title>
-							<View>
+							<View style={{ paddingHorizontal: 8 }}>
 								<Subtitle align="center" override={{ fontSize: 20, marginTop: -8 }}>{promptText.subtitle}</Subtitle>
 								<Body align="center" override={{ fontSize: 15, marginBottom: 10 }}>{promptText.body}</Body>
 							</View>

@@ -275,7 +275,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		},
 		matchResult: {
 			title: "Match Complete",
-			subtitle: `Scoreboard`,
+			subtitle: "",
 			body: "",
 			choices: [
 				{
@@ -328,7 +328,6 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	}
 
 	const startMatch = () => {
-		// "Begin Match" user prompt action
 		setMatchStage("PLAY")
 		setCurrentPlayer((dealer + 1) % 4)
 		setTurnCount(0)
@@ -386,10 +385,16 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		debugMode && console.log("handlePlayerChoice", player, card)
 		setShowActionPrompt(false)
 		if (!matchSuit) {
-			if (trump.left.code === card.suit.code && card.faceValue === "J")
+			debugMode && console.log("NO MATCHSUIT SET")
+			if (trump.left.code === card.suit.code && card.faceValue === "J") {
+				debugMode && console.log("LEFT LAID = SETTING TRUMP AS MATCH SUIT")
 				setMatchSuit(trump.code)
-			else setMatchSuit(card.suit.code)
-		}
+			} else {
+				debugMode && console.log("CARD LAID, NOT LEFT = SETTING MATCHSUIT AS CARD SUIT")
+				setMatchSuit(card.suit.code)
+			}
+		} else debugMode && console.log("MATCHSUIT ALREADY SET, CONTINUING...")
+		debugMode && console.log("PLAYING THE CARD, DISCARD, THEN ADVANCING CURRENT PLAYER")
 		setPlayedCards({ ...playedCards, [player]: card })
 		setCurrentPlayer((currentPlayer + 1) % 4)
 		handleDiscard(player, card)
@@ -431,6 +436,28 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		}
 	}
 
+	const checkValidCard = (hand, card) => {
+		// MATCHSUIT NOT DECLARED
+		// if matchSuit is not declard, return TRUE
+		if (card === upTrump) return false
+		if (!matchSuit) return true
+		// MATCHSUIT DECLARED
+		// Sort Hand by suit
+		const suitMap = groupBySuit(hand)
+		// if you have matchSuit
+		console.log(suitMap)
+		if (suitMap.hasOwnProperty(matchSuit)) {
+			// Check that the only matchSuit card isn't actually the LEFT bower
+			if (suitMap[matchSuit].length === 1 && suitMap[matchSuit][0].faceValue === "J") return true
+			// if the card IS matchSuit AND is NOT the left bower (jack of opposite trump suit) return true
+			if (card.suit.code === matchSuit && !(card.suit.code === trump.left.code && card.faceValue === "J")) return true
+			else return false
+		} else {
+			// if you DON'T have matchSuit
+			return true
+		}
+	}
+
 	const handleTrickEnd = () => {
 		setPlayedCards({
 			0: blankCard,
@@ -457,23 +484,27 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 					if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 						tempTeamScore += scoreCalc
 						setTeamScore(tempTeamScore)
-						if (goAlone !== null) prompts.matchResult.body = `Your team took all five tricks while going alone (4pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
-						else prompts.matchResult.body = `Your team took all five tricks (2pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Won"
+						if (goAlone !== null) prompts.matchResult.body = `Your team took all five tricks while going alone (4pts)`
+						else prompts.matchResult.body = `Your team took all five tricks (2pts)`
 					} else {
 						tempOpposingScore += scoreCalc
 						setOpponentScore(tempOpposingScore)
-						if (goAlone !== null) prompts.matchResult.body = `The other team took all five tricks while going alone (4pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
-						else prompts.matchResult.body = `The other team took all five tricks (2pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Lost"
+						if (goAlone !== null) prompts.matchResult.body = `The other team took all five tricks while going alone (4pts)`
+						else prompts.matchResult.body = `The other team took all five tricks (2pts)`
 					}
 				} else {
 					if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 						tempTeamScore += 1
 						setTeamScore(tempTeamScore)
-						prompts.matchResult.body = `Your team took ${matchTricks.callingTeam} tricks (1pt)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Won"
+						prompts.matchResult.body = `Your team took ${matchTricks.callingTeam} tricks (1pt)`
 					} else {
 						tempOpposingScore += 1
 						setOpponentScore(tempOpposingScore)
-						prompts.matchResult.body = `The other team took ${matchTricks.callingTeam} tricks (1pt)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Lost"
+						prompts.matchResult.body = `The other team took ${matchTricks.callingTeam} tricks (1pt)`
 					}
 				}
 			}
@@ -483,12 +514,14 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 				tempOpposingScore += 2
 				setOpponentScore(tempOpposingScore)
-				prompts.matchResult.body = `You got Euchred\n2pts awarded to the other team\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+				prompts.matchResult.subtitle = "You got Euchred"
+				prompts.matchResult.body = "Your team called Trump but was unable to win at least three tricks"
 			}
 			else {
 				tempTeamScore += 2
 				setTeamScore(tempTeamScore)
-				prompts.matchResult.body = `You Euchred the other team\n2pts awarded to your team\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+				prompts.matchResult.subject = "You Euchred the other team"
+				prompts.matchResult.body = `They called Trump but were unable to win at least three tricks`
 			}
 		}
 
@@ -860,6 +893,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				showTrumpStack, setShowTrumpStack,
 				showDeal, setShowDeal,
 				playedCards, setPlayedCards,
+				matchSuit, setMatchSuit,
 				turnCount, setTurnCount,
 				callingPlayer, setCallingPlayer,
 				opponentScore, setOpponentScore,
@@ -875,6 +909,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				currentPlayer, setCurrentPlayer,
 				playerChoice, setPlayerChoice,
 				actionText, setActionText,
+				checkValidCard,
 				goAlone,
 				matchTricks,
 				handlePlayerChoice,

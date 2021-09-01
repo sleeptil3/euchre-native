@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Audio } from "expo-av";
 import { Flex } from "../CoreElements/containerStyles";
 import { DataContext } from "../GameContext"
@@ -6,7 +6,8 @@ import Card from "./Card"
 import { sounds, sleep } from "../Data/data";
 
 export default function PlayerHand() {
-	const { playerHand, yourSeat, goAlone, enableSound } = useContext(DataContext)
+	const { playerHand, yourSeat, goAlone, enableSound, dealer, matchSuit } = useContext(DataContext)
+	const [matchSuitSend, setMatchSuitSend] = useState()
 
 	async function playDeal() {
 		const { sound } = await Audio.Sound.createAsync(
@@ -18,7 +19,11 @@ export default function PlayerHand() {
 
 	useEffect(() => {
 		sleep(100).then(() => playDeal())
-	}, [])
+	}, [dealer])
+
+	useEffect(() => {
+		setMatchSuitSend(matchSuit)
+	}, [matchSuit])
 
 	return (
 		<Flex
@@ -32,7 +37,7 @@ export default function PlayerHand() {
 				display: (goAlone + 2) % 4 === yourSeat ? "none" : "flex"
 			}}>
 			{
-				playerHand.map((card, idx) => <Card order={idx} card={card} scale={1} key={card._id} use={"HAND"} />)
+				playerHand.map((card, idx) => <Card order={idx} card={card} scale={1} key={card._id} use={"HAND"} matchSuitTemp={matchSuitSend} />)
 			}
 		</Flex>
 	)

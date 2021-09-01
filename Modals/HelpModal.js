@@ -7,11 +7,11 @@ import MatchTricksCount from '../Components/MatchTricksCount'
 import TrumpIndicator from '../Components/TrumpIndicator'
 
 export default function HelpModal() {
-	const { showHelpModal, setShowHelpModal, setShowPromptModal } = useContext(DataContext)
+	const { showHelpModal, setShowHelpModal, setShowPromptModal, showActionPrompt } = useContext(DataContext)
 
 	const handleClose = () => {
 		setShowHelpModal(false)
-		setShowPromptModal(true)
+		!showActionPrompt && setShowPromptModal(true)
 	}
 
 	return (

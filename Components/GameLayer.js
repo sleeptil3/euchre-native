@@ -19,7 +19,7 @@ import HelpModal from '../Modals/HelpModal';
 import { sleep } from '../Data/data';
 
 export default function GameLayer() {
-	const { matchStage, showDeal, matchTricks, showActionPrompt, yourSeat, dealer } = useContext(DataContext)
+	const { matchStage, showDeal, playerHand, showActionPrompt, yourSeat, dealer } = useContext(DataContext)
 	const [showPlayerHand, setShowPlayerHand] = useState(false)
 	const localStyles = StyleSheet.create({
 		hud: {
@@ -29,7 +29,6 @@ export default function GameLayer() {
 			flexDirection: "row",
 			justifyContent: "space-between",
 			paddingHorizontal: 10,
-			opacity: (matchStage === "PLAY" || matchStage === "RESULT") ? 1 : 0
 		},
 		field: {
 			height: "50%",
@@ -38,7 +37,8 @@ export default function GameLayer() {
 	})
 
 	useEffect(() => {
-		matchStage === "DEAL" && sleep(3500).then(() => setShowPlayerHand(true))
+		matchStage === "DEAL" && sleep(3400).then(() => setShowPlayerHand(true))
+		playerHand.length === 0 && setShowPlayerHand(false)
 	}, [matchStage])
 
 	return (
