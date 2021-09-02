@@ -42,11 +42,11 @@ export default function TrumpCard() {
 
 
 	useEffect(() => {
-		showTrumpStack && flipState === false && matchStage === "CALL" && sleep(500).then(() => {
+		if (showTrumpStack && flipState === false && matchStage === "CALL") sleep(500).then(() => {
 			playFlip()
 		})
-		matchStage === "PICK" && flipState === true && playFlip()
-		matchStage === "DISCARD" && fadeOut()
+		if (showTrumpStack && matchStage === "PICK" && flipState === true) playFlip()
+		if (showTrumpStack && matchStage === "DISCARD") fadeOut()
 	}, [matchStage])
 
 	useEffect(() => {

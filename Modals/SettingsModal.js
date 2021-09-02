@@ -7,11 +7,13 @@ import DeckThemeChoice from '../Components/DeckThemeChoice'
 import TableThemeChoice from '../Components/TableThemeChoice'
 
 export default function SettingsModal() {
-	const { matchStage, setShowStartModal, setShowSettingsModal, showSettingsModal, setShowPromptModal, appPreferences, setAppPreferences, enableSound, setEnableSound } = useContext(DataContext)
+	const { matchStage, setShowStartModal, setShowSettingsModal, showSettingsModal, showActionPrompt, setShowPromptModal, appPreferences, setAppPreferences, enableSound, setEnableSound } = useContext(DataContext)
 
 	const handleClose = () => {
 		if (matchStage === "PREGAME") setShowStartModal(true)
-		else setShowPromptModal(true)
+		else {
+			!showActionPrompt && setShowPromptModal(true)
+		}
 		setShowSettingsModal(false)
 	}
 

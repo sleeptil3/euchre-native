@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Audio } from "expo-av";
 import { Flex } from "../CoreElements/containerStyles";
 import { DataContext } from "../GameContext"
@@ -6,7 +6,7 @@ import Card from "./Card"
 import { sounds, sleep } from "../Data/data";
 
 export default function PlayerHand() {
-	const { playerHand, yourSeat, goAlone, enableSound } = useContext(DataContext)
+	const { playerHand, yourSeat, goAlone, enableSound, dealer, matchSuit } = useContext(DataContext)
 
 	async function playDeal() {
 		const { sound } = await Audio.Sound.createAsync(
@@ -18,7 +18,7 @@ export default function PlayerHand() {
 
 	useEffect(() => {
 		sleep(100).then(() => playDeal())
-	}, [])
+	}, [dealer])
 
 	return (
 		<Flex

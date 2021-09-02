@@ -5,10 +5,12 @@ import { cardImages, blankCard, sleep, sounds } from "../Data/data"
 import { Audio } from "expo-av";
 
 export default function Card({ card, scale, use, position, order }) {
-	const { setPlayerChoice, upTrump, appPreferences, matchStage, enableSound } = useContext(DataContext)
+	//  use values: "HAND" or other
+	const { setPlayerChoice, upTrump, appPreferences, matchStage, enableSound, checkValidCard, playerHand, matchSuit } = useContext(DataContext)
 	const [isTrump, setIsTrump] = useState(false)
 	const cardCode = card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()
 	const [imageURL, setImageURL] = useState(cardImages[appPreferences.deckTheme][card === blankCard ? "blank" : "" + card.suit.code + card.faceValue.toLowerCase()])
+	const [isValid, setIsValid] = useState(true)
 
 	async function playCardSound() {
 		const { sound } = await Audio.Sound.createAsync(
@@ -25,7 +27,6 @@ export default function Card({ card, scale, use, position, order }) {
 
 	const dragResponder = useRef(
 		PanResponder.create({
-			onMoveShouldSetPanResponder: () => true,
 			onPanResponderMove: Animated.event(
 				[
 					null,
@@ -35,16 +36,14 @@ export default function Card({ card, scale, use, position, order }) {
 			),
 			onPanResponderRelease: () => {
 				if (moveAnim.y._value < -150.0) {
-					// PASSED THRESHOLD FOR ACTION
+					// PASSED DRAG THRESHOLD FOR ACTION
+					Animated.spring(moveAnim, { toValue: { x: moveAnim.x, y: -350 }, useNativeDriver: true }).start();
+					Animated.timing(fadeAnim, { toValue: 0, duration: 500, useNativeDriver: true }).start();
+					Animated.timing(scaleAnim, { toValue: .75, duration: 500, useNativeDriver: true }).start();
 					playCardSound()
-					if (!isTrump) {
-						Animated.spring(moveAnim, { toValue: { x: moveAnim.x, y: -350 }, useNativeDriver: true }).start();
-						Animated.timing(fadeAnim, { toValue: 0, duration: 500, useNativeDriver: true }).start();
-						Animated.timing(scaleAnim, { toValue: .75, duration: 500, useNativeDriver: true }).start();
-						setPlayerChoice(card)
-					}
+					setPlayerChoice(card)
 				} else {
-					// FAILED THRESHOLD FOR ACTION
+					// FAILED DRAG THRESHOLD FOR ACTION
 					Animated.spring(moveAnim, { toValue: { x: 0, y: 0 }, useNativeDriver: true }).start();
 				}
 			}
@@ -100,8 +99,8 @@ export default function Card({ card, scale, use, position, order }) {
 
 	const animStyles = {
 		hand: {
-			transform: [{ rotate: isTrump ? "10deg" : "0deg" }, { translateX: isTrump ? 40 : moveAnim.x }, { translateY: isTrump ? 0 : moveAnim.y }, { scale: isTrump ? .7 : scaleAnim }],
-			opacity: fadeAnim
+			transform: [{ rotate: isTrump ? "10deg" : "0deg" }, { translateX: isTrump ? 40 : moveAnim.x }, { translateY: isTrump ? 0 : isValid ? moveAnim.y : 40 }, { scale: isTrump ? .7 : scaleAnim }],
+			opacity: fadeAnim,
 		},
 		field: {
 
@@ -109,6 +108,7 @@ export default function Card({ card, scale, use, position, order }) {
 	}
 
 	const selectedStyle = use === "HAND" ? [styles.hand, animStyles.hand] : [styles.field, animStyles.field]
+
 	if (position === 0) {
 		selectedStyle.push({ position: "absolute" })
 	}
@@ -126,12 +126,25 @@ export default function Card({ card, scale, use, position, order }) {
 		setImageURL(cardImages[appPreferences.deckTheme][cardCode])
 	}, [appPreferences.deckTheme, cardCode])
 
+	useEffect(() => {
+		if (use === "HAND") {
+			const result = checkValidCard(playerHand, card)
+			setIsValid(result)
+		}
+	}, [matchSuit, upTrump])
+
+	useEffect(() => {
+		moveAnim.resetAnimation()
+		dragResponder.panHandlers.onMoveShouldSetResponder = isValid ? () => true : () => false
+	}, [isValid])
+
 	return (
 		<Animated.View style={{ transform: [{ translateY: matchStage === "DEAL" ? dealAnim : 0 }] }}>
 			<Animated.Image
 				source={imageURL}
 				style={selectedStyle}
 				{...dragResponder.panHandlers}
+
 			/>
 		</Animated.View>
 	)

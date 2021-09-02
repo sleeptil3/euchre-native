@@ -6,13 +6,13 @@ import { iconSVGs, colors } from '../CoreElements/theme'
 
 
 export default function TrumpIndicator() {
-	const { trump, callingPlayer } = useContext(DataContext)
+	const { trump, callingPlayer, showHelpModal } = useContext(DataContext)
 
 	const styles = StyleSheet.create({
 		container: {
 			alignItems: "center",
 			justifyContent: "center",
-			opacity: .6,
+			opacity: showHelpModal ? .6 : trump.code === undefined ? 0 : .6,
 			borderWidth: 1,
 			borderColor: colors.white,
 			borderRadius: 10,
@@ -27,9 +27,9 @@ export default function TrumpIndicator() {
 			position: "absolute",
 			top: callingPlayer === 2 ? -19 : null,
 			bottom: callingPlayer === 0 ? -19 : null,
-			left: callingPlayer === 1 ? -19 : null,
+			left: showHelpModal ? -19 : callingPlayer === 1 ? -19 : null,
 			right: callingPlayer === 3 ? -19 : null,
-			transform: [{ rotate: callingPlayer === 1 ? "-90deg" : callingPlayer === 3 ? "90deg" : callingPlayer === 0 ? "180deg" : 0 }]
+			transform: [{ rotate: showHelpModal ? "-90deg" : callingPlayer === 1 ? "-90deg" : callingPlayer === 3 ? "90deg" : callingPlayer === 0 ? "180deg" : 0 }]
 		}
 	})
 

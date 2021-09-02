@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext } from "react"
 import * as Device from 'expo-device'
 import { Audio } from "expo-av"
-import { hearts, diamonds, spades, clubs, Deck } from './Deck/deck'
+import { hearts, diamonds, spades, clubs, Deck } from './Data/deck'
 import { sleep, blankCard, sounds } from "./Data/data"
 import {
 	decideTrump,
@@ -275,7 +275,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		},
 		matchResult: {
 			title: "Match Complete",
-			subtitle: `Scoreboard`,
+			subtitle: "",
 			body: "",
 			choices: [
 				{
@@ -328,18 +328,38 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	}
 
 	const startMatch = () => {
-		// "Begin Match" user prompt action
 		setMatchStage("PLAY")
 		setCurrentPlayer((dealer + 1) % 4)
 		setTurnCount(0)
 	}
 
 	const sortHand = (hand) => {
-		const suitMap = groupBySuit(hand)
-		let sortedHand = []
-		for (const suitCode in suitMap) {
-			suitMap[suitCode].sort((a, b) => a.value - b.value)
-			suitMap[suitCode].forEach((card) => sortedHand.push(card))
+		const suitMap = groupBySuit(hand, true, trump)
+		const sortedHand = []
+		if (trump === {}) {
+			for (const suitCode in suitMap) {
+				suitMap[suitCode].sort((a, b) => a.value - b.value)
+				suitMap[suitCode].forEach((card) => sortedHand.push(card))
+			}
+		} else {
+			for (const suitCode in suitMap) {
+				if (suitCode !== trump.code) {
+					suitMap[suitCode].sort((a, b) => a.value - b.value)
+					suitMap[suitCode].forEach((card) => sortedHand.push(card))
+				} else {
+					const trumpCards = []
+					let left, right
+					suitMap[suitCode].forEach((card, idx) => {
+						if (card.faceValue === "J" && card.suit.code === trump.code) right = card
+						else if (card.faceValue === "J" && card.suit.code === trump.left.code) left = card
+						else trumpCards.push(card)
+					})
+					trumpCards.sort((a, b) => a.value - b.value)
+					if (left) trumpCards.push(left)
+					if (right) trumpCards.push(right)
+					sortedHand.push(...trumpCards)
+				}
+			}
 		}
 		return sortedHand
 	}
@@ -386,10 +406,16 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		debugMode && console.log("handlePlayerChoice", player, card)
 		setShowActionPrompt(false)
 		if (!matchSuit) {
-			if (trump.left.code === card.suit.code && card.faceValue === "J")
+			debugMode && console.log("NO MATCHSUIT SET")
+			if (trump.left.code === card.suit.code && card.faceValue === "J") {
+				debugMode && console.log("LEFT LAID = SETTING TRUMP AS MATCH SUIT")
 				setMatchSuit(trump.code)
-			else setMatchSuit(card.suit.code)
-		}
+			} else {
+				debugMode && console.log("CARD LAID, NOT LEFT = SETTING MATCHSUIT AS CARD SUIT")
+				setMatchSuit(card.suit.code)
+			}
+		} else debugMode && console.log("MATCHSUIT ALREADY SET, CONTINUING...")
+		debugMode && console.log("PLAYING THE CARD, DISCARD, THEN ADVANCING CURRENT PLAYER")
 		setPlayedCards({ ...playedCards, [player]: card })
 		setCurrentPlayer((currentPlayer + 1) % 4)
 		handleDiscard(player, card)
@@ -431,6 +457,16 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		}
 	}
 
+	const checkValidCard = (hand, card) => {
+		if (card === upTrump) return false
+		if (!matchSuit) return true
+		const suitMap = groupBySuit(hand, true, trump)
+		if (suitMap.hasOwnProperty(matchSuit) && suitMap[matchSuit].length > 0) {
+			if (suitMap[matchSuit].includes(card)) return true
+			else return false
+		} else return true
+	}
+
 	const handleTrickEnd = () => {
 		setPlayedCards({
 			0: blankCard,
@@ -457,23 +493,27 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 					if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 						tempTeamScore += scoreCalc
 						setTeamScore(tempTeamScore)
-						if (goAlone !== null) prompts.matchResult.body = `Your team took all five tricks while going alone (4pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
-						else prompts.matchResult.body = `Your team took all five tricks (2pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Won"
+						if (goAlone !== null) prompts.matchResult.body = `Your team took all five tricks while going alone (4pts)`
+						else prompts.matchResult.body = `Your team took all five tricks (2pts)`
 					} else {
 						tempOpposingScore += scoreCalc
 						setOpponentScore(tempOpposingScore)
-						if (goAlone !== null) prompts.matchResult.body = `The other team took all five tricks while going alone (4pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
-						else prompts.matchResult.body = `The other team took all five tricks (2pts)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Lost"
+						if (goAlone !== null) prompts.matchResult.body = `The other team took all five tricks while going alone (4pts)`
+						else prompts.matchResult.body = `The other team took all five tricks (2pts)`
 					}
 				} else {
 					if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 						tempTeamScore += 1
 						setTeamScore(tempTeamScore)
-						prompts.matchResult.body = `Your team took ${matchTricks.callingTeam} tricks (1pt)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Won"
+						prompts.matchResult.body = `Your team took ${matchTricks.callingTeam} tricks (1pt)`
 					} else {
 						tempOpposingScore += 1
 						setOpponentScore(tempOpposingScore)
-						prompts.matchResult.body = `The other team took ${matchTricks.callingTeam} tricks (1pt)\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+						prompts.matchResult.subtitle = "You Lost"
+						prompts.matchResult.body = `The other team took ${matchTricks.callingTeam} tricks (1pt)`
 					}
 				}
 			}
@@ -483,12 +523,14 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			if (callingPlayer === yourSeat || findIsTeammate(callingPlayer, yourSeat)) {
 				tempOpposingScore += 2
 				setOpponentScore(tempOpposingScore)
-				prompts.matchResult.body = `You got Euchred\n2pts awarded to the other team\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+				prompts.matchResult.subtitle = "You got Euchred"
+				prompts.matchResult.body = "Your team called Trump but was unable to win at least three tricks"
 			}
 			else {
 				tempTeamScore += 2
 				setTeamScore(tempTeamScore)
-				prompts.matchResult.body = `You Euchred the other team\n2pts awarded to your team\nYour Team: ${tempTeamScore}\nOpposing Team: ${tempOpposingScore}`
+				prompts.matchResult.subtitle = "You Euchred the other team"
+				prompts.matchResult.body = `They called Trump but were unable to win at least three tricks`
 			}
 		}
 
@@ -734,6 +776,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			}
 			case "READY": {
 				logMode && console.log("------------------ READY Stage")
+				setPlayerHand(sortHand([...playerHand]))
 				setUpTrump({})
 				setShowTrumpStack(false)
 				if (goAlone === null) {
@@ -860,6 +903,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				showTrumpStack, setShowTrumpStack,
 				showDeal, setShowDeal,
 				playedCards, setPlayedCards,
+				matchSuit, setMatchSuit,
 				turnCount, setTurnCount,
 				callingPlayer, setCallingPlayer,
 				opponentScore, setOpponentScore,
@@ -875,6 +919,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				currentPlayer, setCurrentPlayer,
 				playerChoice, setPlayerChoice,
 				actionText, setActionText,
+				checkValidCard,
 				goAlone,
 				matchTricks,
 				handlePlayerChoice,

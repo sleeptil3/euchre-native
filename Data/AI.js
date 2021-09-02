@@ -63,8 +63,8 @@ export const findIsTeammate = (player1, player2) => {
 	else return false
 }
 
-export const groupBySuit = (cards) => {
-	return cards.reduce((acc, card) => {
+export const groupBySuit = (cards, player, trump) => {
+	const suitMap = cards.reduce((acc, card) => {
 		let key = card.suit.code
 		if (!acc[key]) {
 			acc[key] = []
@@ -72,6 +72,18 @@ export const groupBySuit = (cards) => {
 		acc[key].push(card)
 		return acc
 	}, {})
+	if (player) {
+		if (trump.code !== undefined) {
+			if (suitMap.hasOwnProperty(trump.left.code) && suitMap[trump.left.code].find(card => card.faceValue === "J") !== undefined) {
+				const leftIdx = suitMap[trump.left.code].findIndex(card => card.faceValue === "J")
+				const left = suitMap[trump.left.code][leftIdx]
+				suitMap[trump.left.code].splice(leftIdx)
+				if (suitMap.hasOwnProperty(trump.code)) suitMap[trump.code].push(left)
+				else suitMap[trump.code] = [left]
+				return suitMap
+			} else return suitMap
+		} else return suitMap
+	} else return suitMap
 }
 
 export const scoreTrick = (playedCards, trump, matchSuit) => {

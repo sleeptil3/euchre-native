@@ -7,11 +7,11 @@ import MatchTricksCount from '../Components/MatchTricksCount'
 import TrumpIndicator from '../Components/TrumpIndicator'
 
 export default function HelpModal() {
-	const { showHelpModal, setShowHelpModal, setShowPromptModal } = useContext(DataContext)
+	const { showHelpModal, setShowHelpModal, setShowPromptModal, showActionPrompt } = useContext(DataContext)
 
 	const handleClose = () => {
 		setShowHelpModal(false)
-		setShowPromptModal(true)
+		!showActionPrompt && setShowPromptModal(true)
 	}
 
 	return (
@@ -50,17 +50,17 @@ export default function HelpModal() {
 								</View>
 								<View style={{ marginTop: 10, alignItems: "center" }}>
 									<Title override={{ fontSize: 18 }}>Match Tricks</Title>
-									<View style={{ alignItems: "center", marginBottom: 10 }}>
+									<View style={{ alignItems: "center", marginVertical: 10 }}>
 										<MatchTricksCount />
 									</View>
 									<Body>Shows how many tricks each team has won so far in the current match</Body>
 								</View>
 								<View style={{ marginTop: 10, alignItems: "center" }}>
 									<Title override={{ fontSize: 18 }}>Trump Indicator</Title>
-									<View style={{ alignItems: "center", marginVertical: 10 }}>
+									<View style={{ alignItems: "center", marginBottom: 10 }}>
 										<TrumpIndicator />
 									</View>
-									<Body>Shows what Trump is for the match as well as a label on top that shows which team called trump: You or Them</Body>
+									<Body>Shows what Trump is for the match as well as an arrow that indicates which player called trump.</Body>
 								</View>
 							</View>
 							<Pressable
