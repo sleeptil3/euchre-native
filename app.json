@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "Euchre Night",
 		"slug": "euchre",
-		"version": "0.9.0",
+		"version": "1.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -17,13 +17,10 @@
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "com.sleeptil3software.euchre",
-			"buildNumber": "0.9.6"
+			"buildNumber": "1.0.1"
 		},
 		"android": {
 			"package": "com.sleeptil3software.euchre"
-		},
-		"web": {
-			"favicon": "./assets/favicon.png"
 		}
 	}
 }
