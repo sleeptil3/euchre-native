@@ -1,6 +1,6 @@
-# Euchre Night Privacy Policy
+# Euchre Night
 
-#### an iOS App from Shawn Clary
+## Privacy Policy
 
 ## Contact
 
