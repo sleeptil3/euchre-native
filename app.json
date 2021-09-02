@@ -17,7 +17,7 @@
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "com.sleeptil3software.euchre",
-			"buildNumber": "0.9.5"
+			"buildNumber": "0.9.6"
 		},
 		"android": {
 			"package": "com.sleeptil3software.euchre"

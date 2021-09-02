@@ -7,7 +7,6 @@ import { sounds, sleep } from "../Data/data";
 
 export default function PlayerHand() {
 	const { playerHand, yourSeat, goAlone, enableSound, dealer, matchSuit } = useContext(DataContext)
-	const [matchSuitSend, setMatchSuitSend] = useState()
 
 	async function playDeal() {
 		const { sound } = await Audio.Sound.createAsync(
@@ -21,10 +20,6 @@ export default function PlayerHand() {
 		sleep(100).then(() => playDeal())
 	}, [dealer])
 
-	useEffect(() => {
-		setMatchSuitSend(matchSuit)
-	}, [matchSuit])
-
 	return (
 		<Flex
 			direction="row"
@@ -37,7 +32,7 @@ export default function PlayerHand() {
 				display: (goAlone + 2) % 4 === yourSeat ? "none" : "flex"
 			}}>
 			{
-				playerHand.map((card, idx) => <Card order={idx} card={card} scale={1} key={card._id} use={"HAND"} matchSuitTemp={matchSuitSend} />)
+				playerHand.map((card, idx) => <Card order={idx} card={card} scale={1} key={card._id} use={"HAND"} />)
 			}
 		</Flex>
 	)

@@ -19,7 +19,7 @@ import HelpModal from '../Modals/HelpModal';
 import { sleep } from '../Data/data';
 
 export default function GameLayer() {
-	const { matchStage, showDeal, playerHand, showActionPrompt, yourSeat, dealer } = useContext(DataContext)
+	const { matchStage, showDeal, playerHand, showActionPrompt, yourSeat, dealer, showHelpModal } = useContext(DataContext)
 	const [showPlayerHand, setShowPlayerHand] = useState(false)
 	const localStyles = StyleSheet.create({
 		hud: {
@@ -29,6 +29,7 @@ export default function GameLayer() {
 			flexDirection: "row",
 			justifyContent: "space-between",
 			paddingHorizontal: 10,
+			opacity: showHelpModal ? 0 : 1
 		},
 		field: {
 			height: "50%",

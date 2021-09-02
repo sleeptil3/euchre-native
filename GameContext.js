@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext } from "react"
 import * as Device from 'expo-device'
 import { Audio } from "expo-av"
-import { hearts, diamonds, spades, clubs, Deck } from './Deck/deck'
+import { hearts, diamonds, spades, clubs, Deck } from './Data/deck'
 import { sleep, blankCard, sounds } from "./Data/data"
 import {
 	decideTrump,
@@ -334,11 +334,32 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	}
 
 	const sortHand = (hand) => {
-		const suitMap = groupBySuit(hand)
-		let sortedHand = []
-		for (const suitCode in suitMap) {
-			suitMap[suitCode].sort((a, b) => a.value - b.value)
-			suitMap[suitCode].forEach((card) => sortedHand.push(card))
+		const suitMap = groupBySuit(hand, true, trump)
+		const sortedHand = []
+		if (trump === {}) {
+			for (const suitCode in suitMap) {
+				suitMap[suitCode].sort((a, b) => a.value - b.value)
+				suitMap[suitCode].forEach((card) => sortedHand.push(card))
+			}
+		} else {
+			for (const suitCode in suitMap) {
+				if (suitCode !== trump.code) {
+					suitMap[suitCode].sort((a, b) => a.value - b.value)
+					suitMap[suitCode].forEach((card) => sortedHand.push(card))
+				} else {
+					const trumpCards = []
+					let left, right
+					suitMap[suitCode].forEach((card, idx) => {
+						if (card.faceValue === "J" && card.suit.code === trump.code) right = card
+						else if (card.faceValue === "J" && card.suit.code === trump.left.code) left = card
+						else trumpCards.push(card)
+					})
+					trumpCards.sort((a, b) => a.value - b.value)
+					if (left) trumpCards.push(left)
+					if (right) trumpCards.push(right)
+					sortedHand.push(...trumpCards)
+				}
+			}
 		}
 		return sortedHand
 	}
@@ -437,25 +458,13 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	}
 
 	const checkValidCard = (hand, card) => {
-		// MATCHSUIT NOT DECLARED
-		// if matchSuit is not declard, return TRUE
 		if (card === upTrump) return false
 		if (!matchSuit) return true
-		// MATCHSUIT DECLARED
-		// Sort Hand by suit
-		const suitMap = groupBySuit(hand)
-		// if you have matchSuit
-		console.log(suitMap)
-		if (suitMap.hasOwnProperty(matchSuit)) {
-			// Check that the only matchSuit card isn't actually the LEFT bower
-			if (suitMap[matchSuit].length === 1 && suitMap[matchSuit][0].faceValue === "J") return true
-			// if the card IS matchSuit AND is NOT the left bower (jack of opposite trump suit) return true
-			if (card.suit.code === matchSuit && !(card.suit.code === trump.left.code && card.faceValue === "J")) return true
+		const suitMap = groupBySuit(hand, true, trump)
+		if (suitMap.hasOwnProperty(matchSuit) && suitMap[matchSuit].length > 0) {
+			if (suitMap[matchSuit].includes(card)) return true
 			else return false
-		} else {
-			// if you DON'T have matchSuit
-			return true
-		}
+		} else return true
 	}
 
 	const handleTrickEnd = () => {
@@ -520,7 +529,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			else {
 				tempTeamScore += 2
 				setTeamScore(tempTeamScore)
-				prompts.matchResult.subject = "You Euchred the other team"
+				prompts.matchResult.subtitle = "You Euchred the other team"
 				prompts.matchResult.body = `They called Trump but were unable to win at least three tricks`
 			}
 		}
@@ -767,6 +776,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			}
 			case "READY": {
 				logMode && console.log("------------------ READY Stage")
+				setPlayerHand(sortHand([...playerHand]))
 				setUpTrump({})
 				setShowTrumpStack(false)
 				if (goAlone === null) {

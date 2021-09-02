@@ -29,7 +29,6 @@ export default function StartModal() {
 	}
 
 	const handleStoreReview = async () => {
-		console.log("asking for review")
 		await StoreReview.hasAction() && StoreReview.requestReview()
 	}
 
@@ -81,20 +80,18 @@ export default function StartModal() {
 						<Pressable
 							accessibilityLabel={"View the rules"}
 							onPress={handleRules}
+							style={{ marginVertical: 10, marginTop: 20, }}
 						>
 							<View
 								style={{
 									justifyContent: "center",
 									alignItems: "center",
 									flexDirection: "row",
-									// backgroundColor: "rgba(34, 131, 0, .25)",
 									borderWidth: 1,
 									borderColor: colors.white,
 									borderRadius: 40,
 									width: 140,
 									paddingVertical: 8,
-									marginVertical: 10,
-									marginTop: 20,
 								}}
 							>
 								<DefaultText align="center">How to Play</DefaultText>

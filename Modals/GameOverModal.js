@@ -39,7 +39,7 @@ export default function GameOverModal() {
 						<Body align="center">{`The final score was ${teamScore} to ${opponentScore}`}</Body>
 						<Subtitle align="center" override={{ fontSize: 20, marginBottom: 10, marginTop: 10 }}>Thank you for playing Euchre!</Subtitle>
 						<Body>If you enjoyed the game, please share it with your friends using the 'Share' button below.</Body>
-						<Body>If you have a moment to rate the app and leave a review on the AppStore, I'd really appreciate it!</Body>
+						<Body>If you have a moment to rate the app and leave a review on the AppStore, I'd really appreciate it. Let's bring the joy of Euchre to everyone!</Body>
 					</View>
 					<View
 						style={{

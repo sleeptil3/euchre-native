@@ -5,13 +5,13 @@ import { DataContext } from "../GameContext"
 import { colors } from '../CoreElements/theme'
 
 export default function MatchTricksCount() {
-	const { matchTricks, callingPlayer, teamScore, opponentScore, matchStage } = useContext(DataContext)
+	const { matchTricks, callingPlayer, teamScore, opponentScore, matchStage, showHelpModal } = useContext(DataContext)
 
 	const styles = StyleSheet.create({
 		container: {
 			alignItems: "center",
 			justifyContent: "center",
-			opacity: teamScore > 0 || opponentScore > 0 || matchStage === "READY" ? .6 : 0,
+			opacity: showHelpModal ? .6 : teamScore > 0 || opponentScore > 0 || matchStage === "READY" || matchStage === "PLAY" ? .6 : 0,
 			borderWidth: 1,
 			borderColor: colors.white,
 			borderRadius: 10,
