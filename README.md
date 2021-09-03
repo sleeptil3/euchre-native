@@ -18,7 +18,7 @@ This was my first foray into React-Native, and I had a blast! What an enjoyable 
 
 I was so impressed with how well the React-Native and Expo documentation was made. I used Expo's Managed Workflow which does limit you a bit on the external libraries you can use, but I found the ones they included met all my needs for this project.
 
-### Dependancies Used
+### Dependencies Used
 
 - react
 - react-dom
@@ -26,8 +26,7 @@ I was so impressed with how well the React-Native and Expo documentation was mad
 - react-native-flip-card
 - react-native-svg
 - react-native-web
-- react-
-- native-async-storage
+- react-native-async-storage
 - expo
 - expo-av
 - expo-cli
@@ -68,8 +67,7 @@ I was so impressed with how well the React-Native and Expo documentation was mad
 ## Planned Version Releases
 
 ### v2.0
-The plan for 2.0 is online multiplayer
-
+The plan for 2.0 is an online multiplayer experience
 
 ## Privacy Policy
 
