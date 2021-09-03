@@ -71,9 +71,13 @@ The plan for 2.0 is an online multiplayer experience
 
 ## Privacy Policy
 
+(_updated 09/02/21_)
+
 [Click here](https://sleeptil3.github.io/euchre-native/) to view the Privacy Policy
 
 ## Licensing
+
+(_updated 09/02/21_)
 
 While this project is posted publically for educational purposes, the code herein is ©2021 Shawn Clary (All Rights Reserved) and no portion of this code, in-part or in-whole, may be used for commercial purposes without express written permission by Shawn Clary.
 
