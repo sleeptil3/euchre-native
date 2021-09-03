@@ -1,3 +1,5 @@
+(_updated 09/02/21_)
+
 # Euchre Night
 
 ## Privacy Policy
