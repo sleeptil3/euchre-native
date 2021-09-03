@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "Euchre Night",
 		"slug": "euchre",
-		"version": "1.0",
+		"version": "1.0.2",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
