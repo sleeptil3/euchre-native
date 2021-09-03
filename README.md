@@ -18,6 +18,8 @@ This was my first foray into React-Native, and I had a blast! What an enjoyable 
 
 I was so impressed with how well the React-Native and Expo documentation was made. I used Expo's Managed Workflow which does limit you a bit on the external libraries you can use, but I found the ones they included met all my needs for this project.
 
+From start to finish, this project took about 17 days. Most of the game logic was completed on a web-version created the preceding week, however much had to be re-tooled for the Native version.
+
 ### Dependencies Used
 
 - react
