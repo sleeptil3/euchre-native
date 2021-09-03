@@ -2,17 +2,18 @@ import { v4 as uuid } from 'uuid'
 
 // Scoring Modes
 export const minAloneScore = 100
-export const minCallScore = 70
+export const minCallScore = 7
 // export const minAloneScore = 500
 // export const minCallScore = 500
 
 // Pace Settings
-export const decidePace = 1000
+export const decidePace = 750
 
 // Log/Debug Mode Settings
 export const logMode = false
 export const debugMode = false
-
+export const logFuncMode = true
+export const AIDebugMode = false
 
 export function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));

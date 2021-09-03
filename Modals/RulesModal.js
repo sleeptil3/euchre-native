@@ -32,6 +32,7 @@ export default function RulesModal() {
 							<View style={{ marginHorizontal: 10, borderWidth: 1, borderRadius: 10, borderColor: colors.white, padding: 12, paddingBottom: 0 }}>
 								<Body>A Note From The Developer:</Body>
 								<Body>These rules are slightly different from the "official" rules on bicycle.com and are aligned with the way I always played growing up in Ohio. I shall dub these the "Midwest Rules."</Body>
+								<Body>The only things that differ are minor, for example, in the official rules, there is no such thing as "stuck to the dealer" and instead a new deck is drawn, but that's boring. Play the Game!</Body>
 								<Body>It was quite common for different people to have different "house rules," so I guess in this case, you're in my house.</Body>
 							</View>
 							<View style={{ marginVertical: 20 }}>

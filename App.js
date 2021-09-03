@@ -54,12 +54,12 @@ export default function App() {
 	}, [])
 
 	useEffect(() => {
-		if (appPreferences !== {}) {
+		if (appPreferences.deckTheme !== undefined) {
 			storePreferences(appPreferences)
 		}
 	}, [appPreferences])
 
-	if (appPreferences === {}) return null
+	if (appPreferences.deckTheme === undefined) return null
 
 	else return (
 		<GameContext appPreferences={appPreferences} setAppPreferences={setAppPreferences}>
