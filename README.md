@@ -39,24 +39,48 @@ I was so impressed with how well the React-Native and Expo documentation was mad
 
 ## Version & Build History
 
+### Version 1.0
+
+#### Builds
+
+- 1.0.1
+  - AppStore Submission
+
 ### Version 0.9.0
 
 #### Builds
 
-- 0.9.1
+- 0.9.0
   - launch of beta testing through TestFlight
+- 0.9.1
+  - Bug Fixes
 - 0.9.2
+  - Bug Fixes
 - 0.9.3
+  - Bug Fixes
 - 0.9.4
+  - Bug Fixes
 - 0.9.5
+  - Bug Fixes
 - 0.9.6rc
+  - Release Candidate
+
+## Planned Version Releases
+
+### v2.0
+The plan for 2.0 is online multiplayer
+
 
 ## Privacy Policy
 
 [Click here](https://sleeptil3.github.io/euchre-native/) to view the Privacy Policy
 
-#### 4 Hashes
+## Licensing
 
-##### 5 Hashes
+While this project is posted publically for educational purposes, the code herein is ©2021 Shawn Clary (All Rights Reserved) and no portion of this code, in-part or in-whole, may be used for commercial purposes without express written permission by Shawn Clary.
 
-This is my React-Native Expo code for my first iOS app "Euchre Night," a one-player version of the classic card game.
+## Contact & Support
+
+- To send me a message, use this [contact form](https://www.sleeptil3software.com/#/contact)
+- If you find a bug or have a feature request, submit an Issue to this repository
+
