@@ -4,12 +4,12 @@ import { colors } from './theme'
 import { useFonts } from 'expo-font'
 
 const customFonts = {
-	"SFPro-Light": require("../assets/fonts/SF-Pro-Text-Light.otf"),
-	"SFPro-Heavy": require("../assets/fonts/SF-Pro-Text-Heavy.otf"),
-	"SFPro-Bold": require("../assets/fonts/SF-Pro-Text-Bold.otf"),
-	"SF-Pro-Display-ThinItalic": require("../assets/fonts/SF-Pro-Display-ThinItalic.otf"),
-	"SFPro-Display-Bold": require("../assets/fonts/SF-Pro-Display-Bold.otf"),
-	"JuliusSansOne": require("../assets/fonts/JuliusSansOne-Regular.ttf"),
+	"SFPro-Light": require("../Assets/fonts/SF-Pro-Text-Light.otf"),
+	"SFPro-Heavy": require("../Assets/fonts/SF-Pro-Text-Heavy.otf"),
+	"SFPro-Bold": require("../Assets/fonts/SF-Pro-Text-Bold.otf"),
+	"SF-Pro-Display-ThinItalic": require("../Assets/fonts/SF-Pro-Display-ThinItalic.otf"),
+	"SFPro-Display-Bold": require("../Assets/fonts/SF-Pro-Display-Bold.otf"),
+	"JuliusSansOne": require("../Assets/fonts/JuliusSansOne-Regular.ttf"),
 }
 
 export const MainTitle = ({ children, align, override, color }) => {

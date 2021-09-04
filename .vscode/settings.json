@@ -1,6 +1,19 @@
 {
-	"javascript.inlayHints.parameterNames.enabled": "all",
-	"typescript.inlayHints.parameterNames.enabled": "all",
-	"typescript.inlayHints.variableTypes.enabled": true,
-	"javascript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": false
+	"workbench.iconTheme": "material-icon-theme",
+	"workbench.preferredLightColorTheme": "Dark+ Black",
+	"workbench.preferredDarkColorTheme": "Dark+ Black",
+	"workbench.colorTheme": "Dark+ Black",
+	"workbench.preferredHighContrastColorTheme": "Dark+ Black",
+	"workbench.productIconTheme": "icons-carbon",
+	"workbench.colorCustomizations": {
+		"list.highlightForeground": "#940000",
+		"list.focusOutline": "#05a3007a",
+		"list.activeSelectionBackground": "#222"
+	},
+	"editor.cursorSmoothCaretAnimation": true,
+	"editor.smoothScrolling": true,
+	"workbench.list.smoothScrolling": true,
+	"workbench.fontAliasing": "auto",
+	"scm.diffDecorations": "gutter",
+	"scm.diffDecorationsGutterAction": "none"
 }

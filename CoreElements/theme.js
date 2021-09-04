@@ -42,26 +42,26 @@ export const styles = StyleSheet.create({
 })
 
 export const themeSamples = {
-	Default: require("../assets/decks/Default/icons/example.png"),
-	Year2099: require("../assets/decks/Year2099/icons/example.png"),
+	Default: require("../Assets/decks/Default/icons/example.png"),
+	Year2099: require("../Assets/decks/Year2099/icons/example.png"),
 }
 
 export const themeHands = {
-	Default: require("../assets/decks/Default/icons/hand.png"),
-	Year2099: require("../assets/decks/Year2099/icons/hand.png"),
+	Default: require("../Assets/decks/Default/icons/hand.png"),
+	Year2099: require("../Assets/decks/Year2099/icons/hand.png"),
 }
 
 export const themeTable = {
 	"table-green": {
-		image: require("../assets/table/table-green.png"),
+		image: require("../Assets/table/table-green.png"),
 		title: "Classic Green"
 	},
 	"table-great-room": {
-		image: require("../assets/table/table-great-room.png"),
+		image: require("../Assets/table/table-great-room.png"),
 		title: "The Great Room"
 	},
 	"table-2099": {
-		image: require("../assets/table/table-2099.png"),
+		image: require("../Assets/table/table-2099.png"),
 		title: "Year 2099"
 	}
 }

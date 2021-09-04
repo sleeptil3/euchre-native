@@ -1,24 +1,24 @@
 import { sleep, blankCard } from "./data"
-import { minAloneScore, minCallScore, decidePace, debugMode, logMode, logFuncMode, AIDebugMode } from "../Data/data"
+import { minAloneScore, minCallScore, decidePace, debugMode, logMode, logFuncMode, AIDebugMode, scoreLog } from "../Data/data"
 
 //////////////
 // AI LOGIC //
 //////////////
 
 const scoreHand = (hand, trumpCode, leftSuitCode) => {
-	logFuncMode && console.log("\n\nFUNCTION: scoreHand")
-	logFuncMode && console.log(`Trump: ${trumpCode} Left: ${leftSuitCode}`)
+	logFuncMode && console.log("\n\nFUNCTION: scoreHand --------------------------")
+	logFuncMode && console.log(`Trump: ${ trumpCode } Left: ${ leftSuitCode }`)
 	let score = 0
 	for (const card of hand) {
 		score += getCardScore(card, trumpCode, leftSuitCode, null)
 	}
-	logFuncMode && console.log(`\nscoreHand RESULT: ${score}`)
+	logFuncMode && console.log(`\nscoreHand RESULT: ${ score } ----------------------`)
 	return score
 }
 
 const getCardScore = (card, trumpCode, leftSuitCode, matchSuit) => {
-	logFuncMode && console.log("\n\nFUNCTION: getCardScore")
-	logFuncMode && console.log(`Card: ${card.faceValue} of ${card.suit.name}, Trump Right: ${trumpCode}, Left: ${leftSuitCode}, Match Suit: ${matchSuit}`)
+	logFuncMode || scoreLog && console.log("\n\nFUNCTION: getCardScore")
+	logFuncMode || scoreLog && console.log(`Card: ${ card.faceValue } of ${ card.suit.name }, Trump Right: ${ trumpCode }, Left: ${ leftSuitCode }, Match Suit: ${ matchSuit }`)
 	let score = card.value
 	if (card.suit.code === trumpCode) {
 		score += 10
@@ -30,22 +30,22 @@ const getCardScore = (card, trumpCode, leftSuitCode, matchSuit) => {
 	}
 	// deduct points for non match suit so it can't win - this will also deduct from trump plays, however the effect is at worst 6 points which isn't enough to sway the +10, 20, or 30 effect of a trump card
 	if (matchSuit !== null && card.suit.code !== matchSuit) {
-		logFuncMode && console.log("Does not follow suit")
+		logFuncMode || scoreLog && console.log("Does not follow suit")
 		// If its not the Left or the Right
 		if (!(card.suit.code === trumpCode || (card.suit.code === leftSuitCode && card.faceValue === "J"))) {
-			logFuncMode && console.log("Deducting for being offsuit and not left or right")
+			logFuncMode || scoreLog && console.log("Deducting for being offsuit and not left or right")
 			score = 0
 		}
 	}
-	logFuncMode && console.log(`\ngetCardScore RESULT: ${score}`)
+	logFuncMode || scoreLog && console.log(`\ngetCardScore RESULT: ${ score }`)
 	return score
 }
 
 const scoreHandByTrump = (currentPlayer, hand, matchStage, suitMap, trumpCode, upTrump, suits, dealer) => {
 	AIDebugMode && console.log("\n\nFUNCTION: scoreHandByTrump")
 	AIDebugMode && console.log(currentPlayer, hand, matchStage, suitMap, trumpCode, upTrump, suits, dealer)
-	const leftCode = suits[trumpCode].left.code
-	if (trumpCode in suitMap || (leftCode in suitMap && suitMap[leftCode].find(card => card.faceValue === "J"))) {
+	const leftCode = suits[ trumpCode ].left.code
+	if (trumpCode in suitMap || (leftCode in suitMap && suitMap[ leftCode ].find(card => card.faceValue === "J"))) {
 		AIDebugMode && console.log("TRUMP in hand")
 		let handScore = scoreHand(hand, trumpCode, leftCode)
 		let enhancedScore = handScore
@@ -66,13 +66,13 @@ const scoreHandByTrump = (currentPlayer, hand, matchStage, suitMap, trumpCode, u
 
 export const getPlayerHand = (player, playerHand, nonPlayerHands) => {
 	logFuncMode && console.log("\n\nFUNCTION: getPlayerHand")
-	logFuncMode && console.log(`Player: ${player}, User Hand Length: ${playerHand.length}`)
+	logFuncMode && console.log(`Player: ${ player }, User Hand Length: ${ playerHand.length }`)
 
 	switch (player) {
-		case 0: return [...playerHand]
-		case 1: return [...nonPlayerHands[0]]
-		case 2: return [...nonPlayerHands[1]]
-		case 3: return [...nonPlayerHands[2]]
+		case 0: return [ ...playerHand ]
+		case 1: return [ ...nonPlayerHands[ 0 ] ]
+		case 2: return [ ...nonPlayerHands[ 1 ] ]
+		case 3: return [ ...nonPlayerHands[ 2 ] ]
 	}
 }
 
@@ -87,33 +87,33 @@ export const findIsTeammate = (player1, player2) => {
 
 export const groupBySuit = (cards, player, trump) => {
 	logFuncMode && console.log("\n\n---- FUNCTION: groupBySuit")
-	logFuncMode && console.log(`User: ${player} | Trump: ${trump.name !== undefined ? trump.name : "not set"}`)
-	logFuncMode && cards.forEach(card => console.log(`${card.faceValue} of ${card.suit.name}`))
+	logFuncMode && console.log(`User: ${ player } | Trump: ${ trump.name !== undefined ? trump.name : "not set" }`)
+	logFuncMode && cards.forEach(card => console.log(`${ card.faceValue } of ${ card.suit.name }`))
 
 	const suitMap = cards.reduce((acc, card) => {
 		let key = card.suit.code
-		if (!acc[key]) {
-			acc[key] = []
+		if (!acc[ key ]) {
+			acc[ key ] = []
 		}
-		acc[key].push(card)
+		acc[ key ].push(card)
 		return acc
 	}, {})
 	if (player) {
 		// If this is the USER, move the Left to Trump Suit, if applicable
 		if (trump.code !== undefined) {
 			// If you have Trump suit in your hand
-			if (suitMap.hasOwnProperty(trump.left.code) && suitMap[trump.left.code].find(card => card.faceValue === "J") !== undefined) {
+			if (suitMap.hasOwnProperty(trump.left.code) && suitMap[ trump.left.code ].find(card => card.faceValue === "J") !== undefined) {
 				// If you have the LEFT bower, put it in the Trump suit group (sort happends in sortHand)
-				const leftIdx = suitMap[trump.left.code].findIndex(card => card.faceValue === "J")
-				const left = suitMap[trump.left.code][leftIdx]
-				suitMap[trump.left.code].splice(leftIdx)
-				if (suitMap.hasOwnProperty(trump.code)) suitMap[trump.code].push(left)
-				else suitMap[trump.code] = [left]
+				const leftIdx = suitMap[ trump.left.code ].findIndex(card => card.faceValue === "J")
+				const left = suitMap[ trump.left.code ][ leftIdx ]
+				suitMap[ trump.left.code ].splice(leftIdx)
+				if (suitMap.hasOwnProperty(trump.code)) suitMap[ trump.code ].push(left)
+				else suitMap[ trump.code ] = [ left ]
 				logFuncMode && console.log("\n---- groupBySuit player RESULT (Trump is set + Left was moved to Trump Suit")
 				logFuncMode && Object.keys(suitMap).forEach(suit => {
-					console.log(`\n${suit}:`)
-					suitMap[suit].forEach(card => {
-						console.log(`${card.faceValue} of ${card.suit.name}`)
+					console.log(`\n${ suit }:`)
+					suitMap[ suit ].forEach(card => {
+						console.log(`${ card.faceValue } of ${ card.suit.name }`)
 					})
 				})
 				return suitMap
@@ -121,9 +121,9 @@ export const groupBySuit = (cards, player, trump) => {
 				// If you don't have the left bower
 				logFuncMode && console.log("\n---- groupBySuit player RESULT (Trump is set + No Left in hand")
 				logFuncMode && Object.keys(suitMap).forEach(suit => {
-					console.log(`\n${suit}:`)
-					suitMap[suit].forEach(card => {
-						console.log(`${card.faceValue} of ${card.suit.name}`)
+					console.log(`\n${ suit }:`)
+					suitMap[ suit ].forEach(card => {
+						console.log(`${ card.faceValue } of ${ card.suit.name }`)
 					})
 				})
 				return suitMap
@@ -131,9 +131,9 @@ export const groupBySuit = (cards, player, trump) => {
 		} else {
 			logFuncMode && console.log("\n---- groupBySuit player RESULT (Trump is NOT set)")
 			logFuncMode && Object.keys(suitMap).forEach(suit => {
-				console.log(`\n${suit}:`)
-				suitMap[suit].forEach(card => {
-					console.log(`${card.faceValue} of ${card.suit.name}`)
+				console.log(`\n${ suit }:`)
+				suitMap[ suit ].forEach(card => {
+					console.log(`${ card.faceValue } of ${ card.suit.name }`)
 				})
 			})
 			return suitMap
@@ -141,9 +141,9 @@ export const groupBySuit = (cards, player, trump) => {
 	} else {
 		logFuncMode && console.log("\n---- groupBySuit RESULT (non-player)")
 		logFuncMode && Object.keys(suitMap).forEach(suit => {
-			console.log(`\n${suit}:`)
-			suitMap[suit].forEach(card => {
-				console.log(`${card.faceValue} of ${card.suit.name}`)
+			console.log(`\n${ suit }:`)
+			suitMap[ suit ].forEach(card => {
+				console.log(`${ card.faceValue } of ${ card.suit.name }`)
 			})
 		})
 		return suitMap
@@ -151,23 +151,23 @@ export const groupBySuit = (cards, player, trump) => {
 }
 
 export const scoreTrick = (playedCards, trump, matchSuit) => {
-	logFuncMode && console.log("\n\nFUNCTION: scoreTrick")
-	logFuncMode && console.log(`Trump: ${trump.name} | Match Suit: ${matchSuit}`)
+	logFuncMode || scoreLog && console.log("\n\nFUNCTION: scoreTrick")
+	logFuncMode || scoreLog && console.log(`Trump: ${ trump.name } | Match Suit: ${ matchSuit }`)
 	let highScore = -Infinity
 	let winner
-	const plays = [playedCards[0], playedCards[1], playedCards[2], playedCards[3]]
+	const plays = [ playedCards[ 0 ], playedCards[ 1 ], playedCards[ 2 ], playedCards[ 3 ] ]
 	plays.forEach((play, idx) => {
 		if (play !== blankCard) {
-			logFuncMode && console.log(`scoreTrick for Player: ${idx} | Card: ${play.faceValue} of ${play.suit.name}`)
+			logFuncMode || scoreLog && console.log(`scoreTrick for Player: ${ idx } | Card: ${ play.faceValue } of ${ play.suit.name }`)
 			const cardScore = getCardScore(play, trump.code, trump.left.code, matchSuit)
 			if (cardScore > highScore) {
 				highScore = cardScore
 				winner = idx
 			}
-		} else logFuncMode && console.log(`scoreTrick for Player: ${idx} | Card: Blank Card`)
+		} else logFuncMode || scoreLog && console.log(`scoreTrick for Player: ${ idx } | Card: Blank Card`)
 	})
-	logFuncMode && console.log("\nscoreTrick RESULT")
-	logFuncMode && console.log(`Winner: Player ${winner} with score ${highScore}`)
+	logFuncMode || scoreLog && console.log("\nscoreTrick RESULT")
+	logFuncMode || scoreLog && console.log(`Winner: Player ${ winner } with score ${ highScore }`)
 	return { winner, highScore }
 }
 
@@ -176,41 +176,41 @@ export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dea
 	AIDebugMode && console.log("FUNCTION: decideTrump")
 	AIDebugMode && console.log("currentPlayer, hand, matchStage, upTrump, suits, dealer, pass, setGoAlone")
 	AIDebugMode && console.log(currentPlayer, hand, matchStage, upTrump, suits, dealer, pass, setGoAlone)
-	const suitMap = groupBySuit(hand, false, suits[upTrump.suit.code])
+	const suitMap = groupBySuit(hand, false, suits[ upTrump.suit.code ])
 	switch (matchStage) {
 		case "CALL": {
 			const trumpCode = upTrump.suit.code
 			const result = scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, trumpCode, upTrump, suits, dealer)
 			AIDebugMode && console.log("Hand Score: ", result)
 			if (result >= minAloneScore) setGoAlone(currentPlayer)
-			if (result > minCallScore) suits[upTrump.suit.code].select()
+			if (result > minCallScore) suits[ upTrump.suit.code ].select()
 			else sleep(decidePace).then(() => pass())
 			break
 		}
 		// PICK OR STUCK
 		default: {
 			const suitScores = [
-				[scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "h", upTrump, suits, dealer), 'h'],
-				[scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "d", upTrump, suits, dealer), 'd'],
-				[scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "c", upTrump, suits, dealer), 'c'],
-				[scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "s", upTrump, suits, dealer), 's']]
+				[ scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "h", upTrump, suits, dealer), 'h' ],
+				[ scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "d", upTrump, suits, dealer), 'd' ],
+				[ scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "c", upTrump, suits, dealer), 'c' ],
+				[ scoreHandByTrump(currentPlayer, hand, matchStage, suitMap, "s", upTrump, suits, dealer), 's' ] ]
 			let highestScore = 0
 			let highSuitCode
 			for (const score of suitScores) {
-				if (score[1] !== upTrumpHistory.code && score[0] > highestScore) {
-					highestScore = score[0]
-					highSuitCode = score[1]
+				if (score[ 1 ] !== upTrumpHistory.code && score[ 0 ] > highestScore) {
+					highestScore = score[ 0 ]
+					highSuitCode = score[ 1 ]
 				}
 			}
 			AIDebugMode && console.log("Hand Scores per Trump (h/d/c/s): ", suitScores)
 			// setShowPromptModal(false)
 			if (matchStage === "PICK") {
 				if (highestScore >= minAloneScore) setGoAlone(currentPlayer)
-				if (highestScore > minCallScore) suits[highSuitCode].select()
+				if (highestScore > minCallScore) suits[ highSuitCode ].select()
 				else sleep(decidePace).then(() => pass())
 			} else {
 				if (highestScore >= minAloneScore) setGoAlone(currentPlayer)
-				suits[highSuitCode].select()
+				suits[ highSuitCode ].select()
 			}
 			break
 		}
@@ -219,15 +219,15 @@ export const decideTrump = (currentPlayer, hand, matchStage, upTrump, suits, dea
 
 export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPlayerHands, handlePlayerChoice, playedCards) => {
 	AIDebugMode && console.log("------------------ DECIDE AI PLAY FUNCTION: Player: ", currentPlayer)
-	const hand = [...getPlayerHand(currentPlayer, playerHand, nonPlayerHands)]
+	const hand = [ ...getPlayerHand(currentPlayer, playerHand, nonPlayerHands) ]
 	const suitMap = groupBySuit(hand, false, trump)
 	// Move the left to the proper trump suit in suitMap
-	if (trump.left.code in suitMap && suitMap[trump.left.code].find(card => card.faceValue === "J")) {
-		const leftIdx = suitMap[trump.left.code].findIndex(card => card.faceValue === "J")
-		const leftCard = suitMap[trump.left.code][leftIdx]
-		suitMap[trump.left.code].slice(leftIdx, 1)
-		if (trump.code in suitMap) suitMap[trump.code].push(leftCard)
-		else suitMap[trump.code] = [leftCard]
+	if (trump.left.code in suitMap && suitMap[ trump.left.code ].find(card => card.faceValue === "J")) {
+		const leftIdx = suitMap[ trump.left.code ].findIndex(card => card.faceValue === "J")
+		const leftCard = suitMap[ trump.left.code ][ leftIdx ]
+		suitMap[ trump.left.code ].slice(leftIdx, 1)
+		if (trump.code in suitMap) suitMap[ trump.code ].push(leftCard)
+		else suitMap[ trump.code ] = [ leftCard ]
 	}
 	let chosenCard = null
 	AIDebugMode && console.log(hand, suitMap)
@@ -238,7 +238,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 		let highOffSuitCard
 		for (const suitCode in suitMap) {
 			if (suitCode === trump.code) continue
-			for (const card of suitMap[suitCode]) {
+			for (const card of suitMap[ suitCode ]) {
 				if (card.value > highOffSuitValue) {
 					highOffSuitValue = card.value
 					highOffSuitCard = card
@@ -254,7 +254,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 		else if (suitMap.hasOwnProperty(trump.code)) {
 			AIDebugMode && console.log("decideAIplay: NO sufficient high offsuit card, but you have TRUMP suit")
 			// if you have trump and its the right (J), bring out the dead
-			const rightTrump = suitMap[trump.code].find(card => card.faceValue === "J")
+			const rightTrump = suitMap[ trump.code ].find(card => card.faceValue === "J")
 			chosenCard = rightTrump !== undefined ? rightTrump : null
 		}
 		if (!chosenCard) {
@@ -266,7 +266,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 			// if you have off trump, lay lowest
 			let highTrumpValue = 0
 			let highTrumpCard
-			for (const card of suitMap[trump.code]) {
+			for (const card of suitMap[ trump.code ]) {
 				if (card.value > highTrumpValue) {
 					highTrumpValue = card.value
 					highTrumpCard = card
@@ -285,7 +285,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 				AIDebugMode && console.log("decideAIplay: TEAMMATE IS WINNING, LAY LOW")
 				let lowCardValue = Infinity
 				let lowCard
-				for (const card of suitMap[matchSuit]) {
+				for (const card of suitMap[ matchSuit ]) {
 					if (card.value < lowCardValue) {
 						lowCardValue = card.value
 						lowCard = card
@@ -297,7 +297,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 				// try to win
 				let highCardValue = currentWinData.highScore
 				let highCard
-				for (const card of suitMap[matchSuit]) {
+				for (const card of suitMap[ matchSuit ]) {
 					if (card.value > highCardValue) {
 						highCardValue = card.value
 						highCard = card
@@ -308,7 +308,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 				if (!chosenCard) {
 					let lowCardValue = Infinity
 					let lowCard
-					for (const card of suitMap[matchSuit]) {
+					for (const card of suitMap[ matchSuit ]) {
 						if (card.value < lowCardValue) {
 							lowCardValue = card.value
 							lowCard = card
@@ -326,7 +326,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 				let lowCard
 				for (const suit in suitMap) {
 					if (suit === trump.code) continue
-					for (const card of suitMap[suit]) {
+					for (const card of suitMap[ suit ]) {
 						if (card.value < lowCardValue) {
 							lowCardValue = card.value
 							lowCard = card
@@ -338,7 +338,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 				if (!chosenCard) {
 					let lowTrumpValue = Infinity
 					let lowTrumpCard
-					for (const card of suitMap[trump.code]) {
+					for (const card of suitMap[ trump.code ]) {
 						if (card.value < lowTrumpValue) {
 							lowCardValue = card.value
 							lowTrumpCard = card
@@ -351,7 +351,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 				let lowTrumpValue = Infinity
 				let lowTrumpCard = null
 				if (suitMap.hasOwnProperty(trump.code)) {
-					for (const trumpCard of suitMap[trump.code]) {
+					for (const trumpCard of suitMap[ trump.code ]) {
 						const scoredTrump = getCardScore(trumpCard, trump.code, trump.left.code, matchSuit)
 						if (scoredTrump > currentWinData.highScore) {
 							if (scoredTrump < lowTrumpValue) {
@@ -378,7 +378,7 @@ export const decideAIplay = (currentPlayer, trump, matchSuit, playerHand, nonPla
 				if (!chosenCard) {
 					let highTrumpValue = 0
 					let highTrumpCard = null
-					for (const card of suitMap[trump.code]) {
+					for (const card of suitMap[ trump.code ]) {
 						if (card.value > highTrumpValue) {
 							highTrumpValue = card.value
 							highTrumpCard = card

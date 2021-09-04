@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"workbench.iconTheme": "material-icon-theme",
+		"workbench.preferredLightColorTheme": "Dark+ Black",
+		"workbench.preferredDarkColorTheme": "Dark+ Black",
+		"workbench.colorTheme": "Dark+ Black",
+		"workbench.preferredHighContrastColorTheme": "Dark+ Black",
+		"workbench.productIconTheme": "icons-carbon",
+		"workbench.colorCustomizations": {
+			"list.highlightForeground": "#940000",
+			"list.focusOutline": "#05a3007a",
+			"list.activeSelectionBackground": "#222"
+		},
+		"workbench.list.smoothScrolling": true,
+		"workbench.fontAliasing": "auto",
+		"editor.fontWeight": "100",
+		"editor.minimap.maxColumn": 50,
+		"editor.minimap.size": "fill",
+		"git.decorations.enabled": false,
+		"scm.diffDecorationsGutterWidth": 1,
+		"editor.multiCursorModifier": "ctrlCmd",
+		"scm.diffDecorations": "gutter",
+		"scm.diffDecorationsGutterAction": "none"
+	}
+}
