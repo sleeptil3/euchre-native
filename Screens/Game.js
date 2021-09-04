@@ -3,7 +3,7 @@ import { Image, View, StyleSheet } from "react-native";
 import { styles, themeTable } from '../CoreElements/theme'
 import GameLayer from "../Components/GameLayer";
 import { DataContext } from "../GameContext";
-import { logMode, debugMode, logFuncMode, AIDebugMode, scoreLog, decidePace } from '../Data/data';
+import { logMode, debugMode, logFuncMode, AIDebugMode, resetDefaultGamSettingsFlag, decidePace } from '../Data/data';
 
 export default function Game() {
 	const { appPreferences } = useContext(DataContext)
@@ -29,7 +29,7 @@ export default function Game() {
 
 	return (
 		<View style={ styles.screen }>
-			{ logMode || debugMode || logFuncMode || AIDebugMode || scoreLog || decidePace < 1000 ? <View style={ localStyles.logMode } /> : <Image resizeMode={ "stretch" } style={ localStyles.background } source={ tableImage } /> }
+			{ resetDefaultGamSettingsFlag ? <View style={ localStyles.logMode } /> : <Image resizeMode={ "stretch" } style={ localStyles.background } source={ tableImage } /> }
 			<GameLayer />
 		</View>
 	);

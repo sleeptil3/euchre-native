@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react"
 import * as Device from 'expo-device'
 import { Audio } from "expo-av"
 import { hearts, diamonds, spades, clubs, Deck } from './Data/deck'
-import { sleep, blankCard, sounds, decidePace, debugMode, logMode, logFuncMode, scoreLog } from "./Data/data"
+import { sleep, blankCard, sounds, decidePace, debugMode, logMode, logFuncMode, resetDefaultGamSettingsFlag } from "./Data/data"
 import {
 	decideTrump,
 	decideAIplay,
@@ -842,7 +842,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 					setActionText(actionPrompts.discard)
 					setShowActionPrompt(true)
 				}
-				else handleDiscard(dealer, upTrump)
+				else {
+					setPlayerHand(sortHand([ ...playerHand ]))
+					handleDiscard(dealer, upTrump)
+				}
 				break
 			}
 			case "PLAY": {

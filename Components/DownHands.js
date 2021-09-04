@@ -1,15 +1,14 @@
 import React, { useContext, useState, useEffect } from "react"
 import { DataContext } from "../GameContext"
 import DownHand from "./DownHand"
-import { Flex } from "../CoreElements/containerStyles";
 import { sleep } from "../Data/data";
 import { StyleSheet, View } from "react-native";
 
 export default function DownHands() {
 	const { teammateHand, opponentHand1, opponentHand2, matchStage, promptText } = useContext(DataContext)
-	const [show1, setShow1] = useState(false)
-	const [show2, setShow2] = useState(false)
-	const [show3, setShow3] = useState(false)
+	const [ show1, setShow1 ] = useState(false)
+	const [ show2, setShow2 ] = useState(false)
+	const [ show3, setShow3 ] = useState(false)
 
 	useEffect(() => {
 		if (matchStage === "DEAL") {
@@ -46,13 +45,13 @@ export default function DownHands() {
 	})
 
 	return (
-		<View style={localStyles.downHands}>
-			<View style={localStyles.horizontal}>
-				{show1 && <DownHand position={1} handLength={opponentHand1.length} />}
-				{show3 && <DownHand position={3} handLength={opponentHand2.length} />}
+		<View style={ localStyles.downHands }>
+			<View style={ localStyles.horizontal }>
+				{ show1 && <DownHand position={ 1 } handLength={ opponentHand1.length } /> }
+				{ show3 && <DownHand position={ 3 } handLength={ opponentHand2.length } /> }
 			</View>
-			<View style={localStyles.vertical}>
-				{show2 && <DownHand position={2} handLength={teammateHand.length} />}
+			<View style={ localStyles.vertical }>
+				{ show2 && <DownHand position={ 2 } handLength={ teammateHand.length } /> }
 			</View>
 		</View>
 	)

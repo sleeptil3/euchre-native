@@ -1,25 +1,30 @@
 import { v4 as uuid } from 'uuid'
 
 // Scoring Modes
-export const minAloneScore = 100
 export const minCallScore = 72
-// export const minAloneScore = 500
+export const minAloneScore = 100
 // export const minCallScore = 500
+// export const minAloneScore = 500
 
 // Pace Settings
-export const decidePace = 500
+export const decidePace = 900
 
 // Log/Debug Mode Settings
 export const logMode = false
 export const debugMode = false
 export const logFuncMode = false
 export const AIDebugMode = false
-export const scoreLog = true
+
+/* Things to Check Before Unflagging:
+	- minCall and minAlone Scores (72,100)
+	- decidePace (1000)
+	- all log modes FALSE
+*/
+export const resetDefaultGamSettingsFlag = false
 
 export function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
-// sleep(1500).then(() => setMatchStage("DEAL"));
 
 export const blankCard = {
 	_id: uuid(),
