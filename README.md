@@ -40,11 +40,18 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 
 ## Version & Build History
 
-### Version 1.0.2 (current)
+### Version 1.0.5 (in development)
 
 #### Builds
 
-- 1.0.4 (current)
+- 2021.9.b1 (in development)
+  - fixed versioning/build numbers being out of sync
+
+### Version 1.0.2
+
+#### Builds
+
+- 1.0.4
   - Fixed a bug where a card disappeared from your hand stopping play
   - Fixed a bug which caused the upTrump card to not reappear subsequent to the first match
   - Optimized the method the trumpStack and the upTrump card where loaded and animated to avoid timing bugs
@@ -80,6 +87,7 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 ## Planned Future Updates
 
 ### v2.0
+
 The plan for 2.0 is an online multiplayer experience
 
 ## Privacy Policy
@@ -98,4 +106,3 @@ While this project is posted publically for educational purposes, the code herei
 
 - If you find a bug or have a feature request, submit an Issue to this repository using the templates provided
 - To get in contact with me directly, use the [contact form](https://www.sleeptil3software.com/#/contact) on my website
-
