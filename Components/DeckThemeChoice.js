@@ -6,15 +6,10 @@ import { iconSVGs, colors, themeSamples } from '../CoreElements/theme'
 
 export default function DeckThemeChoice({ deck }) {
 	const { appPreferences, setAppPreferences } = useContext(DataContext)
-	const [ setChosen ] = useState(false)
 
 	const handleThemeChange = () => {
 		setAppPreferences({ ...appPreferences, deckTheme: deck })
 	}
-	useEffect(() => {
-		if (appPreferences.deckTheme === deck) setChosen(true)
-		else setChosen(false)
-	}, [ appPreferences.deckTheme ])
 
 	const styles = StyleSheet.create({
 		container: {
