@@ -2,11 +2,10 @@ import React, { useContext, useEffect } from 'react'
 import { View, Modal, StyleSheet, Pressable, Image } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Flex } from '../CoreElements/containerStyles'
-import { Italic, Body, DefaultText, Heading, MainTitle } from '../CoreElements/fontStyles'
+import { Italic, Body, DefaultText, MainTitle } from '../CoreElements/fontStyles'
 import { colors, iconSVGs, themeHands } from '../CoreElements/theme'
 import ShareButton from '../Components/ShareButton'
 import * as StoreReview from 'expo-store-review';
-import { sleep } from '../Data/data'
 
 export default function StartModal() {
 	const { gameplayCount, appPreferences, setShowRulesModal, setShowSettingsModal, showStartModal, setShowStartModal, setCurrentPlayer, setMatchStage, setTurnCount, dealer, turnCount } = useContext(DataContext)
@@ -34,33 +33,33 @@ export default function StartModal() {
 
 	useEffect(() => {
 		gameplayCount > 0 && handleStoreReview()
-	}, [gameplayCount])
+	}, [ gameplayCount ])
 
 	return (
 		<Modal
 			animationType="slide"
-			transparent={true}
-			visible={showStartModal}
+			transparent={ true }
+			visible={ showStartModal }
 		>
-			<Flex align="center" justify="center" override={{
+			<Flex align="center" justify="center" override={ {
 				shadowRadius: 10,
 				shadowColor: colors.black,
 				shadowOpacity: 1,
 				shadowOffset: { width: 4, height: 4 }
-			}}>
-				<View style={styles.modal}>
+			} }>
+				<View style={ styles.modal }>
 					<MainTitle>Euchre Night</MainTitle>
 					<Italic align="center">Created by Shawn Clary</Italic>
-					<View style={{ marginVertical: 10 }}>
-						<Image source={appPreferences.deckTheme ? themeHands[appPreferences.deckTheme] : themeHands.Default} />
+					<View style={ { marginVertical: 10 } }>
+						<Image source={ appPreferences.deckTheme ? themeHands[ appPreferences.deckTheme ] : themeHands.Default } />
 					</View>
-					<Body align="center" override={{ marginBottom: 10 }}>Choose an option:</Body>
+					<Body align="center" override={ { marginBottom: 10 } }>Choose an option:</Body>
 					<Pressable
-						accessibilityLabel={"Begin a new game"}
-						onPress={handlePlay}
+						accessibilityLabel={ "Begin a new game" }
+						onPress={ handlePlay }
 					>
 						<View
-							style={{
+							style={ {
 								justifyContent: "space-around",
 								alignItems: "center",
 								flexDirection: "row",
@@ -71,19 +70,19 @@ export default function StartModal() {
 								paddingHorizontal: 50,
 								paddingVertical: 16,
 								marginVertical: 0,
-							}}
+							} }
 						>
-							<DefaultText align="center" override={{ fontSize: 24, fontFamily: "SFPro-Bold" }}>New Game</DefaultText>
+							<DefaultText align="center" override={ { fontSize: 24, fontFamily: "SFPro-Bold" } }>New Game</DefaultText>
 						</View>
 					</Pressable>
-					<View style={{ width: "85%", alignItems: "center", justifyContent: "center" }}>
+					<View style={ { width: "85%", alignItems: "center", justifyContent: "center" } }>
 						<Pressable
-							accessibilityLabel={"View the rules"}
-							onPress={handleRules}
-							style={{ marginVertical: 10, marginTop: 20, }}
+							accessibilityLabel={ "View the rules" }
+							onPress={ handleRules }
+							style={ { marginVertical: 10, marginTop: 20, } }
 						>
 							<View
-								style={{
+								style={ {
 									justifyContent: "center",
 									alignItems: "center",
 									flexDirection: "row",
@@ -92,27 +91,27 @@ export default function StartModal() {
 									borderRadius: 40,
 									width: 140,
 									paddingVertical: 8,
-								}}
+								} }
 							>
 								<DefaultText align="center">How to Play</DefaultText>
 							</View>
 						</Pressable>
 						<View
-							style={{
+							style={ {
 								justifyContent: "space-between",
 								alignItems: "flex-end",
 								flexDirection: "row",
 								marginVertical: 10,
 								width: "35%"
-							}}
+							} }
 						>
-							<ShareButton styles={styles} />
+							<ShareButton styles={ styles } />
 							<Pressable
-								accessibilityLabel={"Change settings"}
-								onPress={handleSettings}
-								style={styles.icon}
+								accessibilityLabel={ "Change settings" }
+								onPress={ handleSettings }
+								style={ styles.icon }
 							>
-								{iconSVGs.settingsMedium}
+								{ iconSVGs.settingsMedium }
 							</Pressable>
 						</View>
 					</View>

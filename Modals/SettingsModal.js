@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { View, Modal, StyleSheet, Pressable, ScrollView, Switch } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Italic, DefaultText, Heading, Title, Subtitle } from '../CoreElements/fontStyles'
@@ -25,48 +25,48 @@ export default function SettingsModal() {
 	return (
 		<Modal
 			animationType="slide"
-			transparent={true}
-			visible={showSettingsModal}
+			transparent={ true }
+			visible={ showSettingsModal }
 		>
-			<View style={styles.settingsScreen}>
-				<View style={styles.settings}>
-					<Pressable onPress={handleClose} style={{ position: "absolute", right: 20, top: -50, opacity: .67 }}>{iconSVGs.close}</Pressable>
-					<ScrollView scrollIndicatorInsets={{ right: 4 }} indicatorStyle="white" style={localStyles.modal}>
-						<View style={{ margin: 20 }}>
-							<View style={{ marginVertical: 10, alignItems: "center" }}>{iconSVGs.settingsLarge}</View>
-							<View style={{ marginBottom: 20 }} >
+			<View style={ styles.settingsScreen }>
+				<View style={ styles.settings }>
+					<Pressable onPress={ handleClose } style={ { position: "absolute", right: 20, top: -50, opacity: .67 } }>{ iconSVGs.close }</Pressable>
+					<ScrollView scrollIndicatorInsets={ { right: 4 } } indicatorStyle="white" style={ localStyles.modal }>
+						<View style={ { margin: 20 } }>
+							<View style={ { marginVertical: 10, alignItems: "center" } }>{ iconSVGs.settingsLarge }</View>
+							<View style={ { marginBottom: 20 } } >
 								<Heading align="center">Settings</Heading>
 								<Italic align="center">Configure app settings below</Italic>
 							</View>
-							<View style={{ justifyContent: "center", alignItems: "center", marginVertical: 20 }}>
-								<Title override={{ fontSize: 24 }}>Deck Theme</Title>
+							<View style={ { justifyContent: "center", alignItems: "center", marginVertical: 20 } }>
+								<Title override={ { fontSize: 24 } }>Deck Theme</Title>
 								<DeckThemeChoice deck="Default" />
 								<DeckThemeChoice deck="Year2099" />
 							</View>
-							<View style={{ justifyContent: "center", alignItems: "center", marginVertical: 20 }}>
-								<Title override={{ fontSize: 24 }}>Table Theme</Title>
-								{Object.keys(themeTable).map(theme => {
-									return <TableThemeChoice key={theme} id={theme} title={themeTable[theme].title} />
-								})}
+							<View style={ { justifyContent: "center", alignItems: "center", marginVertical: 20 } }>
+								<Title override={ { fontSize: 24 } }>Table Theme</Title>
+								{ Object.keys(themeTable).map(theme => {
+									return <TableThemeChoice key={ theme } id={ theme } title={ themeTable[ theme ].title } />
+								}) }
 							</View>
-							<View style={{ justifyContent: "center", alignItems: "center", marginVertical: 20 }}>
-								<Title override={{ fontSize: 24 }}>Sounds</Title>
-								<View style={[localStyles.container, { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20 }]} >
+							<View style={ { justifyContent: "center", alignItems: "center", marginVertical: 20 } }>
+								<Title override={ { fontSize: 24 } }>Sounds</Title>
+								<View style={ [ localStyles.container, { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20 } ] } >
 									<Switch
-										trackColor={{ false: colors.red, true: colors.green }}
-										ios_backgroundColor={colors.red}
-										onValueChange={handleToggle}
-										value={enableSound}
+										trackColor={ { false: colors.red, true: colors.green } }
+										ios_backgroundColor={ colors.red }
+										onValueChange={ handleToggle }
+										value={ enableSound }
 									/>
-									<Subtitle align="left" override={{ fontSize: 18, top: 1, paddingLeft: 18 }}>Enable Sounds</Subtitle>
+									<Subtitle align="left" override={ { fontSize: 18, top: 1, paddingLeft: 18 } }>Enable Sounds</Subtitle>
 								</View>
 							</View>
 							<Pressable
-								accessibilityLabel={"Close settings"}
-								onPress={handleClose}
+								accessibilityLabel={ "Close settings" }
+								onPress={ handleClose }
 							>
 								<View
-									style={{
+									style={ {
 										justifyContent: "space-around",
 										alignItems: "center",
 										flexDirection: "row",
@@ -77,7 +77,7 @@ export default function SettingsModal() {
 										paddingHorizontal: 50,
 										paddingVertical: 12,
 										marginVertical: 10,
-									}}
+									} }
 								>
 									<DefaultText align="center">Close</DefaultText>
 								</View>

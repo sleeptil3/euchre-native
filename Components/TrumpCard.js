@@ -7,7 +7,7 @@ import FlipCard from 'react-native-flip-card'
 import { Audio } from 'expo-av';
 
 export default function TrumpCard() {
-	const { appPreferences, upTrump, matchStage } = useContext(DataContext)
+	const { appPreferences, upTrump, matchStage, showTrumpCard } = useContext(DataContext)
 	const [ cardCode, setCardCode ] = useState("")
 	const [ flipState, setFlipState ] = useState(false)
 
@@ -40,20 +40,21 @@ export default function TrumpCard() {
 		).start();
 	};
 
-
+	// if trump is ordered up on CALL stage, setShowTrumpCard(false) during call stage
+	// if PICK stage is reached, then setShowTrumpCard(false)
 	useEffect(() => {
-		if (matchStage === "CALL") sleep(500).then(() => {
-			playFlip()
-		})
-		if (matchStage === "PICK") playFlip()
-		if (matchStage === "DISCARD") {
-			fadeOut()
-			setFlipState(false)
-			sleep(750).then(() => {
-				fadeAnim.resetAnimation()
+		if (showTrumpCard) {
+			sleep(500).then(() => {
+				playFlip()
 			})
+		} else {
+			if (matchStage === "CALL") {
+				fadeOut()
+				sleep(600).then(() => setFlipState(false))
+			}
+			else if (matchStage === "PICK") playFlip()
 		}
-	}, [ matchStage ])
+	}, [ showTrumpCard ])
 
 	useEffect(() => {
 		upTrump.faceValue !== undefined && setCardCode("" + upTrump.suit.code + upTrump.faceValue.toLowerCase())

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Body, DefaultText, Subtitle } from '../CoreElements/fontStyles'
+import { StyleSheet, View } from 'react-native'
+import { DefaultText } from '../CoreElements/fontStyles'
 import { DataContext } from "../GameContext"
 import { iconSVGs, colors } from '../CoreElements/theme'
 
@@ -29,16 +29,16 @@ export default function TrumpIndicator() {
 			bottom: callingPlayer === 0 ? -19 : null,
 			left: showHelpModal ? -19 : callingPlayer === 1 ? -19 : null,
 			right: callingPlayer === 3 ? -19 : null,
-			transform: [{ rotate: showHelpModal ? "-90deg" : callingPlayer === 1 ? "-90deg" : callingPlayer === 3 ? "90deg" : callingPlayer === 0 ? "180deg" : 0 }]
+			transform: [ { rotate: showHelpModal ? "-90deg" : callingPlayer === 1 ? "-90deg" : callingPlayer === 3 ? "90deg" : callingPlayer === 0 ? "180deg" : 0 } ]
 		}
 	})
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.indicator}>
-				{iconSVGs.indicator}
+		<View style={ styles.container }>
+			<View style={ styles.indicator }>
+				{ iconSVGs.indicator }
 			</View>
-			<DefaultText align="center" override={{ fontSize: 15, marginBottom: 2 }}>Trump</DefaultText>
+			<DefaultText align="center" override={ { fontSize: 15, marginBottom: 2 } }>Trump</DefaultText>
 			{
 				trump.code === "h" ? iconSVGs.heartFilled
 					: trump.code === "c" ? iconSVGs.clubFilled

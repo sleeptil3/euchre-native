@@ -4,10 +4,9 @@ import GameContext from './GameContext';
 import { StatusBar } from 'expo-status-bar';
 import Game from './Screens/Game'
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { colors } from './CoreElements/theme';
 
 export default function App() {
-	const [appPreferences, setAppPreferences] = useState({})
+	const [ appPreferences, setAppPreferences ] = useState({})
 	const { height, width } = useWindowDimensions()
 
 	const getStoredPreferences = async () => {
@@ -57,14 +56,14 @@ export default function App() {
 		if (appPreferences.deckTheme !== undefined) {
 			storePreferences(appPreferences)
 		}
-	}, [appPreferences])
+	}, [ appPreferences ])
 
 	if (appPreferences.deckTheme === undefined) return null
 
 	else return (
-		<GameContext appPreferences={appPreferences} setAppPreferences={setAppPreferences}>
-			<View style={{ position: "absolute", width: width, height: height, alignItems: "center", justifyContent: "center", backgroundColor: "#000" }}>
-				<StatusBar style="light" hidden={true} />
+		<GameContext appPreferences={ appPreferences } setAppPreferences={ setAppPreferences }>
+			<View style={ { position: "absolute", width: width, height: height, alignItems: "center", justifyContent: "center", backgroundColor: "#000" } }>
+				<StatusBar style="light" hidden={ true } />
 				<Game />
 			</View>
 		</GameContext>

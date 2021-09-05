@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { View, Pressable, StyleSheet } from 'react-native'
 import { iconSVGs } from '../CoreElements/theme'
 import { DataContext } from '../GameContext'
 
@@ -17,16 +17,16 @@ export default function ControlPanel() {
 	}
 
 	return (
-		<View style={localStyles.panel}>
+		<View style={ localStyles.panel }>
 			<Pressable
-				onPress={handleHelp}
+				onPress={ handleHelp }
 			>
-				{iconSVGs.help}
+				{ iconSVGs.help }
 			</Pressable>
 			<Pressable
-				onPress={handleSettings}
+				onPress={ handleSettings }
 			>
-				{iconSVGs.settingsMedium}
+				{ iconSVGs.settingsMedium }
 			</Pressable>
 		</View>
 	)

@@ -5,7 +5,7 @@ import { sleep } from "../Data/data";
 import { StyleSheet, View } from "react-native";
 
 export default function DownHands() {
-	const { teammateHand, opponentHand1, opponentHand2, matchStage, promptText } = useContext(DataContext)
+	const { teammateHand, opponentHand1, opponentHand2, matchStage } = useContext(DataContext)
 	const [ show1, setShow1 ] = useState(false)
 	const [ show2, setShow2 ] = useState(false)
 	const [ show3, setShow3 ] = useState(false)

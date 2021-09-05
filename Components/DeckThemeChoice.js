@@ -3,11 +3,10 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { Body, Subtitle } from '../CoreElements/fontStyles'
 import { DataContext } from "../GameContext"
 import { iconSVGs, colors, themeSamples } from '../CoreElements/theme'
-import { ButtonURLLink } from '../CoreElements/buttonStyles'
 
 export default function DeckThemeChoice({ deck }) {
 	const { appPreferences, setAppPreferences } = useContext(DataContext)
-	const [chosen, setChosen] = useState(false)
+	const [ setChosen ] = useState(false)
 
 	const handleThemeChange = () => {
 		setAppPreferences({ ...appPreferences, deckTheme: deck })
@@ -15,7 +14,7 @@ export default function DeckThemeChoice({ deck }) {
 	useEffect(() => {
 		if (appPreferences.deckTheme === deck) setChosen(true)
 		else setChosen(false)
-	}, [appPreferences.deckTheme])
+	}, [ appPreferences.deckTheme ])
 
 	const styles = StyleSheet.create({
 		container: {
@@ -31,12 +30,12 @@ export default function DeckThemeChoice({ deck }) {
 	})
 
 	return (
-		<Pressable onPress={appPreferences.deckTheme !== deck ? handleThemeChange : null}>
-			<View style={styles.container}>
-				<Subtitle align="left" override={{ fontSize: 18, top: 5, marginBottom: 20 }}>{deck}</Subtitle>
-				<Image source={themeSamples[deck]} />
-				<View style={{ position: "absolute", top: 10, left: 10 }}>
-					{appPreferences.deckTheme === deck ? iconSVGs.toggleOn : iconSVGs.toggleOff}
+		<Pressable onPress={ appPreferences.deckTheme !== deck ? handleThemeChange : null }>
+			<View style={ styles.container }>
+				<Subtitle align="left" override={ { fontSize: 18, top: 5, marginBottom: 20 } }>{ deck }</Subtitle>
+				<Image source={ themeSamples[ deck ] } />
+				<View style={ { position: "absolute", top: 10, left: 10 } }>
+					{ appPreferences.deckTheme === deck ? iconSVGs.toggleOn : iconSVGs.toggleOff }
 				</View>
 			</View>
 		</Pressable>

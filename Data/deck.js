@@ -30,15 +30,15 @@ class Card {
 	}
 	constructor(faceValue, suitCode) {
 		this.faceValue = faceValue
-		this.value = Card.gameValues[faceValue]
-		this.suit = suits[suitCode]
+		this.value = Card.gameValues[ faceValue ]
+		this.suit = suits[ suitCode ]
 		this._id = uuid()
 	}
 }
 
 
 export class Deck {
-	static faceValues = ["9", "10", "J", "Q", "K", "A"]
+	static faceValues = [ "9", "10", "J", "Q", "K", "A" ]
 	deck = []
 	generateDeck = () => {
 		for (const suit in suits) {
@@ -49,11 +49,11 @@ export class Deck {
 	}
 
 	// Randomize array in-place using Durstenfeld shuffle algorithm
-	// Resourced from StackOverflow user 'ashleedawg'
+	// Sourced from StackOverflow user 'ashleedawg'
 	shuffleDeck = () => {
 		for (let i = this.deck.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+			[ this.deck[ i ], this.deck[ j ] ] = [ this.deck[ j ], this.deck[ i ] ];
 		}
 	}
 }

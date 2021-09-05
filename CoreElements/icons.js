@@ -2,11 +2,10 @@ import React, { useContext, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { iconSVGs } from './theme';
 import { DataContext } from '../GameContext';
-import { logMode, debugMode } from '../Data/data';
 
 export default function Icon({ choice }) {
 	const { setShowPromptModal } = useContext(DataContext)
-	const [isPressed, setIsPressed] = useState(false)
+	const [ isPressed, setIsPressed ] = useState(false)
 	const styles = StyleSheet.create({
 		icon: {
 			marginHorizontal: 12,
@@ -56,29 +55,27 @@ export default function Icon({ choice }) {
 	}
 
 	const handlePress = (code) => {
-		logMode && console.log("SHORT PRESS")
 		choice.shortAction ? choice.shortAction(code) : null
 		setShowPromptModal(false)
 	}
 
 	const handleLongPress = (code) => {
-		logMode && console.log("LONG PRESS")
 		choice.longAction ? choice.longAction(code) : choice.shortAction ? choice.shortAction(code) : null
 		setShowPromptModal(false)
 	}
 
 	return (
 		<Pressable
-			delayLongPress={750}
-			onPressIn={() => setIsPressed(true)}
-			onPressOut={() => setIsPressed(false)}
-			onPress={() => handlePress(choice.text)}
-			onLongPress={() => handleLongPress(choice.text)}
-			style={styles.icon}
-			accessibilityLabel={choice.altText}
-			hitSlop={10}
+			delayLongPress={ 750 }
+			onPressIn={ () => setIsPressed(true) }
+			onPressOut={ () => setIsPressed(false) }
+			onPress={ () => handlePress(choice.text) }
+			onLongPress={ () => handleLongPress(choice.text) }
+			style={ styles.icon }
+			accessibilityLabel={ choice.altText }
+			hitSlop={ 10 }
 		>
-			{isPressed === true ? filledType : outlineType}
+			{ isPressed === true ? filledType : outlineType }
 		</Pressable>
 	)
 }

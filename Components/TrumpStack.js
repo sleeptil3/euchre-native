@@ -2,17 +2,14 @@ import React, { useContext, useState, useEffect, useRef } from "react"
 import { Image, Animated } from "react-native"
 import { DataContext } from "../GameContext"
 import TrumpCard from "./TrumpCard"
-import { Flex } from "../CoreElements/containerStyles"
 import { cardImages } from "../Data/data"
 
 export default function TrumpStack() {
-	const { appPreferences, trump, showTrumpStack } = useContext(DataContext)
+	const { appPreferences, matchStage, showTrumpStack } = useContext(DataContext)
 	const [ imageURL, setImageURL ] = useState(cardImages[ appPreferences.deckTheme ].deck)
-	const [ showTrumpCard, setShowTrumpCard ] = useState(true)
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 
 	const fadeIn = () => {
-		// Will change fadeAnim value to 1 in 5 seconds
 		Animated.timing(
 			fadeAnim,
 			{
@@ -25,7 +22,6 @@ export default function TrumpStack() {
 	};
 
 	const fadeOut = () => {
-		// Will change fadeAnim value to 0 in 3 seconds
 		Animated.timing(
 			fadeAnim,
 			{
@@ -34,7 +30,6 @@ export default function TrumpStack() {
 				useNativeDriver: true
 			}
 		).start();
-		setShowTrumpCard(false)
 	};
 
 	useEffect(() => {
@@ -45,15 +40,11 @@ export default function TrumpStack() {
 		setImageURL(cardImages[ appPreferences.deckTheme ].deck)
 	}, [ appPreferences.deckTheme ])
 
-	if (!trump.suit) {
-		return (
-			<Animated.View style={ { opacity: fadeAnim, alignItems: "center", justifyContent: "center", width: "100%", height: "100%" } }>
-				<Image source={ imageURL } style={ { position: "absolute" } } />
-				{ showTrumpCard && <TrumpCard /> }
-			</Animated.View>
-		)
-	} else {
-		return null
-	}
+	return (
+		<Animated.View style={ { opacity: fadeAnim, alignItems: "center", justifyContent: "center", width: "100%", height: "100%" } }>
+			<Image source={ imageURL } style={ { position: "absolute" } } />
+			{ matchStage !== "PLAY" && <TrumpCard /> }
+		</Animated.View>
+	)
 }
 
