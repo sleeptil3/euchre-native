@@ -38,13 +38,19 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 - expo-status-bar
 - expo-store-review
 
-## Version & Build History
+## Current Release
 
-### Version 1.0.4 (current)
+### Version 1.0.5
 
-#### Builds
+- #### Build 1
+  - fixed an issue causing theme chooser to crash
+  - fixed versioning/build numbers being out of sync
 
-- 1.0.4 (current)
+## Version History
+
+### Version 1.0.2
+
+- #### Build 1.0.4
   - Fixed a bug where a card disappeared from your hand stopping play
   - Fixed a bug which caused the upTrump card to not reappear subsequent to the first match
   - Optimized the method the trumpStack and the upTrump card where loaded and animated to avoid timing bugs
@@ -59,33 +65,29 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 
 ### Version 1.0
 
-#### Builds
-
-- 1.0.1
+- #### Build 1.0.1
   - AppStore Submission
 
 ### Version 0.9.0
 
-#### Builds
-
-- 0.9.0
+- #### Build 0.9.0
   - launch of beta testing through TestFlight
-- 0.9.1
+- #### Build 0.9.1
   - Bug Fixes
-- 0.9.2
+- #### Build 0.9.2
   - Bug Fixes
-- 0.9.3
+- #### Build 0.9.3
   - Bug Fixes
-- 0.9.4
+- #### Build 0.9.4
   - Bug Fixes
-- 0.9.5
+- #### Build 0.9.5
   - Bug Fixes
-- 0.9.6rc
+- #### Build 0.9.6rc
   - Release Candidate
 
 ## Planned Future Updates
 
-### v2.0
+### Version 2.0
 
 The plan for 2.0 is an online multiplayer experience
 

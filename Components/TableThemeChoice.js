@@ -6,16 +6,10 @@ import { iconSVGs, colors } from '../CoreElements/theme'
 
 export default function TableThemeChoice({ id, title }) {
 	const { appPreferences, setAppPreferences } = useContext(DataContext)
-	const [ chosen, setChosen ] = useState(false)
 
 	const handleThemeChange = () => {
 		setAppPreferences({ ...appPreferences, tableTheme: id })
 	}
-
-	useEffect(() => {
-		if (appPreferences.tableTheme === id) setChosen(true)
-		else setChosen(false)
-	}, [ appPreferences.tableTheme ])
 
 	const styles = StyleSheet.create({
 		container: {
@@ -29,6 +23,7 @@ export default function TableThemeChoice({ id, title }) {
 			width: 250
 		},
 	})
+
 	return (
 		<Pressable onPress={ appPreferences.tableTheme !== id ? handleThemeChange : null }>
 			<View style={ [ styles.container, { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20 } ] }>
