@@ -38,6 +38,12 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 - expo-status-bar
 - expo-store-review
 
+## In Development
+
+### Version 1.0.6
+
+- #### Build 1
+
 ## Current Release
 
 ### Version 1.0.5
