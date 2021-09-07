@@ -1,3 +1,5 @@
+import { leftDebugHand } from "./Data/deck"
+
 import React, { useState, useEffect, createContext } from "react"
 import * as Device from 'expo-device'
 import { Audio } from "expo-av"
@@ -6,6 +8,7 @@ import { sleep, blankCard, sounds, decidePace } from "./Data/data"
 import {
 	decideTrump,
 	decideAIplay,
+	decideAIdiscard,
 	findIsTeammate,
 	groupBySuit,
 	getPlayerHand,
@@ -24,12 +27,6 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	const [ teammateHand, setTeammateHand ] = useState([])
 	const [ opponentHand1, setOpponentHand1 ] = useState([])
 	const [ opponentHand2, setOpponentHand2 ] = useState([])
-	const [ playedCards, setPlayedCards ] = useState({
-		0: blankCard,
-		1: blankCard,
-		2: blankCard,
-		3: blankCard,
-	})
 	const nonPlayerHands = [ opponentHand1, teammateHand, opponentHand2 ]
 
 	// Game State
@@ -58,7 +55,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	})
 
 	// Match State
-	const [ playerChoice, setPlayerChoice ] = useState(null)
+	const [ playerChoice, setPlayerChoice ] = useState(blankCard)
+	const [ opponentOneChoice, setOpponentOneChoice ] = useState(blankCard)
+	const [ teammateChoice, setTeammateChoice ] = useState(blankCard)
+	const [ opponentThreeChoice, setOpponentThreeChoice ] = useState(blankCard)
 	const [ trump, setTrump ] = useState({}) // {suit, left}
 	const [ callingPlayer, setCallingPlayer ] = useState(null)
 	const [ teamScore, setTeamScore ] = useState(0)
@@ -79,10 +79,34 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	const [ showTrumpCard, setShowTrumpCard ] = useState(false)
 	const [ showDeal, setShowDeal ] = useState(false)
 	const suits = {
-		"h": { ...hearts, left: { ...diamonds }, select() { handleCallUp(suits.h) }, },
-		"d": { ...diamonds, left: { ...hearts }, select() { handleCallUp(suits.d) }, },
-		"s": { ...spades, left: { ...clubs }, select() { handleCallUp(suits.s) }, },
-		"c": { ...clubs, left: { ...spades }, select() { handleCallUp(suits.c) }, },
+		"h": {
+			...hearts, left: { ...diamonds }, select() {
+				let hand
+				hand = dealer === 0 ? playerHand : nonPlayerHands[ dealer - 1 ]
+				handleCallUp(suits.h, hand)
+			},
+		},
+		"d": {
+			...diamonds, left: { ...hearts }, select() {
+				let hand
+				hand = dealer === 0 ? playerHand : nonPlayerHands[ dealer - 1 ]
+				handleCallUp(suits.d, hand)
+			},
+		},
+		"s": {
+			...spades, left: { ...clubs }, select() {
+				let hand
+				hand = dealer === 0 ? playerHand : nonPlayerHands[ dealer - 1 ]
+				handleCallUp(suits.s, hand)
+			},
+		},
+		"c": {
+			...clubs, left: { ...spades }, select() {
+				let hand
+				hand = dealer === 0 ? playerHand : nonPlayerHands[ dealer - 1 ]
+				handleCallUp(suits.c, hand)
+			},
+		},
 	}
 	async function playAIsound() {
 		const { sound } = await Audio.Sound.createAsync(
@@ -334,27 +358,28 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		setTurnCount(0)
 	}
 
-	const sortHand = (hand) => {
-		const suitMap = groupBySuit(hand, true, trump)
+	const sortHand = (hand, givenTrump) => {
+		const byTrump = givenTrump ? givenTrump : trump
+		const suitMap = groupBySuit(hand, byTrump)
 		const sortedHand = []
-		if (trump.code === undefined) {
+		if (byTrump.code === undefined) {
 			for (const suitCode in suitMap) {
 				suitMap[ suitCode ].sort((a, b) => a.value - b.value)
 				suitMap[ suitCode ].forEach((card) => sortedHand.push(card))
 			}
 		} else {
 			for (const suitCode in suitMap) {
-				if (suitCode !== trump.code) {
+				if (suitCode !== byTrump.code) {
 					suitMap[ suitCode ].sort((a, b) => a.value - b.value)
 					suitMap[ suitCode ].forEach(card => sortedHand.push(card))
 				}
 			}
-			if (suitMap.hasOwnProperty(trump.code)) {
+			if (suitMap.hasOwnProperty(byTrump.code)) {
 				const trumpCards = []
 				let left, right
-				suitMap[ trump.code ].forEach(card => {
-					if (card.faceValue === "J" && card.suit.code === trump.code) right = card
-					else if (card.faceValue === "J" && card.suit.code === trump.left.code) left = card
+				suitMap[ byTrump.code ].forEach(card => {
+					if (card.faceValue === "J" && card.suit.code === byTrump.code) right = card
+					else if (card.faceValue === "J" && card.suit.code === byTrump.left.code) left = card
 					else trumpCards.push(card)
 				})
 				trumpCards.sort((a, b) => a.value - b.value)
@@ -370,7 +395,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		return sortedHand
 	}
 
-	const handleCallUp = (trump) => {
+	const handleCallUp = (trump, hand) => {
+		const sortedHand = sortHand([ ...hand ], trump)
 		setTrump(trump)
 		setCallingPlayer(currentPlayer)
 		if (matchStage === "CALL") {
@@ -379,7 +405,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			sleep(decidePace).then(() => {
 				switch (dealer) {
 					case 0: {
-						setPlayerHand([ ...playerHand, upTrump ])
+						setPlayerHand([ ...sortedHand, upTrump ])
 						break
 					}
 					case 1: {
@@ -408,10 +434,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		}
 	}
 
-	const handleDiscard = (player, card) => {
+	const handleDiscard = (player, card, incomingHand) => {
+		let hand = [ ...incomingHand ]
 		setShowActionPrompt(false)
 		showDeal === true && sleep(300).then(() => setShowTrumpStack(false))
-		const hand = getPlayerHand(player, playerHand, nonPlayerHands)
 		switch (player) {
 			case 0: {
 				if (hand.length === 1) setPlayerHand([])
@@ -441,12 +467,14 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 			setCurrentPlayer((currentPlayer + 1) % 4)
 			setTurnCount(turnCount + 1)
 		} else {
+			setPlayerChoice(blankCard)
 			setMatchStage("READY")
 			setTurnCount(turnCount - 1)
 		}
 	}
 
 	const handlePlayerChoice = (player, card) => {
+		let hand
 		setShowActionPrompt(false)
 		if (!matchSuit) {
 			if (trump.left.code === card.suit.code && card.faceValue === "J") {
@@ -455,9 +483,28 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				setMatchSuit(card.suit.code)
 			}
 		}
-		setPlayedCards({ ...playedCards, [ player ]: card })
-		setCurrentPlayer((currentPlayer + 1) % 4)
-		handleDiscard(player, card)
+		hand = player === 0 ? [ ...playerHand ] : [ ...nonPlayerHands[ player - 1 ] ]
+		handleDiscard(player, card, hand)
+		switch (player) {
+			case 0: {
+				setPlayerChoice(card)
+				break
+			}
+			case 1: {
+				setOpponentOneChoice(card)
+				break
+			}
+			case 2: {
+				setTeammateChoice(card)
+				break
+			}
+			case 3: {
+				setOpponentThreeChoice(card)
+				break
+			}
+			default: console.log("no given player in handlePlayerChoice")
+		}
+		setCurrentPlayer((player + 1) % 4)
 	}
 
 
@@ -466,7 +513,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		if (!matchSuit) {
 			return true
 		}
-		const suitMap = groupBySuit(hand, true, trump)
+		const suitMap = groupBySuit(hand, trump)
 		if (suitMap.hasOwnProperty(matchSuit) && suitMap[ matchSuit ].length > 0) {
 			if (suitMap[ matchSuit ].includes(card)) return true
 			else return false
@@ -474,12 +521,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	}
 
 	const handleTrickEnd = () => {
-		setPlayedCards({
-			0: blankCard,
-			1: blankCard,
-			2: blankCard,
-			3: blankCard,
-		})
+		setPlayerChoice(blankCard)
+		setOpponentOneChoice(blankCard)
+		setTeammateChoice(blankCard)
+		setOpponentThreeChoice(blankCard)
 		setMatchSuit(null)
 		setMatchStage("RESULT")
 		setTurnCount(-10)
@@ -564,12 +609,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 		setTeammateHand([])
 		setOpponentHand1([])
 		setOpponentHand2([])
-		setPlayedCards({
-			0: blankCard,
-			1: blankCard,
-			2: blankCard,
-			3: blankCard,
-		})
+		setPlayerChoice(blankCard)
+		setOpponentOneChoice(blankCard)
+		setTeammateChoice(blankCard)
+		setOpponentThreeChoice(blankCard)
 
 		// Game State
 		setGameplayCount(gameplayCount + 1)
@@ -616,6 +659,11 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	// useEffects //
 	////////////////
 
+	// Re-Sort playerHand after Trump state change
+	useEffect(() => {
+		setPlayerHand(sortHand([ ...playerHand ]))
+	}, [ trump ])
+
 	// Check for notch
 	useEffect(() => {
 		const notchCheck = checkForNotch()
@@ -630,8 +678,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 
 	// Handle Player Drag Choice
 	useEffect(() => {
-		if (playerChoice) {
-			matchStage === "PLAY" ? handlePlayerChoice(yourSeat, playerChoice) : handleDiscard(yourSeat, playerChoice)
+		if (playerChoice !== blankCard) {
+			matchStage === "PLAY" ? handlePlayerChoice(yourSeat, playerChoice) : handleDiscard(yourSeat, playerChoice, playerHand)
 		}
 	}, [ playerChoice ])
 
@@ -762,7 +810,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				break
 			}
 			case "READY": {
-				setPlayerHand(sortHand([ ...playerHand ]))
+				// setPlayerHand(sortHand([ ...playerHand ]))
 				setUpTrumpHistory(upTrump)
 				setUpTrump({})
 				setShowTrumpStack(false)
@@ -783,8 +831,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 					setShowActionPrompt(true)
 				}
 				else {
-					setPlayerHand(sortHand([ ...playerHand ]))
-					handleDiscard(dealer, upTrump)
+					const player = dealer
+					const hand = nonPlayerHands[ player - 1 ]
+					const discardChoice = decideAIdiscard(hand, trump)
+					handleDiscard(player, discardChoice, hand)
 				}
 				break
 			}
@@ -809,15 +859,24 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 								currentPlayer,
 								trump,
 								matchSuit,
-								playerHand,
-								nonPlayerHands,
+								nonPlayerHands[ currentPlayer - 1 ],
 								handlePlayerChoice,
-								playedCards
+								{
+									0: playerChoice,
+									1: opponentOneChoice,
+									2: teammateChoice,
+									3: opponentThreeChoice
+								}
 							)
 						})
 					}
 				} else {
-					const trickScoreData = scoreTrick(playedCards, trump, matchSuit)
+					const trickScoreData = scoreTrick({
+						0: playerChoice,
+						1: opponentOneChoice,
+						2: teammateChoice,
+						3: opponentThreeChoice
+					}, trump, matchSuit)
 					setCurrentTrickScore(trickScoreData)
 					if (trickScoreData.winner === callingPlayer || findIsTeammate(trickScoreData.winner, callingPlayer)) {
 						setMatchTricks({
@@ -885,7 +944,10 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				showTrumpStack, setShowTrumpStack,
 				showDeal, setShowDeal,
 				showTrumpCard, setShowTrumpCard,
-				playedCards, setPlayedCards,
+				playerChoice, setPlayerChoice,
+				opponentOneChoice, setOpponentOneChoice,
+				teammateChoice, setTeammateChoice,
+				opponentThreeChoice, setOpponentThreeChoice,
 				matchSuit, setMatchSuit,
 				turnCount, setTurnCount,
 				callingPlayer, setCallingPlayer,
@@ -902,7 +964,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 				currentPlayer, setCurrentPlayer,
 				playerChoice, setPlayerChoice,
 				actionText, setActionText,
-				checkValidCard, upTrumpHistory, goAlone, matchTricks, handlePlayerChoice, handleDiscard, pass, hasNotch, yourSeat, upTrump, suits, resetGame
+				checkValidCard, upTrumpHistory, goAlone, matchTricks, handlePlayerChoice, pass, hasNotch, yourSeat, upTrump, suits, resetGame, sortHand
 			} }
 		>
 			{ children }

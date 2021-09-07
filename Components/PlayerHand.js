@@ -6,7 +6,7 @@ import Card from "./Card"
 import { sounds, sleep } from "../Data/data";
 
 export default function PlayerHand() {
-	const { playerHand, yourSeat, goAlone, enableSound, dealer } = useContext(DataContext)
+	const { playerHand, yourSeat, goAlone, enableSound, dealer, setPlayerHand, sortHand, trump } = useContext(DataContext)
 
 	async function playDeal() {
 		const { sound } = await Audio.Sound.createAsync(

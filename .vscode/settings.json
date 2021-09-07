@@ -15,5 +15,6 @@
 	"workbench.list.smoothScrolling": true,
 	"workbench.fontAliasing": "auto",
 	"scm.diffDecorations": "gutter",
-	"scm.diffDecorationsGutterAction": "none"
+	"scm.diffDecorationsGutterAction": "none",
+	"editor.inlayHints.enabled": false
 }

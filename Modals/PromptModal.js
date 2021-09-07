@@ -9,7 +9,13 @@ import Icon from '../CoreElements/icons'
 import ControlPanel from '../Components/ControlPanel'
 
 export default function PromptModal() {
-	const { showPromptModal, promptText, currentPlayer, yourSeat, playedCards, matchStage } = useContext(DataContext)
+	const { showPromptModal, promptText, currentPlayer, yourSeat, playerChoice, opponentOneChoice, opponentThreeChoice, teammateChoice, matchStage } = useContext(DataContext)
+	const playedCards = {
+		0: playerChoice,
+		1: opponentOneChoice,
+		2: teammateChoice,
+		3: opponentThreeChoice
+	}
 
 	return (
 		<Modal
