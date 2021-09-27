@@ -36,6 +36,13 @@ class Card {
 	}
 }
 
+const jH = new Card("J", "h")
+const qD = new Card("Q", "d")
+const nineC = new Card("9", "c")
+const tenC = new Card("10", "c")
+const jC = new Card("J", "c")
+
+export const leftDebugHand = [ jH, qD, nineC, tenC, jC ]
 
 export class Deck {
 	static faceValues = [ "9", "10", "J", "Q", "K", "A" ]

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react"
-import { Audio } from "expo-av";
 import { Flex } from "../CoreElements/containerStyles";
 import { DataContext } from "../GameContext"
 import Card from "./Card"
+import { Audio } from "expo-av";
 import { sounds, sleep } from "../Data/data";
 
 export default function PlayerHand() {
