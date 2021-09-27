@@ -11,10 +11,10 @@ export default function StartModal() {
 	const { gameplayCount, appPreferences, setShowRulesModal, setShowSettingsModal, showStartModal, setShowStartModal, setCurrentPlayer, setMatchStage, setTurnCount, dealer, turnCount } = useContext(DataContext)
 
 	const handlePlay = () => {
-		setShowStartModal(false)
 		setCurrentPlayer((dealer + 1) % 4)
 		setMatchStage("NEWGAME")
 		setTurnCount(turnCount - 1)
+		setShowStartModal(false)
 	}
 
 	const handleRules = () => {
@@ -33,7 +33,7 @@ export default function StartModal() {
 
 	useEffect(() => {
 		gameplayCount > 0 && handleStoreReview()
-	}, [ gameplayCount ])
+	}, [gameplayCount])
 
 	return (
 		<Modal
@@ -51,7 +51,7 @@ export default function StartModal() {
 					<MainTitle>Euchre Night</MainTitle>
 					<Italic align="center">Created by Shawn Clary</Italic>
 					<View style={ { marginVertical: 10 } }>
-						<Image source={ appPreferences.deckTheme ? themeHands[ appPreferences.deckTheme ] : themeHands.Default } />
+						<Image source={ appPreferences.deckTheme ? themeHands[appPreferences.deckTheme] : themeHands.Default } />
 					</View>
 					<Body align="center" override={ { marginBottom: 10 } }>Choose an option:</Body>
 					<Pressable

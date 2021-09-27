@@ -8,8 +8,8 @@ import { Audio } from 'expo-av';
 
 export default function TrumpCard() {
 	const { appPreferences, upTrump, matchStage, showTrumpCard } = useContext(DataContext)
-	const [ cardCode, setCardCode ] = useState("")
-	const [ flipState, setFlipState ] = useState(false)
+	const [cardCode, setCardCode] = useState("")
+	const [flipState, setFlipState] = useState(false)
 
 	async function playFlip() {
 		_onPlaybackStatusUpdate = playbackStatus => {
@@ -52,13 +52,16 @@ export default function TrumpCard() {
 				fadeOut()
 				sleep(600).then(() => setFlipState(false))
 			}
-			else if (matchStage === "PICK") playFlip()
 		}
-	}, [ showTrumpCard ])
+	}, [showTrumpCard])
+
+	useEffect(() => {
+		if (matchStage === "PICK") playFlip()
+	}, [matchStage])
 
 	useEffect(() => {
 		upTrump.faceValue !== undefined && setCardCode("" + upTrump.suit.code + upTrump.faceValue.toLowerCase())
-	}, [ upTrump ])
+	}, [upTrump])
 
 	return (
 		<Animated.View style={ { position: "absolute", opacity: fadeAnim } }>
@@ -70,11 +73,11 @@ export default function TrumpCard() {
 			>
 				<View>
 					<Image
-						source={ cardImages[ appPreferences.deckTheme ].down1 }
-						style={ { transform: [ { scale: 1.05 } ] } } />
+						source={ cardImages[appPreferences.deckTheme].down1 }
+						style={ { transform: [{ scale: 1.05 }] } } />
 				</View>
 				<View>
-					<Image style={ { width: 120, height: 166 } } source={ cardImages[ appPreferences.deckTheme ][ cardCode ] } />
+					<Image style={ { width: 120, height: 166 } } source={ cardImages[appPreferences.deckTheme][cardCode] } />
 				</View>
 			</FlipCard>
 		</Animated.View>

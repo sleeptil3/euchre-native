@@ -90,4 +90,6 @@ export const sounds = {
 	deal: require("../Assets/sounds/deal.mp3"),
 	play: require("../Assets/sounds/play.mp3"),
 	flip: require("../Assets/sounds/flip.mp3"),
+	win: require("../Assets/sounds/win.wav"),
+	lose: require("../Assets/sounds/lose.wav"),
 }

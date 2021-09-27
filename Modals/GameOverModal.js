@@ -1,48 +1,61 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { View, Modal, StyleSheet, Pressable, Linking } from 'react-native'
+import { View, Modal, StyleSheet, Pressable } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Flex } from '../CoreElements/containerStyles'
 import { Subtitle, Title, Body, DefaultText } from '../CoreElements/fontStyles'
 import { colors } from '../CoreElements/theme'
 import ShareButton from '../Components/ShareButton'
 import { ButtonURLLink } from '../CoreElements/buttonStyles'
+import { Audio } from "expo-av"
+import { sounds } from '../Data/data'
 
 export default function GameOverModal() {
-	const { showGameOverModal, teamScore, opponentScore, resetGame } = useContext(DataContext)
-	const [linkSupported, setLinkSupported] = useState(false)
-	const url = "mailto:sleeptil3software@gmail.com?subject=Euchre iOS App Feedback"
+	const { showGameOverModal, teamScore, opponentScore, resetGame, enableSound } = useContext(DataContext)
 
-	const checkLink = async () => {
-		const supported = await Linking.canOpenURL(url);
-		if (supported) {
-			setLinkSupported(true)
-		} else {
-			setLinkSupported(false)
-		}
+	async function playWin() {
+		const { sound } = await Audio.Sound.createAsync(
+			sounds.win,
+			{ isMuted: !enableSound, volume: .4 }
+		)
+		await sound.playAsync()
 	}
 
-	useEffect(() => {
-		checkLink()
-	}, [])
+	async function playLose() {
+		const { sound } = await Audio.Sound.createAsync(
+			sounds.lose,
+			{ isMuted: !enableSound, volume: .4 }
+		)
+		await sound.playAsync()
+	}
 
 	return (
 		<Modal
 			animationType="slide"
-			transparent={true}
-			visible={showGameOverModal}
+			transparent={ true }
+			visible={ showGameOverModal }
+			onShow={ teamScore > opponentScore ? playWin : playLose }
 		>
 			<Flex align="center" justify="center">
-				<View style={styles.modal}>
+				<View style={ styles.modal }>
 					<Title align="center">Game Over</Title>
-					<View>
-						<Subtitle align="center">{teamScore > opponentScore ? "Your Team Won!" : "The Other Team Won..."}</Subtitle>
-						<Body align="center">{`The final score was ${teamScore} to ${opponentScore}`}</Body>
-						<Subtitle align="center" override={{ fontSize: 20, marginBottom: 10, marginTop: 10 }}>Thank you for playing Euchre!</Subtitle>
-						<Body>If you enjoyed the game, please share it with your friends using the 'Share' button below.</Body>
-						<Body>If you have a moment to rate the app and leave a review on the AppStore, I'd really appreciate it. Let's bring the joy of Euchre to everyone!</Body>
+					<View style={ { paddingHorizontal: 2 } }>
+						<Subtitle align="center">{ teamScore > opponentScore ? "Your Team Won!" : "The Other Team Won" }</Subtitle>
+						<Body align="center">{ `The final score was ${ teamScore } to ${ opponentScore }` }</Body>
+						<Subtitle align="center" override={ { fontSize: 20, marginBottom: 14, marginTop: 10 } }>Thank you for playing Euchre!</Subtitle>
+						<Body>If you enjoyed the game, please share it with your friends using the 'Share' icon below. A rating and review on the AppStore would also be much appreciated!</Body>
+						<Body>If came across any issues while playing the game, please open a support ticket using the link below:</Body>
+						<ButtonURLLink url={ 'https://www.sleeptil3software.com/#/euchrenight/support' } align="center" override={ { fontSize: 16, marginTop: -10, opacity: .7, marginBottom: 20, color: colors.white } }>Submit Feedback</ButtonURLLink>
+						<Subtitle align="center" override={ { fontSize: 16, lineHeight: 28, marginBottom: 10, marginTop: 0 } }>Let's bring the joy of Euchre to everyone!</Subtitle>
 					</View>
+					<ShareButton styles={ {
+						icon: {
+							paddingVertical: 10,
+							paddingHorizontal: 10,
+							opacity: .7,
+						}
+					} } />
 					<View
-						style={{
+						style={ {
 							justifyContent: "center",
 							alignItems: "center",
 							backgroundColor: "rgba(0, 0, 0, .75)",
@@ -51,26 +64,17 @@ export default function GameOverModal() {
 							borderRadius: 40,
 							paddingHorizontal: 20,
 							paddingVertical: 8,
-							marginVertical: 10,
-							marginTop: 20
-						}}
+							marginVertical: 20,
+						} }
 					>
 						<Pressable
-							hitSlop={40}
-							accessibilityLabel={"Go back to the start screen"}
-							onPress={resetGame}
+							hitSlop={ 40 }
+							accessibilityLabel={ "Go back to the start screen" }
+							onPress={ resetGame }
 						>
-							<DefaultText align="center">Close</DefaultText>
+							<DefaultText align="center" override={ { fontSize: 20, paddingHorizontal: 10 } }>Close</DefaultText>
 						</Pressable>
 					</View>
-					<ShareButton styles={{
-						icon: {
-							paddingVertical: 10,
-							paddingHorizontal: 10,
-							opacity: .7,
-						}
-					}} />
-					{linkSupported && <ButtonURLLink url={url} override={{ fontSize: 16, marginTop: 10, color: colors.white, opacity: .7 }}>Submit Feedback</ButtonURLLink>}
 				</View>
 			</Flex>
 		</Modal>

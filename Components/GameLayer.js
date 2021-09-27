@@ -19,8 +19,8 @@ import RulesModal from '../Modals/RulesModal';
 import HelpModal from '../Modals/HelpModal';
 
 export default function GameLayer() {
-	const { matchStage, showDeal, playerHand, showActionPrompt, yourSeat, dealer, showHelpModal } = useContext(DataContext)
-	const [ showPlayerHand, setShowPlayerHand ] = useState(false)
+	const { matchStage, showDeal, setShowTrumpStack, setShowTrumpCard, setShowDeal, playerHand, showActionPrompt, yourSeat, dealer, showHelpModal } = useContext(DataContext)
+	const [showPlayerHand, setShowPlayerHand] = useState(false)
 	const localStyles = StyleSheet.create({
 		hud: {
 			position: "absolute",
@@ -38,9 +38,14 @@ export default function GameLayer() {
 	})
 
 	useEffect(() => {
-		matchStage === "DEAL" && sleep(3400).then(() => setShowPlayerHand(true))
+		if (matchStage === "DEAL") {
+			// setShowDeal(true)
+			sleep(3400).then(() => setShowPlayerHand(true))
+			// sleep(4400).then(() => setShowTrumpStack(true))
+			// sleep(4900).then(() => setShowTrumpCard(true))
+		}
 		playerHand.length === 0 && setShowPlayerHand(false)
-	}, [ matchStage ])
+	}, [matchStage])
 
 	return (
 		<View style={ styles.screen }>
@@ -66,10 +71,12 @@ export default function GameLayer() {
 			{ yourSeat === dealer && (matchStage !== 'PREGAME' && matchStage !== 'RESULT') && <View style={ { position: "absolute", justifyContent: "flex-end", bottom: 0 } }>
 				{ iconSVGs.dealerIndicatorLarge }
 			</View> }
-			<View style={ localStyles.hud }>
-				<TrumpIndicator />
-				<MatchTricksCount />
-			</View>
+			{ matchStage !== "GAMEOVER" &&
+				<View style={ localStyles.hud }>
+					<TrumpIndicator />
+					<MatchTricksCount />
+				</View>
+			}
 		</View>
 	)
 }

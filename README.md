@@ -38,21 +38,24 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 - expo-status-bar
 - expo-store-review
 
-## In Development
+## Current Release
 
 ### Version 1.0.6
 
 - #### Build 1
+  - _Released 9/27/2021_
+  - Fixed an issue where left bower was not considered part of the trump suit
+  - Fixed an issue where after a GameOver event, the next game would not setup properly
+  - Added GameOver sound effects
+  - General performance fixes
 
-## Current Release
+## Version History
 
 ### Version 1.0.5
 
 - #### Build 1
   - fixed an issue causing theme chooser to crash
   - fixed versioning/build numbers being out of sync
-
-## Version History
 
 ### Version 1.0.2
 
@@ -65,9 +68,8 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 
 ### Version 1.0.2
 
-#### Builds
-
-- 1.0.3
+- #### Build 1.0.3
+  - Bug fixes
 
 ### Version 1.0
 

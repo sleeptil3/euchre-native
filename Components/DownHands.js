@@ -6,11 +6,12 @@ import { StyleSheet, View } from "react-native";
 
 export default function DownHands() {
 	const { teammateHand, opponentHand1, opponentHand2, matchStage } = useContext(DataContext)
-	const [ show1, setShow1 ] = useState(false)
-	const [ show2, setShow2 ] = useState(false)
-	const [ show3, setShow3 ] = useState(false)
+	const [show1, setShow1] = useState(false)
+	const [show2, setShow2] = useState(false)
+	const [show3, setShow3] = useState(false)
 
 	useEffect(() => {
+		// console.log('DOWNHANDS USEEFFECT RAN')
 		if (matchStage === "DEAL") {
 			sleep(500).then(() => setShow1(true))
 			sleep(1500).then(() => setShow2(true))
