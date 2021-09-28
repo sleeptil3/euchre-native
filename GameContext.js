@@ -58,8 +58,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	const [opponentThreeChoice, setOpponentThreeChoice] = useState(blankCard)
 	const [trump, setTrump] = useState({}) // {suit, left}
 	const [callingPlayer, setCallingPlayer] = useState(null)
-	const [teamScore, setTeamScore] = useState(9)
-	const [opponentScore, setOpponentScore] = useState(9)
+	const [teamScore, setTeamScore] = useState(0)
+	const [opponentScore, setOpponentScore] = useState(0)
 	const [matchStage, setMatchStage] = useState("PREGAME") // PREGAME, NEWGAME, NEWMATCH, DEAL, PICK, CALL, READY, PLAY, RESULT, GAMEOVER
 	const [currentMatchScore, setCurrentTrickScore] = useState({})
 	const [matchSuit, setMatchSuit] = useState(null)
