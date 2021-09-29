@@ -3,9 +3,10 @@ import { View, Modal, StyleSheet, Pressable, Image } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Flex } from '../CoreElements/containerStyles'
 import { Italic, Body, DefaultText, MainTitle } from '../CoreElements/fontStyles'
-import { colors, iconSVGs, themeHands } from '../CoreElements/theme'
+import { colors, iconSVGs } from '../CoreElements/theme'
+import { themeHands } from '../Data/data'
 import ShareButton from '../Components/ShareButton'
-import * as StoreReview from 'expo-store-review';
+import * as StoreReview from 'expo-store-review'
 
 export default function StartModal() {
 	const { gameplayCount, appPreferences, setShowRulesModal, setShowSettingsModal, showStartModal, setShowStartModal, setCurrentPlayer, setMatchStage, setTurnCount, dealer, turnCount } = useContext(DataContext)

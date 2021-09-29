@@ -42,7 +42,15 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 
 ### Version 1.0.6
 
+- #### Build 3
+
+  - _Released 9/29/2021_
+  - Fixed an issue where team score and opponent score started the game at 9 (from debug mode)
+  - bundled images into the build to help with first load
+    - subsequent themes added will be downloaded on-demand
+
 - #### Build 1
+
   - _Released 9/27/2021_
   - Fixed an issue where left bower was not considered part of the trump suit
   - Fixed an issue where after a GameOver event, the next game would not setup properly
@@ -54,12 +62,14 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 ### Version 1.0.5
 
 - #### Build 1
+
   - fixed an issue causing theme chooser to crash
   - fixed versioning/build numbers being out of sync
 
 ### Version 1.0.2
 
 - #### Build 1.0.4
+
   - Fixed a bug where a card disappeared from your hand stopping play
   - Fixed a bug which caused the upTrump card to not reappear subsequent to the first match
   - Optimized the method the trumpStack and the upTrump card where loaded and animated to avoid timing bugs
@@ -69,11 +79,13 @@ From start to finish, this project took about 17 days. Most of the game logic wa
 ### Version 1.0.2
 
 - #### Build 1.0.3
+
   - Bug fixes
 
 ### Version 1.0
 
 - #### Build 1.0.1
+
   - AppStore Submission
 
 ### Version 0.9.0

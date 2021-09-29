@@ -13,11 +13,11 @@
 		"updates": {
 			"fallbackToCacheTimeout": 0
 		},
-		"assetBundlePatterns": ["assets/**"],
+		"assetBundlePatterns": ["assets/**/*"],
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "com.sleeptil3software.euchre",
-			"buildNumber": "2"
+			"buildNumber": "3"
 		},
 		"android": {
 			"package": "com.sleeptil3software.euchre"

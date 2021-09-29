@@ -2,9 +2,10 @@ import React, { useContext } from 'react'
 import { View, Modal, StyleSheet, Pressable, ScrollView, Switch } from 'react-native'
 import { DataContext } from '../GameContext'
 import { Italic, DefaultText, Heading, Title, Subtitle } from '../CoreElements/fontStyles'
-import { colors, iconSVGs, styles, themeTable } from '../CoreElements/theme'
+import { colors, iconSVGs, styles } from '../CoreElements/theme'
 import DeckThemeChoice from '../Components/DeckThemeChoice'
 import TableThemeChoice from '../Components/TableThemeChoice'
+import { themeTable } from '../Data/data'
 
 export default function SettingsModal() {
 	const { matchStage, setShowStartModal, setShowSettingsModal, showSettingsModal, showActionPrompt, setShowPromptModal, appPreferences, setAppPreferences, enableSound, setEnableSound } = useContext(DataContext)
@@ -46,12 +47,12 @@ export default function SettingsModal() {
 							<View style={ { justifyContent: "center", alignItems: "center", marginVertical: 20 } }>
 								<Title override={ { fontSize: 24 } }>Table Theme</Title>
 								{ Object.keys(themeTable).map(theme => {
-									return <TableThemeChoice key={ theme } id={ theme } title={ themeTable[ theme ].title } />
+									return <TableThemeChoice key={ theme } id={ theme } title={ themeTable[theme].title } />
 								}) }
 							</View>
 							<View style={ { justifyContent: "center", alignItems: "center", marginVertical: 20 } }>
 								<Title override={ { fontSize: 24 } }>Sounds</Title>
-								<View style={ [ localStyles.container, { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20 } ] } >
+								<View style={ [localStyles.container, { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20 }] } >
 									<Switch
 										trackColor={ { false: colors.red, true: colors.green } }
 										ios_backgroundColor={ colors.red }

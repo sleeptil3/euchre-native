@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { Body, Subtitle } from '../CoreElements/fontStyles'
 import { DataContext } from "../GameContext"
-import { iconSVGs, colors, themeSamples } from '../CoreElements/theme'
+import { themeSamples } from '../Data/data'
+import { iconSVGs, color } from '../CoreElements/theme'
 
 export default function DeckThemeChoice({ deck }) {
 	const { appPreferences, setAppPreferences } = useContext(DataContext)
@@ -28,7 +29,7 @@ export default function DeckThemeChoice({ deck }) {
 		<Pressable onPress={ appPreferences.deckTheme !== deck ? handleThemeChange : null }>
 			<View style={ styles.container }>
 				<Subtitle align="left" override={ { fontSize: 18, top: 5, marginBottom: 20 } }>{ deck }</Subtitle>
-				<Image source={ themeSamples[ deck ] } />
+				<Image source={ themeSamples[deck] } />
 				<View style={ { position: "absolute", top: 10, left: 10 } }>
 					{ appPreferences.deckTheme === deck ? iconSVGs.toggleOn : iconSVGs.toggleOff }
 				</View>

@@ -1,12 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Image, View, StyleSheet } from "react-native";
-import { styles, themeTable } from '../CoreElements/theme'
+import { styles } from '../CoreElements/theme'
 import GameLayer from "../Components/GameLayer";
 import { DataContext } from "../GameContext";
+import { themeTable } from "../Data/data";
 
 export default function Game() {
 	const { appPreferences } = useContext(DataContext)
-	const [ tableImage, setTableImage ] = useState(themeTable[ "table-great-room" ].image)
+	const [tableImage, setTableImage] = useState(themeTable["table-great-room"].image)
 
 	const localStyles = StyleSheet.create({
 		background: {
@@ -23,8 +24,8 @@ export default function Game() {
 	})
 
 	useEffect(() => {
-		appPreferences.tableTheme && setTableImage(themeTable[ appPreferences.tableTheme ].image)
-	}, [ appPreferences.tableTheme ])
+		appPreferences.tableTheme && setTableImage(themeTable[appPreferences.tableTheme].image)
+	}, [appPreferences.tableTheme])
 
 	return (
 		<View style={ styles.screen }>
