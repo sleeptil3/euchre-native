@@ -1,8 +1,8 @@
-import React, { useState, useEffect, createContext } from "react"
-import * as Device from 'expo-device'
-import { Audio } from "expo-av"
-import { hearts, diamonds, spades, clubs, Deck } from './Data/deck'
-import { sleep, blankCard, sounds, decidePace } from "./Data/data"
+import React, { useState, useEffect, createContext } from "react";
+import * as Device from 'expo-device';
+import { Audio } from "expo-av";
+import { hearts, diamonds, spades, clubs, Deck } from './Data/deck';
+import { sleep, blankCard, sounds, decidePace } from "./Data/data";
 import {
 	decideTrump,
 	decideAIplay,
@@ -10,7 +10,7 @@ import {
 	findIsTeammate,
 	groupBySuit,
 	scoreTrick,
-} from "./Data/AI"
+} from "./Data/AI";
 
 export const DataContext = createContext()
 
@@ -108,9 +108,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	async function playAIsound() {
 		const { sound } = await Audio.Sound.createAsync(
 			sounds.play,
-			{ isMuted: !enableSound }
+			{ isMuted: !enableSound, 0.2 }
 		)
-		sound.setVolumeAsync(.2)
 		await sound.playAsync()
 	}
 

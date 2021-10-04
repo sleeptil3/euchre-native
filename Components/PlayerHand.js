@@ -11,14 +11,14 @@ export default function PlayerHand() {
 	async function playDeal() {
 		const { sound } = await Audio.Sound.createAsync(
 			sounds.deal,
-			{ isMuted: !enableSound, volume: .3 }
+			{ isMuted: !enableSound, volume: 0.3 }
 		)
 		await sound.playAsync()
 	}
 
 	useEffect(() => {
 		sleep(100).then(() => playDeal())
-	}, [ dealer ])
+	}, [dealer])
 
 	return (
 		<Flex

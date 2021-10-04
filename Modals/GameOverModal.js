@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { View, Modal, StyleSheet, Pressable } from 'react-native'
-import { DataContext } from '../GameContext'
-import { Flex } from '../CoreElements/containerStyles'
-import { Subtitle, Title, Body, DefaultText } from '../CoreElements/fontStyles'
-import { colors } from '../CoreElements/theme'
-import ShareButton from '../Components/ShareButton'
-import { ButtonURLLink } from '../CoreElements/buttonStyles'
-import { Audio } from "expo-av"
-import { sounds } from '../Data/data'
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Modal, StyleSheet, Pressable } from 'react-native';
+import { DataContext } from '../GameContext';
+import { Flex } from '../CoreElements/containerStyles';
+import { Subtitle, Title, Body, DefaultText } from '../CoreElements/fontStyles';
+import { colors } from '../CoreElements/theme';
+import ShareButton from '../Components/ShareButton';
+import { ButtonURLLink } from '../CoreElements/buttonStyles';
+import { Audio } from "expo-av";
+import { sounds } from '../Data/data';
 
 export default function GameOverModal() {
 	const { showGameOverModal, teamScore, opponentScore, resetGame, enableSound } = useContext(DataContext)
@@ -15,7 +15,7 @@ export default function GameOverModal() {
 	async function playWin() {
 		const { sound } = await Audio.Sound.createAsync(
 			sounds.win,
-			{ isMuted: !enableSound, volume: .4 }
+			{ isMuted: !enableSound, volume: 0.4 }
 		)
 		await sound.playAsync()
 	}
@@ -23,7 +23,7 @@ export default function GameOverModal() {
 	async function playLose() {
 		const { sound } = await Audio.Sound.createAsync(
 			sounds.lose,
-			{ isMuted: !enableSound, volume: .4 }
+			{ isMuted: !enableSound, volume: 0.4 }
 		)
 		await sound.playAsync()
 	}

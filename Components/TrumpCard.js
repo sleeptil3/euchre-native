@@ -19,9 +19,8 @@ export default function TrumpCard() {
 		}
 		const { sound } = await Audio.Sound.createAsync(
 			sounds.flip,
-			{ isMuted: !appPreferences.sounds }
+			{ isMuted: !appPreferences.sounds, volume: 0.2 }
 		)
-		sound.setVolumeAsync(.2)
 		sound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate)
 		await sound.playAsync()
 	}

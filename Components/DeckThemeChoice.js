@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { Body, Subtitle } from '../CoreElements/fontStyles'
 import { DataContext } from "../GameContext"
 import { themeSamples } from '../Data/data'
-import { iconSVGs, color } from '../CoreElements/theme'
+import { iconSVGs, colors } from '../CoreElements/theme'
 
 export default function DeckThemeChoice({ deck }) {
 	const { appPreferences, setAppPreferences } = useContext(DataContext)

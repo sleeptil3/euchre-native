@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect, useRef } from "react"
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Animated, PanResponder, StyleSheet } from "react-native";
-import { DataContext } from "../GameContext"
-import { cardImages, blankCard, sleep, sounds } from "../Data/data"
+import { DataContext } from "../GameContext";
+import { cardImages, blankCard, sounds } from "../Data/data";
 import { Audio } from "expo-av";
 
 export default function Card({ card, scale, use, position, order }) {
@@ -139,11 +139,11 @@ export default function Card({ card, scale, use, position, order }) {
 	}, [isValid])
 
 	return (
-		<Animated.View style={{ transform: [{ translateY: matchStage === "DEAL" ? dealAnim : 0 }] }}>
+		<Animated.View style={ { transform: [{ translateY: matchStage === "DEAL" ? dealAnim : 0 }] } }>
 			<Animated.Image
-				source={imageURL}
-				style={selectedStyle}
-				{...dragResponder.panHandlers}
+				source={ imageURL }
+				style={ selectedStyle }
+				{ ...dragResponder.panHandlers }
 
 			/>
 		</Animated.View>

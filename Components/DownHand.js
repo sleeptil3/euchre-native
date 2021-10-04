@@ -119,7 +119,7 @@ export default function DownHand({ position, handLength }) {
 	async function playDeal() {
 		const { sound } = await Audio.Sound.createAsync(
 			sounds.deal,
-			{ isMuted: !enableSound, volume: .5 }
+			{ isMuted: !enableSound, volume: 0.5 }
 		)
 		await sound.playAsync()
 	}
@@ -134,7 +134,7 @@ export default function DownHand({ position, handLength }) {
 	}, [])
 
 	return (
-		<View style={[handStyles[position], { flexDirection: "row", justifyContent: "center" }]}>
+		<View style={ [handStyles[position], { flexDirection: "row", justifyContent: "center" }] }>
 			<Animated.Image
 				style={
 					[
@@ -147,7 +147,7 @@ export default function DownHand({ position, handLength }) {
 						}
 					]
 				}
-				source={cardImages[appPreferences.deckTheme].down1}
+				source={ cardImages[appPreferences.deckTheme].down1 }
 			/>
 			<Animated.Image
 				style={
@@ -161,7 +161,7 @@ export default function DownHand({ position, handLength }) {
 						}
 					]
 				}
-				source={cardImages[appPreferences.deckTheme].down1}
+				source={ cardImages[appPreferences.deckTheme].down1 }
 			/>
 			<Animated.Image
 				style={
@@ -175,7 +175,7 @@ export default function DownHand({ position, handLength }) {
 						}
 					]
 				}
-				source={cardImages[appPreferences.deckTheme].down1}
+				source={ cardImages[appPreferences.deckTheme].down1 }
 			/>
 			<Animated.Image
 				style={
@@ -189,7 +189,7 @@ export default function DownHand({ position, handLength }) {
 						}
 					]
 				}
-				source={cardImages[appPreferences.deckTheme].down1}
+				source={ cardImages[appPreferences.deckTheme].down1 }
 			/>
 			<Animated.Image
 				style={
@@ -203,11 +203,11 @@ export default function DownHand({ position, handLength }) {
 						}
 					]
 				}
-				source={cardImages[appPreferences.deckTheme].down1}
+				source={ cardImages[appPreferences.deckTheme].down1 }
 			/>
 
-			{(position === dealer && matchTricks.callingTeam + matchTricks.opposingTeam !== 5) && <View style={{ position: "absolute", top: 22, left: 62 }}>
-				{iconSVGs.dealerIndicator}
+			{ (position === dealer && matchTricks.callingTeam + matchTricks.opposingTeam !== 5) && <View style={ { position: "absolute", top: 22, left: 62 } }>
+				{ iconSVGs.dealerIndicator }
 			</View>
 			}
 		</View>
