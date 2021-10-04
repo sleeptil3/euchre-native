@@ -108,7 +108,7 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	async function playAIsound() {
 		const { sound } = await Audio.Sound.createAsync(
 			sounds.play,
-			{ isMuted: !enableSound, 0.2 }
+			{ isMuted: !enableSound, volume: 0.2 }
 		)
 		await sound.playAsync()
 	}
