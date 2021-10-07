@@ -111,9 +111,6 @@ export const groupBySuit = (cards, trump) => {
 };
 
 export const scoreTrick = (playedCards, trump, matchSuit, isTrickEnd) => {
-	if (isTrickEnd && Object.values(playedCards).includes(blankCard)) {
-		throw new Error('blankCard in played cards')
-	}
 	// console.log("scoreTrick fxn")
 	// console.log("playedCards", playedCards)
 	// console.log("trump", trump)

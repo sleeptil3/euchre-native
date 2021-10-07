@@ -205,10 +205,10 @@ export default function DownHand({ position, handLength }) {
 				}
 				source={ cardImages[appPreferences.deckTheme].down1 }
 			/>
-
-			{ (position === dealer && matchTricks.callingTeam + matchTricks.opposingTeam !== 5) && <View style={ { position: "absolute", top: 22, left: 62 } }>
-				{ iconSVGs.dealerIndicator }
-			</View>
+			{ (position === dealer && matchTricks.callingTeam + matchTricks.opposingTeam !== 5) &&
+				<View style={ { position: "absolute", top: 22, left: 62 } }>
+					{ iconSVGs.dealerIndicator }
+				</View>
 			}
 		</View>
 	)

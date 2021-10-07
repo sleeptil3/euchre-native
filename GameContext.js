@@ -650,8 +650,8 @@ export default function GameContext({ appPreferences, setAppPreferences, childre
 	}
 
 	const checkForNotch = () => {
-		const thisDevice = Device.modelName
-		const notchedPhones = ["iPhone XR", "iPhone X", "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", "iPhone 12 mini", "iPhone 11 Pro", "iPhone 11 Pro Max", "iPhone 11", "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13", "iPhone 13 mini",]
+		const thisDevice = Device.modelId
+		const notchedPhones = ["iPhone14,3", "iPhone14,2", "iPhone14,5", "iPhone14,4", "iPhone13,4", "iPhone13,3", "iPhone13,1", "iPhone12,5", "iPhone12,3", "iPhone12,1", "iPhone11,4", "iPhone11,6", "iPhone11,2", "iPhone11,8", "iPhone10,3", "iPhone10,6"]
 		return notchedPhones.includes(thisDevice)
 	}
 

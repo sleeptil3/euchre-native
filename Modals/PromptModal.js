@@ -51,7 +51,7 @@ export default function PromptModal() {
 									}) }
 								</Flex>
 							}
-							{ (currentPlayer !== yourSeat && Object.values(playedCards).includes(blankCard) && matchStage !== "RESULT" && matchStage !== "GAMEOVER" && matchStage !== "READY") && <ActivityIndicator style={ { margin: 20, marginTop: 30 } } animating={ true } color={ colors.white } size="small" /> }
+							{ (currentPlayer !== yourSeat && Object.values(playedCards).includes(blankCard) && matchStage !== "RESULT" && matchStage !== "GAMEOVER" && matchStage !== "READY" && promptText.title !== "Trick Results") && <ActivityIndicator style={ { margin: 20, marginTop: 30 } } animating={ true } color={ colors.white } size="small" /> }
 							{ (currentPlayer === yourSeat || matchStage === "READY" || !Object.values(playedCards).includes(blankCard)) && <ControlPanel /> }
 						</Flex>
 					</View>
